@@ -32,7 +32,7 @@
         spechars: "~/dialogs/spechars/spechars.html",
         searchreplace: "~/dialogs/searchreplace/searchreplace.html",
         map: "~/dialogs/map/map.html",
-        gmap: "~/dialogs/gmap/gmap.html",
+        //gmap: "~/dialogs/gmap/gmap.html",
         insertvideo: "~/dialogs/video/video.html",
         help: "~/dialogs/help/help.html",
         preview: "~/dialogs/preview/preview.html",
@@ -43,8 +43,8 @@
         edittip: "~/dialogs/table/edittip.html",
         edittable: "~/dialogs/table/edittable.html",
         edittd: "~/dialogs/table/edittd.html",
-        webapp: "~/dialogs/webapp/webapp.html",
-        snapscreen: "~/dialogs/snapscreen/snapscreen.html",
+        //webapp: "~/dialogs/webapp/webapp.html",
+        //snapscreen: "~/dialogs/snapscreen/snapscreen.html",
         scrawl: "~/dialogs/scrawl/scrawl.html",
         music: "~/dialogs/music/music.html",
         template: "~/dialogs/template/template.html",
@@ -348,7 +348,7 @@
             }
         })(p, dialogBtns[p]);
     }
-    editorui.snapscreen = function (editor, iframeUrl, title) {
+    /*editorui.snapscreen = function (editor, iframeUrl, title) {
         title =
             editor.options.labelMap["snapscreen"] ||
             editor.getLang("labelMap.snapscreen") ||
@@ -398,7 +398,7 @@
             ui.setDisabled(editor.queryCommandState("snapscreen") == -1);
         });
         return ui;
-    };
+    };*/
     editorui.insertcode = function (editor, list, title) {
         list = editor.options["insertcode"] || [];
         title =

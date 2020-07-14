@@ -65,9 +65,9 @@
                 'paragraph',
                 'fontfamily',
                 'fontsize',
-                '|',
+                /*'|',
                 'directionalityltr',
-                'directionalityrtl',
+                'directionalityrtl',*///已去除
                 'indent',
                 '|',
                 'justifyleft',
@@ -98,7 +98,7 @@
                 'gmap',
                 'insertframe',
                 'insertcode',
-                'webapp',
+                //'webapp',//已去除
                 'pagebreak',
                 'template',
                 'background',
@@ -107,7 +107,7 @@
                 'date',
                 'time',
                 'spechars',
-                'snapscreen',
+                //'snapscreen',//已去除
                 'wordimage',
                 '|',
                 'inserttable',
@@ -380,12 +380,15 @@
         //}
         //allowLinkProtocol 允许的链接地址，有这些前缀的链接地址不会自动添加http
         //, allowLinkProtocols: ['http:', 'https:', '#', '/', 'ftp:', 'mailto:', 'tel:', 'git:', 'svn:']
-        //webAppKey 百度应用的APIkey，每个站长必须首先去百度官网注册一个key后方能正常使用app功能，注册介绍，http://app.baidu.com/static/cms/getapikey.html
+        //webAppKey 百度应用的APIkey，每个站长必须首先去百度官网注册一个key后方能正常使用app功能，注册介绍，http://app.baidu.com/static/cms/getapikey.html //已去除
         //, webAppKey: ""
         //默认过滤规则相关配置项目
         //,disabledTableInTable:true  //禁止表格嵌套
         //,allowDivTransToP:true      //允许进入编辑器的div标签自动变成p标签
         //,rgb2Hex:true               //默认产出的数据中的color自动从rgb格式变成16进制格式
+
+        //allowFileDel:true //允许附件、图片、视频、音乐等在线删除
+
         // xss 过滤是否开启,inserthtml等操作
         , xssFilterRules: true
         //input xss过滤
