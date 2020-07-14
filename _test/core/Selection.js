@@ -1,9 +1,7 @@
 module("core.Selection");
-
 /*
  * 因为编辑器是必定会放在一个iframe中，所以在测试的过程中我们也放在iframe中测试，以防一些他们没有做容错处理导致的问题出现
  * */
-
 //test( 'getRange--简单', function() {
 //    stop();
 //    /*防止frame没有加载好导致无法取到document*/
@@ -86,7 +84,6 @@ module("core.Selection");
 //        start();
 //    }, 20 );
 //} );
-
 test('getRange--闭合选区的边界情况', function () {
     var div_new = document.createElement('div');
     document.body.appendChild(div_new);
@@ -101,25 +98,20 @@ test('getRange--闭合选区的边界情况', function () {
                 range.setStart(editor.body.firstChild.firstChild, 0).collapse(true).select();
                 range = editor.selection.getRange();
                 var strong = editor.body.firstChild.firstChild;
-                    /*startContainer:ie is xxx,others are strong.firstChild*/
-                if(ua.browser.ie>8){
-                    ok(( range.startContainer === strong) && range.startOffset === 1, 'startContainer是xxx左边的占位符或者xxx');
-                }
-
-                 else{
+                /*startContainer:ie is xxx,others are strong.firstChild*/
+                if (ua.browser.ie > 8) {
+                    ok((range.startContainer === strong) && range.startOffset === 1, 'startContainer是xxx左边的占位符或者xxx');
+                } else {
                     ok(range.startContainer.nodeType == 3, 'startContainer是文本节点');
-
-                    ok(( range.startContainer === strong.firstChild) && strong.firstChild.length == 1 || (range.startContainer.nodeValue.length == 3 && range.startContainer === strong.lastChild), 'startContainer是xxx左边的占位符或者xxx');
+                    ok((range.startContainer === strong.firstChild) && strong.firstChild.length == 1 || (range.startContainer.nodeValue.length == 3 && range.startContainer === strong.lastChild), 'startContainer是xxx左边的占位符或者xxx');
                 }
-
                 ua.manualDeleteFillData(editor.body);
                 range.setStart(editor.body.firstChild.firstChild, 1).collapse(true).select();
                 /*去掉占位符*/
                 range = editor.selection.getRange();
                 /*可能为(strong，1)或者(xxx，3)*/
-                ok(( range.startContainer === strong) || ( range.startContainer === strong.lastChild) && strong.lastChild.length == 1 || (range.startContainer.nodeValue.length == 3 && range.startContainer === strong.firstChild), 'startContainer是xxx或者xxx右边的占位符');
+                ok((range.startContainer === strong) || (range.startContainer === strong.lastChild) && strong.lastChild.length == 1 || (range.startContainer.nodeValue.length == 3 && range.startContainer === strong.firstChild), 'startContainer是xxx或者xxx右边的占位符');
 //    ok( range.startContainer.nodeType == 1 ? range.startContainer.tagName.toLowerCase() == 'strong' && range.startOffset == 1 : range.startContainer.data == 'xxx' && range.startOffset == 3, 'strong,1或xxx,3' );
-
                 ua.manualDeleteFillData(editor.body);
                 /*p,0*/
                 range.setStart(editor.body.firstChild, 0).collapse(true).select();
@@ -129,8 +121,6 @@ test('getRange--闭合选区的边界情况', function () {
 //    ua.manualDeleteFillData( editor.body );
 //    range.setStart( editor.body.firstChild, 1 ).collapse( true ).select();
 //    equal( range.startContainer.tagName.toLowerCase(), 'p', 'p,1' );
-
-
                 te.dom.push(div_new);
                 te.obj.push(editor);
                 start();
@@ -138,7 +128,6 @@ test('getRange--闭合选区的边界情况', function () {
         });
     }, 50);
 });
-
 //test( '不闭合选区的边界情况', function () {
 //
 //} );
@@ -164,7 +153,6 @@ test('trace 1742  isFocus', function () {
                 ok(!editor1.selection.isFocus(), '设editor内容是<span> editor1 is not focused');
                 div1.parentNode.removeChild(div1);
                 div2.parentNode.removeChild(div2);
-
                 var div3 = document.createElement('div');
                 var div4 = document.createElement('div');
                 document.body.appendChild(div3);

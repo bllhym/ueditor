@@ -5,7 +5,7 @@
  * Time: 下午4:46
  * To change this template use File | Settings | File Templates.
  */
-module( 'ui.separator' );
-test( '', function() {
-    equal('','','');
-} );
+module('ui.separator');
+test('', function () {
+    equal('', '', '');
+});

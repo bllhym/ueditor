@@ -1,5 +1,4 @@
 module("plugins.basestyle");
-
 test('sub--table', function () {
     var editor = te.obj[0];
     setTimeout(function () {
@@ -23,7 +22,6 @@ test('sub--table', function () {
                 equal(ua.getChildHTML(tbody.lastChild.firstChild.nextSibling), '<sub>hello4</sub>', '检查第4个单元格中文本是否是下标');
                 equal(editor.queryCommandState('superscript'), 0, 'check sup state');
                 equal(editor.queryCommandState('subscript'), 1, 'check sub state');
-
                 editor.execCommand('subscript');
                 /**trace 943，为表格去上下标**/
                 equal(tbody.firstChild.firstChild.innerHTML, 'hello1', '检查第1个单元格中文本是否不是下标');
@@ -32,7 +30,6 @@ test('sub--table', function () {
                 equal(tbody.lastChild.firstChild.nextSibling.innerHTML, 'hello4', '检查第4个单元格中文本是否你是下标');
                 equal(editor.queryCommandState('superscript'), 0, 'check sup state');
                 equal(editor.queryCommandState('subscript'), 0, 'check sub state');
-
                 editor.execCommand('superscript');
                 /*上下标互斥*/
                 equal(ua.getChildHTML(tbody.firstChild.firstChild), '<sup>hello1</sup>', '检查第1个单元格中文本是否是上标');
@@ -47,7 +44,6 @@ test('sub--table', function () {
     }, 50);
     stop();
 });
-
 //如果没有setTimeout在FF（3.6和9都是）中range会出错，其他浏览器没问题
 test('闭合插入上下标', function () {
     var editor = te.obj[0];
@@ -63,9 +59,8 @@ test('闭合插入上下标', function () {
         range.insertNode(editor.document.createTextNode('hello'));
         equal(ua.getChildHTML(body.firstChild), '你<sup>hello</sup>好', '上标标签中插入文本');
         start();
-    }, 100)
+    }, 100);
 });
-
 test('不闭合插入上下标', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -80,7 +75,6 @@ test('不闭合插入上下标', function () {
         start();
     }, 100);
 });
-
 /*trace 870*/
 //无法模拟光标自动移到的场景，因此模拟输入文本通过插入文本节点实现的方法，在插入文本后光标仍然在原来的位置
 // 我们不确定光标实际在哪
@@ -101,12 +95,13 @@ test('trace 870:加粗文本前面去加粗', function () {
     /*插入一个文本节点*/
     ua.manualDeleteFillData(editor.body);
     /*ie下插入节点后会自动移动光标到节点后面，而其他浏览器不会*/
-    if (ua.browser.chrome || ua.browser.safari || (ua.browser.ie && ua.browser.ie > 8 && ua.browser.ie<11))// ie9,10改range
+    if (ua.browser.chrome || ua.browser.safari || (ua.browser.ie && ua.browser.ie > 8 && ua.browser.ie < 11))// ie9,10改range
+    {
         equal(editor.getContent(), '<p>hello2<strong>hello</strong><br/></p>');
-    else
+    } else {
         equal(editor.getContent(), '<p><strong>hello</strong>hello2<br/></p>');
+    }
 });
-
 /*trace 1043*/
 test('bold-在已加粗文本中间去除加粗', function () {
     var editor = te.obj[0];
@@ -122,7 +117,6 @@ test('bold-在已加粗文本中间去除加粗', function () {
     ua.manualDeleteFillData(editor.body);
     equal(ua.getChildHTML(body.firstChild), "aa<strong>hello</strong>ssss", "新文本节点没有加粗");
 });
-
 /*trace 958*/
 test('bold-在已加粗文本中间去除加粗', function () {
     var editor = te.obj[0];
@@ -132,7 +126,6 @@ test('bold-在已加粗文本中间去除加粗', function () {
     editor.execCommand('bold');
     ok(ua.getChildHTML(body), "<stong></stong>", "editor不focus时点加粗，不会多一个空行");
 });
-
 /*trace 958*/
 test('bold-加粗状态反射', function () {
     var editor = te.obj[0];
@@ -146,12 +139,13 @@ test('bold-加粗状态反射', function () {
         range.setStart(body.firstChild.firstChild.firstChild, 2).collapse(true).select();
         equal(editor.queryCommandState('bold'), 1, '闭合选择，加粗高亮');
         ua.manualDeleteFillData(editor.body);
-        range.setStart(body.firstChild.firstChild.firstChild, 0).setEnd(body.firstChild.firstChild.lastChild, 4).select();
+        range.setStart(body.firstChild.firstChild.firstChild, 0)
+             .setEnd(body.firstChild.firstChild.lastChild, 4)
+             .select();
         equal(editor.queryCommandState('bold'), 1, '不闭合选择，加粗高亮');
         start();
-    }, 100)
+    }, 100);
 });
-
 /*trace 580*/
 test('bold-连续加粗2次', function () {
     var editor = te.obj[0];
@@ -172,7 +166,6 @@ test('bold-连续加粗2次', function () {
     /*第二次加粗*/
     equal(editor.queryCommandState('bold'), 1, '加粗高亮');
 });
-
 /*trace 1983*/
 test('bold-2个单词，中间有空格第一个单词加粗，第二个单词加粗再去加粗', function () {
     var editor = te.obj[0];
@@ -188,7 +181,6 @@ test('bold-2个单词，中间有空格第一个单词加粗，第二个单词�
     editor.execCommand('bold');
     ok(body.firstChild.childNodes.length == 3 && body.firstChild.childNodes[1].length == 1, '空格保留');
 });
-
 test('测试 userAction.manualdeleteFilldata', function () {
     var editor = te.obj[0];
     var body = editor.body;
@@ -201,7 +193,6 @@ test('测试 userAction.manualdeleteFilldata', function () {
     ua.manualDeleteFillData(body);
     equal(body.innerHTML.toLowerCase(), '<p>' + space + '</p>', '清除不可见字符后相等');
 });
-
 test('trace 1884:单击B再单击I ', function () {
     var editor = te.obj[0];
     var body = editor.body;
@@ -213,7 +204,6 @@ test('trace 1884:单击B再单击I ', function () {
     editor.execCommand('italic');
     equal(editor.queryCommandState('italic'), 1, 'b高亮');
 });
-
 test('单击B再在其他地方单击I，空的strong标签被删除 ', function () {
     var editor = te.obj[0];
     var body = editor.body;
@@ -227,10 +217,9 @@ test('单击B再在其他地方单击I，空的strong标签被删除 ', function
     equal(editor.queryCommandState('italic'), 1, 'b高亮');
     ua.manualDeleteFillData(body);
     if (!ua.browser.ie) {     //ie下有问题不能修，屏蔽ie
-        equal(body.innerHTML.toLowerCase(), '<p><em></em>hello</p>', '空strong标签被删除')
+        equal(body.innerHTML.toLowerCase(), '<p><em></em>hello</p>', '空strong标签被删除');
     }
 });
-
 test('ctrl+i', function () {
     var editor = te.obj[0];
     var body = editor.body;
@@ -248,7 +237,6 @@ test('ctrl+i', function () {
     }, 100);
     stop();
 });
-
 test('ctrl+u', function () {
     var editor = te.obj[0];
     var body = editor.body;
@@ -266,12 +254,10 @@ test('ctrl+u', function () {
     }, 150);
     stop();
 });
-
 test('ctrl+b', function () {
     var editor = te.obj[0];
     var body = editor.body;
     var range = te.obj[1];
-
     editor.setContent('<p>没有加粗的文本</p>');
     range.selectNode(body.firstChild).select();
     setTimeout(function () {
@@ -283,7 +269,6 @@ test('ctrl+b', function () {
     }, 150);
     stop();
 });
-
 /*trace 3240*/
 test('表格中文本加粗', function () {
     var editor = te.obj[0];
@@ -301,13 +286,13 @@ test('表格中文本加粗', function () {
         var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[2].cells[0]);
         ut.setSelected(cellsRange);
         range.setStart(trs[0].cells[0], 0).collapse(true).select();
-
         editor.execCommand('bold');
         ua.manualDeleteFillData(editor.body);
         equal(editor.queryCommandState('bold'), 1, 'b高亮');
         equal(trs[0].cells[0].firstChild.tagName.toLowerCase(), 'strong', '[0][0]单元格中文本标签');
-        if (!ua.browser.ie)
+        if (!ua.browser.ie) {
             equal(trs[1].cells[0].firstChild.tagName.toLowerCase(), 'br', '[1][0]单元格中文本标签');
+        }
         equal(trs[2].cells[0].firstChild.tagName.toLowerCase(), 'strong', '[2][0]单元格中文本标签');
         start();
     }, 50);

@@ -5,7 +5,7 @@
  * Time: 下午4:45
  * To change this template use File | Settings | File Templates.
  */
-module( 'ui.mask' );
-test( '', function() {
-    equal('','','');
-} );
+module('ui.mask');
+test('', function () {
+    equal('', '', '');
+});

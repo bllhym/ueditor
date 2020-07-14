@@ -68,7 +68,6 @@ test('chrome删除后切换源码再切换回来，光标没了', function () {
 //    else
 //        ok( true, 'ie里加了视频节点embed,在节点embed后加bookmark会出错' );
 //} );
-
 //trace 852
 test('切换源码，源码中多处空行', function () {
     var editor = te.obj[0];
@@ -85,14 +84,11 @@ test('切换源码，源码中多处空行', function () {
             }, 100);
         }, 100);
     }, 100);
-
     //    var html = '<p>\nhello<a href="http://www.baidu.com/">\n\tbaidu\n</a>\n</p>';
     //无奈的验证，有不可见字符
     //多余不可见字符的的bug已经修改了，现在用例字符串长度：53
-
     // ok(html.length>=58&&html.length<=60,'切换源码不会多空行');
 });
-
 /*trace 710*/
 test('设置源码内容没有p标签，切换源码后会自动添加', function () {
     var editor = te.obj[0];
@@ -116,7 +112,6 @@ test('设置源码内容没有p标签，切换源码后会自动添加', functio
     }, 100);
     stop();
 });
-
 test('切换源码去掉空的span', function () {
     var editor = te.obj[0];
     editor.setContent('<p>切换源码<span>去掉空的span</span></p>');
@@ -130,7 +125,6 @@ test('切换源码去掉空的span', function () {
     stop();
     equal(editor.getContent(), '<p>切换源码去掉空的span</p>');
 });
-
 test('b,i标签，切换源码后自动转换成strong和em', function () {
     var editor = te.obj[0];
     editor.setContent('<p><b>加粗的内容</b><i>斜体的内容<b>加粗且斜体</b></i></p>');
@@ -144,7 +138,6 @@ test('b,i标签，切换源码后自动转换成strong和em', function () {
     stop();
     equal(editor.getContent(), '<p><strong>加粗的内容</strong><em>斜体的内容<strong>加粗且斜体</strong></em></p>');
 });
-
 test(' trace 3739 trace 1734 range的更新/特殊符号的转换', function () {
     var editor = te.obj[0];
     editor.setContent('<p>"<></p>');
@@ -160,7 +153,16 @@ test(' trace 3739 trace 1734 range的更新/特殊符号的转换', function () 
 //                var label = ua.browser.gecko ? 'html' : 'body';
 //                var label = 'html';
                 ua.manualDeleteFillData(editor.body);
-                var sc = (ua.browser.ie==11)?editor.selection.getRange().startContainer.parentNode.tagName.toLowerCase():editor.selection.getRange().startContainer.parentNode.parentNode.tagName.toLowerCase();
+                var sc = (ua.browser.ie == 11) ? editor.selection.getRange()
+                                                       .startContainer
+                                                       .parentNode
+                                                       .tagName
+                                                       .toLowerCase() : editor.selection.getRange()
+                                                                              .startContainer
+                                                                              .parentNode
+                                                                              .parentNode
+                                                                              .tagName
+                                                                              .toLowerCase();
                 equal(sc, 'html', 'range的更新');
                 editor.execCommand('source');
                 setTimeout(function () {
@@ -173,36 +175,32 @@ test(' trace 3739 trace 1734 range的更新/特殊符号的转换', function () 
     }, 100);
     stop();
 });
-
 /*trace 1234 */
 test('默认插入的占位符', function () {
     var editor = te.obj[0];
     editor.setContent('');
     equal(editor.getContent(), '');
 });
-
 test('插入分页符,源码中显示：_baidu_page_break_tag_', function () {
     var editor = te.obj[0];
-        var range = te.obj[1];
-        editor.setContent('<p><br /></p>');
-        setTimeout(function () {
-            range.setStart(editor.body.firstChild, 0).collapse(1).select();
-            editor.execCommand('pagebreak');
-            ua.manualDeleteFillData(editor.body);
-            var pagebreak = editor.body.getElementsByTagName('hr')[0];
-
-            if (typeof pagebreak.attributes['class'] == "undefined") {
-                equal(pagebreak.getAttribute('class'), 'pagebreak', 'pagebreak');
-            }
-            else {//适用于ie6,7
-                equal(pagebreak.attributes['class'].nodeValue, 'pagebreak', 'pagebreak');
-            }
-            ua.manualDeleteFillData(editor.body);
+    var range = te.obj[1];
+    editor.setContent('<p><br /></p>');
+    setTimeout(function () {
+        range.setStart(editor.body.firstChild, 0).collapse(1).select();
+        editor.execCommand('pagebreak');
+        ua.manualDeleteFillData(editor.body);
+        var pagebreak = editor.body.getElementsByTagName('hr')[0];
+        if (typeof pagebreak.attributes['class'] == "undefined") {
+            equal(pagebreak.getAttribute('class'), 'pagebreak', 'pagebreak');
+        } else {//适用于ie6,7
+            equal(pagebreak.attributes['class'].nodeValue, 'pagebreak', 'pagebreak');
+        }
+        ua.manualDeleteFillData(editor.body);
 //        var br = baidu.editor.browser.ie ? '&nbsp;' : '<br />';
-            ok(editor.getContent().indexOf('_ueditor_page_break_tag_') >= 0, 'pagebreak被解析');
+        ok(editor.getContent().indexOf('_ueditor_page_break_tag_') >= 0, 'pagebreak被解析');
 //        equal( editor.getContent(), '<p>' + br + '</p>_baidu_page_break_tag_<p>' + br + '</p>' );
-            start();
-        }, 200);
+        start();
+    }, 200);
     stop();
 });
 //TODO 1.2.6
@@ -240,9 +238,8 @@ test('插入分页符,源码中显示：_baidu_page_break_tag_', function () {
 //        start();
 //    },50);
 //} );
-
 test('不以http://开头的超链接绝对路径网址', function () {
-    if (ua.browser.ie == 9)return 0;//TODO 1.2.6
+    if (ua.browser.ie == 9) return 0;//TODO 1.2.6
     var editor = te.obj[0];
     editor.setContent('<p><a href="www.baidu.com">绝对路径网址</a></p>');
     setTimeout(function () {
@@ -255,7 +252,6 @@ test('不以http://开头的超链接绝对路径网址', function () {
     }, 100);
     stop();
 });
-
 test('trace 1727:插入超链接后再插入空格，空格不能被删除', function () {
     var editor = te.obj[0];
     editor.setContent('<p> <a href="http://www.baidu.com/">绝对路径网址</a>  ddd</p>');
@@ -303,7 +299,6 @@ test('trace 1727:插入超链接后再插入空格，空格不能被删除', fun
 //        },100);
 //    });
 //});
-
 test('在font,b,i标签中输入，会自动转换标签 ', function () {
 //    if(!ua.browser.gecko){
     var editor = te.obj[0];
@@ -313,10 +308,11 @@ test('在font,b,i标签中输入，会自动转换标签 ', function () {
         setTimeout(function () {
             editor.execCommand('source');
             equal(editor.body.firstChild.firstChild.tagName.toLowerCase(), 'span', 'font转换成span');
-            if (ua.browser.gecko || ua.browser.ie)
+            if (ua.browser.gecko || ua.browser.ie) {
                 equal($(editor.body.firstChild.firstChild).css('font-size'), '16px', '检查style');
-            else
+            } else {
                 equal($(editor.body.firstChild.firstChild).css('font-size'), '16px', '检查style');
+            }
             var EMstyle = $(editor.body.firstChild.firstChild).css('color');
             ok(EMstyle == 'rgb(255, 0, 0)' || EMstyle == 'red' || EMstyle == '#ff0000', '检查style');
             equal(ua.getChildHTML(editor.body.firstChild.firstChild), '<strong><em>x</em></strong>', 'b转成strong,i转成em ');
@@ -326,7 +322,6 @@ test('在font,b,i标签中输入，会自动转换标签 ', function () {
     stop();
 //    }
 });
-
 test('trace 3334:img和a之间不会产生多余空格', function () {
     var editor = te.obj[0];
     editor.setContent('<p><img src="http://img.baidu.com/hi/jx2/j_0001.gif" /><a href="http://www.baidu.com">http://www.baidu.com</a></p>');
@@ -345,9 +340,8 @@ test('trace 3334:img和a之间不会产生多余空格', function () {
     }, 20);
     stop();
 });
-
 test('trace 3334:table中td不会产生多余空格', function () {
-    if(ua.browser.ie)return ;//todo 1.3.0
+    if (ua.browser.ie) return;//todo 1.3.0
     var editor = te.obj[0];
     editor.execCommand('inserttable');
     var br = ua.browser.ie ? '' : '<br>';
@@ -365,7 +359,6 @@ test('trace 3334:table中td不会产生多余空格', function () {
     }, 20);
     stop();
 });
-
 test('trace 3349：带颜色的span切到源码再切回，不会丢失span', function () {
     var editor = te.obj[0];
     editor.setContent('<p><span style="color: rgb(255, 0, 0);"></span><br></p>');

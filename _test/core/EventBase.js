@@ -1,6 +1,5 @@
-module( "EventBase" );
-
-test( "addListener,fireEvent", function() {
+module("EventBase");
+test("addListener,fireEvent", function () {
     var editor = te.obj[1];
     var div = te.dom[0];
     expect(6);
@@ -8,7 +7,6 @@ test( "addListener,fireEvent", function() {
     stop();
     editor.ready(function () {
         editor.focus();
-
         editor.addListener("event1", function () {
             ok(true, "listener1 is fired");
         });
@@ -17,7 +15,6 @@ test( "addListener,fireEvent", function() {
         });
         editor.fireEvent("event1");
         editor.fireEvent("event2");
-
         editor.fireEvent("event1 event2");
         var fun = function (type) {
             ok(true, type + " is fired");
@@ -26,8 +23,8 @@ test( "addListener,fireEvent", function() {
         editor.fireEvent("event3 event4 ");
         start();
     });
-} );
-test( "on,trigger", function() {
+});
+test("on,trigger", function () {
     var editor = te.obj[1];
     var div = te.dom[0];
     expect(6);
@@ -35,7 +32,6 @@ test( "on,trigger", function() {
     stop();
     editor.ready(function () {
         editor.focus();
-
         editor.on("event1", function () {
             ok(true, "listener1 is fired");
         });
@@ -44,7 +40,6 @@ test( "on,trigger", function() {
         });
         editor.trigger("event1");
         editor.trigger("event2");
-
         editor.trigger("event1 event2");
         var fun = function (type) {
             ok(true, type + " is fired");
@@ -53,51 +48,52 @@ test( "on,trigger", function() {
         editor.trigger("event3 event4 ");
         start();
     });
-} );
-test( "addListener,fireEvent --同一个侦听器绑定多个事件", function() {
+});
+test("addListener,fireEvent --同一个侦听器绑定多个事件", function () {
     var editor = te.obj[1];
     var div = te.dom[0];
-    editor.render( div );
-    expect( 2 );
+    editor.render(div);
+    expect(2);
     stop();
     editor.ready(function () {
         editor.focus();
-        editor.addListener( "event1", function() {
-            ok( true, "listener1 is fired" );
-        } );
-        editor.addListener( "event1", function() {
-            ok( true, "listener2 is fired" );
-        } );
-        editor.fireEvent( "event1" );
+        editor.addListener("event1", function () {
+            ok(true, "listener1 is fired");
+        });
+        editor.addListener("event1", function () {
+            ok(true, "listener2 is fired");
+        });
+        editor.fireEvent("event1");
         start();
     });
-} );
-test( "on,trigger --同一个侦听器绑定多个事件", function() {
+});
+test("on,trigger --同一个侦听器绑定多个事件", function () {
     var editor = te.obj[1];
     var div = te.dom[0];
-    editor.render( div );
-    expect( 2 );
+    editor.render(div);
+    expect(2);
     stop();
     editor.ready(function () {
         editor.focus();
-        editor.on( "event1", function() {
-            ok( true, "listener1 is fired" );
-        } );
-        editor.on( "event1", function() {
-            ok( true, "listener2 is fired" );
-        } );
-        editor.trigger( "event1" );
+        editor.on("event1", function () {
+            ok(true, "listener1 is fired");
+        });
+        editor.on("event1", function () {
+            ok(true, "listener2 is fired");
+        });
+        editor.trigger("event1");
         start();
     });
-} );
-test( "removeListener", function() {
+});
+test("removeListener", function () {
     var editor = te.obj[1];
     var div = te.dom[0];
-    editor.render( div);
+    editor.render(div);
     expect(3);
     stop();
     editor.ready(function () {
         editor.focus();
+
         function fun1() {
             ok(true, "listener1 is fired");
         }
@@ -109,7 +105,6 @@ test( "removeListener", function() {
         editor.addListener("event1", fun1);
         editor.addListener("event1", fun2);
         editor.fireEvent("event1");
-
         editor.removeListener("event1", fun1);
         editor.fireEvent("event1");
 
@@ -122,16 +117,16 @@ test( "removeListener", function() {
         editor.fireEvent("event3 event4 ");
         start();
     });
-} );
-
-test( "off", function() {
+});
+test("off", function () {
     var editor = te.obj[1];
     var div = te.dom[0];
-    editor.render( div);
+    editor.render(div);
     expect(3);
     stop();
     editor.ready(function () {
         editor.focus();
+
         function fun1() {
             ok(true, "listener1 is fired");
         }
@@ -143,7 +138,6 @@ test( "off", function() {
         editor.on("event1", fun1);
         editor.on("event1", fun2);
         editor.trigger("event1");
-
         editor.off("event1", fun1);
         editor.trigger("event1");
 
@@ -156,14 +150,15 @@ test( "off", function() {
         editor.trigger("event3 event4 ");
         start();
     });
-} );
-test( "fireEvent--nolisteners", function() {
+});
+test("fireEvent--nolisteners", function () {
     var editor = te.obj[1];
     var div = te.dom[0];
     editor.render(div);
     stop();
     editor.ready(function () {
         editor.focus();
+
         function fun1() {
             ok(true, "listener1 is fired");
         }
@@ -173,15 +168,15 @@ test( "fireEvent--nolisteners", function() {
         editor.fireEvent("event1");//listener1 and listener2 are both fired
         start();
     });
-} );
-
-test( "trigger--nolisteners", function() {
+});
+test("trigger--nolisteners", function () {
     var editor = te.obj[1];
     var div = te.dom[0];
     editor.render(div);
     stop();
     editor.ready(function () {
         editor.focus();
+
         function fun1() {
             ok(true, "listener1 is fired");
         }
@@ -191,4 +186,4 @@ test( "trigger--nolisteners", function() {
         editor.trigger("event1");//listener1 and listener2 are both fired
         start();
     });
-} );
+});

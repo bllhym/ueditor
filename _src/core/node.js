@@ -5,22 +5,18 @@
  * @class uNode
  * @since 1.2.6.1
  */
-
 /**
  * UEditor公用空间，UEditor所有的功能都挂载在该空间下
  * @unfile
  * @module UE
  */
-
 (function () {
-
     /**
      * 编辑器模拟的节点类
      * @unfile
      * @module UE
      * @class uNode
      */
-
     /**
      * 通过一个键值对，创建一个uNode对象
      * @constructor
@@ -31,33 +27,30 @@
      *     type:'element',
      *     tagName:'span',
      *     attrs:{style:'font-size:14px;'}
-     * }
+     * })
      * ```
      */
-    var uNode = UE.uNode = function (obj) {
+    var uNode = (UE.uNode = function (obj) {
         this.type = obj.type;
         this.data = obj.data;
         this.tagName = obj.tagName;
         this.parentNode = obj.parentNode;
         this.attrs = obj.attrs || {};
         this.children = obj.children;
-    };
-
+    });
     var notTransAttrs = {
-        'href':1,
-        'src':1,
-        '_src':1,
-        '_href':1,
-        'cdata_data':1
+        href: 1,
+        src: 1,
+        _src: 1,
+        _href: 1,
+        cdata_data: 1
     };
-
     var notTransTagName = {
-        style:1,
-        script:1
+        style: 1,
+        script: 1
     };
-
-    var indentChar = '    ',
-        breakChar = '\n';
+    var indentChar = "    ",
+        breakChar = "\n";
 
     function insertLine(arr, current, begin) {
         arr.push(breakChar);
@@ -75,57 +68,66 @@
     //支持标签和html
     uNode.createElement = function (html) {
         if (/[<>]/.test(html)) {
-            return UE.htmlparser(html).children[0]
+            return UE.htmlparser(html).children[0];
         } else {
             return new uNode({
-                type:'element',
-                children:[],
-                tagName:html
-            })
+                type: "element",
+                children: [],
+                tagName: html
+            });
         }
     };
-    uNode.createText = function (data,noTrans) {
+    uNode.createText = function (data, noTrans) {
         return new UE.uNode({
-            type:'text',
-            'data':noTrans ? data : utils.unhtml(data || '')
-        })
+            type: "text",
+            data: noTrans ? data : utils.unhtml(data || "")
+        });
     };
+
     function nodeToHtml(node, arr, formatter, current) {
         switch (node.type) {
-            case 'root':
-                for (var i = 0, ci; ci = node.children[i++];) {
+            case "root":
+                for (var i = 0, ci; (ci = node.children[i++]);) {
                     //插入新行
-                    if (formatter && ci.type == 'element' && !dtd.$inlineWithA[ci.tagName] && i > 1) {
+                    if (
+                        formatter &&
+                        ci.type == "element" &&
+                        !dtd.$inlineWithA[ci.tagName] &&
+                        i > 1
+                    ) {
                         insertLine(arr, current, true);
-                        insertIndent(arr, current)
+                        insertIndent(arr, current);
                     }
-                    nodeToHtml(ci, arr, formatter, current)
+                    nodeToHtml(ci, arr, formatter, current);
                 }
                 break;
-            case 'text':
+            case "text":
                 isText(node, arr);
                 break;
-            case 'element':
+            case "element":
                 isElement(node, arr, formatter, current);
                 break;
-            case 'comment':
+            case "comment":
                 isComment(node, arr, formatter);
         }
         return arr;
     }
 
     function isText(node, arr) {
-        if(node.parentNode.tagName == 'pre'){
+        if (node.parentNode.tagName == "pre") {
             //源码模式下输入html标签，不能做转换处理，直接输出
-            arr.push(node.data)
-        }else{
-            arr.push(notTransTagName[node.parentNode.tagName] ? utils.html(node.data) : node.data.replace(/[ ]{2}/g,' &nbsp;'))
+            arr.push(node.data);
+        } else {
+            arr.push(
+                notTransTagName[node.parentNode.tagName]
+                ? utils.html(node.data)
+                : node.data.replace(/[ ]{2}/g, " &nbsp;")
+            );
         }
-
     }
 
     function isElement(node, arr, formatter, current) {
-        var attrhtml = '';
+        var attrhtml = "";
         if (node.attrs) {
             attrhtml = [];
             var attrs = node.attrs;
@@ -134,58 +136,76 @@
                 //<p>'<img src='http://nsclick.baidu.com/u.gif?&asdf=\"sdf&asdfasdfs;asdf'></p>
                 //这里边的\"做转换，要不用innerHTML直接被截断了，属性src
                 //有可能做的不够
-                attrhtml.push(a + (attrs[a] !== undefined ? '="' + (notTransAttrs[a] ? utils.html(attrs[a]).replace(/["]/g, function (a) {
-                   return '&quot;'
-                }) : utils.unhtml(attrs[a])) + '"' : ''))
+                attrhtml.push(
+                    a +
+                    (attrs[a] !== undefined
+                     ? '="' +
+                         (notTransAttrs[a]
+                          ? utils.html(attrs[a]).replace(/["]/g, function (a) {
+                                 return "&quot;";
+                             })
+                          : utils.unhtml(attrs[a])) +
+                         '"'
+                     : "")
+                );
             }
-            attrhtml = attrhtml.join(' ');
+            attrhtml = attrhtml.join(" ");
         }
-        arr.push('<' + node.tagName +
-            (attrhtml ? ' ' + attrhtml  : '') +
-            (dtd.$empty[node.tagName] ? '\/' : '' ) + '>'
+        arr.push(
+            "<" +
+            node.tagName +
+            (attrhtml ? " " + attrhtml : "") +
+            (dtd.$empty[node.tagName] ? "/" : "") +
+            ">"
         );
         //插入新行
-        if (formatter  &&  !dtd.$inlineWithA[node.tagName] && node.tagName != 'pre') {
-            if(node.children && node.children.length){
+        if (formatter && !dtd.$inlineWithA[node.tagName] && node.tagName != "pre") {
+            if (node.children && node.children.length) {
                 current = insertLine(arr, current, true);
-                insertIndent(arr, current)
+                insertIndent(arr, current);
             }
-
         }
         if (node.children && node.children.length) {
-            for (var i = 0, ci; ci = node.children[i++];) {
-                if (formatter && ci.type == 'element' &&  !dtd.$inlineWithA[ci.tagName] && i > 1) {
+            for (var i = 0, ci; (ci = node.children[i++]);) {
+                if (
+                    formatter &&
+                    ci.type == "element" &&
+                    !dtd.$inlineWithA[ci.tagName] &&
+                    i > 1
+                ) {
                     insertLine(arr, current);
-                    insertIndent(arr, current)
+                    insertIndent(arr, current);
                 }
-                nodeToHtml(ci, arr, formatter, current)
+                nodeToHtml(ci, arr, formatter, current);
             }
         }
         if (!dtd.$empty[node.tagName]) {
-            if (formatter && !dtd.$inlineWithA[node.tagName]  && node.tagName != 'pre') {
-
-                if(node.children && node.children.length){
+            if (
+                formatter &&
+                !dtd.$inlineWithA[node.tagName] &&
+                node.tagName != "pre"
+            ) {
+                if (node.children && node.children.length) {
                     current = insertLine(arr, current);
-                    insertIndent(arr, current)
+                    insertIndent(arr, current);
                 }
             }
-            arr.push('<\/' + node.tagName + '>');
+            arr.push("</" + node.tagName + ">");
         }
-
     }
 
     function isComment(node, arr) {
-        arr.push('<!--' + node.data + '-->');
+        arr.push("<!--" + node.data + "-->");
     }
 
     function getNodeById(root, id) {
         var node;
-        if (root.type == 'element' && root.getAttr('id') == id) {
+        if (root.type == "element" && root.getAttr("id") == id) {
             return root;
         }
         if (root.children && root.children.length) {
-            for (var i = 0, ci; ci = root.children[i++];) {
-                if (node = getNodeById(ci, id)) {
+            for (var i = 0, ci; (ci = root.children[i++]);) {
+                if ((node = getNodeById(ci, id))) {
                     return node;
                 }
             }
@@ -193,34 +213,34 @@
     }
 
     function getNodesByTagName(node, tagName, arr) {
-        if (node.type == 'element' && node.tagName == tagName) {
+        if (node.type == "element" && node.tagName == tagName) {
             arr.push(node);
         }
         if (node.children && node.children.length) {
-            for (var i = 0, ci; ci = node.children[i++];) {
-                getNodesByTagName(ci, tagName, arr)
+            for (var i = 0, ci; (ci = node.children[i++]);) {
+                getNodesByTagName(ci, tagName, arr);
             }
         }
     }
-    function nodeTraversal(root,fn){
-        if(root.children && root.children.length){
-            for(var i= 0,ci;ci=root.children[i];){
-                nodeTraversal(ci,fn);
+
+    function nodeTraversal(root, fn) {
+        if (root.children && root.children.length) {
+            for (var i = 0, ci; (ci = root.children[i]);) {
+                nodeTraversal(ci, fn);
                 //ci被替换的情况，这里就不再走 fn了
-                if(ci.parentNode ){
-                    if(ci.children && ci.children.length){
-                        fn(ci)
+                if (ci.parentNode) {
+                    if (ci.children && ci.children.length) {
+                        fn(ci);
                     }
-                    if(ci.parentNode) i++
+                    if (ci.parentNode) i++;
                 }
             }
-        }else{
-            fn(root)
+        } else {
+            fn(root);
         }
-
     }
-    uNode.prototype = {
 
+    uNode.prototype = {
         /**
          * 当前节点对象，转换成html文本
          * @method toHtml
@@ -241,12 +261,11 @@
          * node.toHtml( true );
          * ```
          */
-        toHtml:function (formatter) {
+        toHtml: function (formatter) {
             var arr = [];
             nodeToHtml(this, arr, formatter, 0);
-            return arr.join('')
+            return arr.join("");
         },
-
         /**
          * 获取节点的html内容
          * @method innerHTML
@@ -269,32 +288,31 @@
          * node.innerHTML('<span>text</span>');
          * ```
          */
-        innerHTML:function (htmlstr) {
-            if (this.type != 'element' || dtd.$empty[this.tagName]) {
+        innerHTML: function (htmlstr) {
+            if (this.type != "element" || dtd.$empty[this.tagName]) {
                 return this;
             }
             if (utils.isString(htmlstr)) {
-                if(this.children){
-                    for (var i = 0, ci; ci = this.children[i++];) {
+                if (this.children) {
+                    for (var i = 0, ci; (ci = this.children[i++]);) {
                         ci.parentNode = null;
                     }
                 }
                 this.children = [];
                 var tmpRoot = UE.htmlparser(htmlstr);
-                for (var i = 0, ci; ci = tmpRoot.children[i++];) {
+                for (var i = 0, ci; (ci = tmpRoot.children[i++]);) {
                     this.children.push(ci);
                     ci.parentNode = this;
                 }
                 return this;
             } else {
                 var tmpRoot = new UE.uNode({
-                    type:'root',
-                    children:this.children
+                    type: "root",
+                    children: this.children
                 });
                 return tmpRoot.toHtml();
             }
         },
-
         /**
          * 获取节点的纯文本内容
          * @method innerText
@@ -317,24 +335,23 @@
          * node.innerText('<span>text</span>');
          * ```
          */
-        innerText:function (textStr,noTrans) {
-            if (this.type != 'element' || dtd.$empty[this.tagName]) {
+        innerText: function (textStr, noTrans) {
+            if (this.type != "element" || dtd.$empty[this.tagName]) {
                 return this;
             }
             if (textStr) {
-                if(this.children){
-                    for (var i = 0, ci; ci = this.children[i++];) {
+                if (this.children) {
+                    for (var i = 0, ci; (ci = this.children[i++]);) {
                         ci.parentNode = null;
                     }
                 }
                 this.children = [];
-                this.appendChild(uNode.createText(textStr,noTrans));
+                this.appendChild(uNode.createText(textStr, noTrans));
                 return this;
             } else {
-                return this.toHtml().replace(/<[^>]+>/g, '');
+                return this.toHtml().replace(/<[^>]+>/g, "");
             }
         },
-
         /**
          * 获取当前对象的data属性
          * @method getData
@@ -344,12 +361,10 @@
          * node.getData();
          * ```
          */
-        getData:function () {
-            if (this.type == 'element')
-                return '';
-            return this.data
+        getData: function () {
+            if (this.type == "element") return "";
+            return this.data;
         },
-
         /**
          * 获取当前节点下的第一个子节点
          * @method firstChild
@@ -359,13 +374,12 @@
          * node.firstChild(); //返回第一个子节点
          * ```
          */
-        firstChild:function () {
-//            if (this.type != 'element' || dtd.$empty[this.tagName]) {
-//                return this;
-//            }
+        firstChild: function () {
+            //            if (this.type != 'element' || dtd.$empty[this.tagName]) {
+            //                return this;
+            //            }
             return this.children ? this.children[0] : null;
         },
-
         /**
          * 获取当前节点下的最后一个子节点
          * @method lastChild
@@ -375,13 +389,12 @@
          * node.lastChild(); //返回最后一个子节点
          * ```
          */
-        lastChild:function () {
-//            if (this.type != 'element' || dtd.$empty[this.tagName] ) {
-//                return this;
-//            }
+        lastChild: function () {
+            //            if (this.type != 'element' || dtd.$empty[this.tagName] ) {
+            //                return this;
+            //            }
             return this.children ? this.children[this.children.length - 1] : null;
         },
-
         /**
          * 获取和当前节点有相同父亲节点的前一个节点
          * @method previousSibling
@@ -391,16 +404,14 @@
          * node.children[2].previousSibling(); //返回子节点node.children[1]
          * ```
          */
-        previousSibling : function(){
+        previousSibling: function () {
             var parent = this.parentNode;
-            for (var i = 0, ci; ci = parent.children[i]; i++) {
+            for (var i = 0, ci; (ci = parent.children[i]); i++) {
                 if (ci === this) {
-                   return i == 0 ? null : parent.children[i-1];
+                    return i == 0 ? null : parent.children[i - 1];
                 }
             }
-
         },
-
         /**
          * 获取和当前节点有相同父亲节点的后一个节点
          * @method nextSibling
@@ -410,15 +421,14 @@
          * node.children[2].nextSibling(); //如果有，返回子节点node.children[3]
          * ```
          */
-        nextSibling : function(){
+        nextSibling: function () {
             var parent = this.parentNode;
-            for (var i = 0, ci; ci = parent.children[i++];) {
+            for (var i = 0, ci; (ci = parent.children[i++]);) {
                 if (ci === this) {
                     return parent.children[i];
                 }
             }
         },
-
         /**
          * 用新的节点替换当前节点
          * @method replaceChild
@@ -430,12 +440,12 @@
          * node.replaceChild(newNode, childNode); //用newNode替换childNode,childNode是node的子节点
          * ```
          */
-        replaceChild:function (target, source) {
+        replaceChild: function (target, source) {
             if (this.children) {
-                if(target.parentNode){
+                if (target.parentNode) {
                     target.parentNode.removeChild(target);
                 }
-                for (var i = 0, ci; ci = this.children[i]; i++) {
+                for (var i = 0, ci; (ci = this.children[i]); i++) {
                     if (ci === source) {
                         this.children.splice(i, 1, target);
                         source.parentNode = null;
@@ -445,7 +455,6 @@
                 }
             }
         },
-
         /**
          * 在节点的子节点列表最后位置插入一个节点
          * @method appendChild
@@ -456,15 +465,18 @@
          * node.appendChild( newNode ); //在node内插入子节点newNode
          * ```
          */
-        appendChild:function (node) {
-            if (this.type == 'root' || (this.type == 'element' && !dtd.$empty[this.tagName])) {
+        appendChild: function (node) {
+            if (
+                this.type == "root" ||
+                (this.type == "element" && !dtd.$empty[this.tagName])
+            ) {
                 if (!this.children) {
-                    this.children = []
+                    this.children = [];
                 }
-                if(node.parentNode){
+                if (node.parentNode) {
                     node.parentNode.removeChild(node);
                 }
-                for (var i = 0, ci; ci = this.children[i]; i++) {
+                for (var i = 0, ci; (ci = this.children[i]); i++) {
                     if (ci === node) {
                         this.children.splice(i, 1);
                         break;
@@ -474,10 +486,7 @@
                 node.parentNode = this;
                 return node;
             }
-
-
         },
-
         /**
          * 在传入节点的前面插入一个节点
          * @method insertBefore
@@ -489,22 +498,20 @@
          * node.parentNode.insertBefore(newNode, node); //在node节点后面插入newNode
          * ```
          */
-        insertBefore:function (target, source) {
+        insertBefore: function (target, source) {
             if (this.children) {
-                if(target.parentNode){
+                if (target.parentNode) {
                     target.parentNode.removeChild(target);
                 }
-                for (var i = 0, ci; ci = this.children[i]; i++) {
+                for (var i = 0, ci; (ci = this.children[i]); i++) {
                     if (ci === source) {
                         this.children.splice(i, 0, target);
                         target.parentNode = this;
                         return target;
                     }
                 }
-
             }
         },
-
         /**
          * 在传入节点的后面插入一个节点
          * @method insertAfter
@@ -516,22 +523,20 @@
          * node.parentNode.insertAfter(newNode, node); //在node节点后面插入newNode
          * ```
          */
-        insertAfter:function (target, source) {
+        insertAfter: function (target, source) {
             if (this.children) {
-                if(target.parentNode){
+                if (target.parentNode) {
                     target.parentNode.removeChild(target);
                 }
-                for (var i = 0, ci; ci = this.children[i]; i++) {
+                for (var i = 0, ci; (ci = this.children[i]); i++) {
                     if (ci === source) {
                         this.children.splice(i + 1, 0, target);
                         target.parentNode = this;
                         return target;
                     }
-
                 }
             }
         },
-
         /**
          * 从当前节点的子节点列表中，移除节点
          * @method removeChild
@@ -543,17 +548,16 @@
          * node.removeChild(childNode,true); //在node的子节点列表中移除child节点，并且吧child的子节点插入到移除的位置
          * ```
          */
-        removeChild:function (node,keepChildren) {
+        removeChild: function (node, keepChildren) {
             if (this.children) {
-                for (var i = 0, ci; ci = this.children[i]; i++) {
+                for (var i = 0, ci; (ci = this.children[i]); i++) {
                     if (ci === node) {
                         this.children.splice(i, 1);
                         ci.parentNode = null;
-                        if(keepChildren && ci.children && ci.children.length){
-                            for(var j= 0,cj;cj=ci.children[j];j++){
-                                this.children.splice(i+j,0,cj);
+                        if (keepChildren && ci.children && ci.children.length) {
+                            for (var j = 0, cj; (cj = ci.children[j]); j++) {
+                                this.children.splice(i + j, 0, cj);
                                 cj.parentNode = this;
-
                             }
                         }
                         return ci;
@@ -561,7 +565,6 @@
                 }
             }
         },
-
         /**
          * 获取当前节点所代表的元素属性，即获取attrs对象下的属性值
          * @method getAttr
@@ -572,10 +575,9 @@
          * node.getAttr('title');
          * ```
          */
-        getAttr:function (attrName) {
-            return this.attrs && this.attrs[attrName.toLowerCase()]
+        getAttr: function (attrName) {
+            return this.attrs && this.attrs[attrName.toLowerCase()];
         },
-
         /**
          * 设置当前节点所代表的元素属性，即设置attrs对象下的属性值
          * @method setAttr
@@ -587,32 +589,30 @@
          * node.setAttr('title','标题');
          * ```
          */
-        setAttr:function (attrName, attrVal) {
+        setAttr: function (attrName, attrVal) {
             if (!attrName) {
                 delete this.attrs;
                 return;
             }
-            if(!this.attrs){
+            if (!this.attrs) {
                 this.attrs = {};
             }
             if (utils.isObject(attrName)) {
                 for (var a in attrName) {
                     if (!attrName[a]) {
-                        delete this.attrs[a]
+                        delete this.attrs[a];
                     } else {
                         this.attrs[a.toLowerCase()] = attrName[a];
                     }
                 }
             } else {
                 if (!attrVal) {
-                    delete this.attrs[attrName]
+                    delete this.attrs[attrName];
                 } else {
                     this.attrs[attrName.toLowerCase()] = attrVal;
                 }
-
             }
         },
-
         /**
          * 获取当前节点在父节点下的位置索引
          * @method getIndex
@@ -622,16 +622,15 @@
          * node.getIndex();
          * ```
          */
-        getIndex:function(){
+        getIndex: function () {
             var parent = this.parentNode;
-            for(var i= 0,ci;ci=parent.children[i];i++){
-                if(ci === this){
+            for (var i = 0, ci; (ci = parent.children[i]); i++) {
+                if (ci === this) {
                     return i;
                 }
             }
             return -1;
         },
-
         /**
          * 在当前节点下，根据id查找节点
          * @method getNodeById
@@ -642,17 +641,16 @@
          * node.getNodeById('textId');
          * ```
          */
-        getNodeById:function (id) {
+        getNodeById: function (id) {
             var node;
             if (this.children && this.children.length) {
-                for (var i = 0, ci; ci = this.children[i++];) {
-                    if (node = getNodeById(ci, id)) {
+                for (var i = 0, ci; (ci = this.children[i++]);) {
+                    if ((node = getNodeById(ci, id))) {
                         return node;
                     }
                 }
             }
         },
-
         /**
          * 在当前节点下，根据元素名称查找节点列表
          * @method getNodesByTagName
@@ -663,19 +661,19 @@
          * node.getNodesByTagName('span');
          * ```
          */
-        getNodesByTagName:function (tagNames) {
-            tagNames = utils.trim(tagNames).replace(/[ ]{2,}/g, ' ').split(' ');
-            var arr = [], me = this;
+        getNodesByTagName: function (tagNames) {
+            tagNames = utils.trim(tagNames).replace(/[ ]{2,}/g, " ").split(" ");
+            var arr = [],
+                me = this;
             utils.each(tagNames, function (tagName) {
                 if (me.children && me.children.length) {
-                    for (var i = 0, ci; ci = me.children[i++];) {
-                        getNodesByTagName(ci, tagName, arr)
+                    for (var i = 0, ci; (ci = me.children[i++]);) {
+                        getNodesByTagName(ci, tagName, arr);
                     }
                 }
             });
             return arr;
         },
-
         /**
          * 根据样式名称，获取节点的样式值
          * @method getStyle
@@ -686,19 +684,18 @@
          * node.getStyle('font-size');
          * ```
          */
-        getStyle:function (name) {
-            var cssStyle = this.getAttr('style');
+        getStyle: function (name) {
+            var cssStyle = this.getAttr("style");
             if (!cssStyle) {
-                return ''
+                return "";
             }
-            var reg = new RegExp('(^|;)\\s*' + name + ':([^;]+)','i');
+            var reg = new RegExp("(^|;)\\s*" + name + ":([^;]+)", "i");
             var match = cssStyle.match(reg);
             if (match && match[0]) {
-                return match[2]
+                return match[2];
             }
-            return '';
+            return "";
         },
-
         /**
          * 给节点设置样式
          * @method setStyle
@@ -709,30 +706,28 @@
          * node.setStyle('font-size', '12px');
          * ```
          */
-        setStyle:function (name, val) {
+        setStyle: function (name, val) {
             function exec(name, val) {
-                var reg = new RegExp('(^|;)\\s*' + name + ':([^;]+;?)', 'gi');
-                cssStyle = cssStyle.replace(reg, '$1');
+                var reg = new RegExp("(^|;)\\s*" + name + ":([^;]+;?)", "gi");
+                cssStyle = cssStyle.replace(reg, "$1");
                 if (val) {
-                    cssStyle = name + ':' + utils.unhtml(val) + ';' + cssStyle
+                    cssStyle = name + ":" + utils.unhtml(val) + ";" + cssStyle;
                 }
-
             }
 
-            var cssStyle = this.getAttr('style');
+            var cssStyle = this.getAttr("style");
             if (!cssStyle) {
-                cssStyle = '';
+                cssStyle = "";
             }
             if (utils.isObject(name)) {
                 for (var a in name) {
-                    exec(a, name[a])
+                    exec(a, name[a]);
                 }
             } else {
-                exec(name, val)
+                exec(name, val);
             }
-            this.setAttr('style', utils.trim(cssStyle))
+            this.setAttr("style", utils.trim(cssStyle));
         },
-
         /**
          * 传入一个函数，递归遍历当前节点下的所有节点
          * @method traversal
@@ -744,11 +739,11 @@
          * });
          * ```
          */
-        traversal:function(fn){
-            if(this.children && this.children.length){
-                nodeTraversal(this,fn);
+        traversal: function (fn) {
+            if (this.children && this.children.length) {
+                nodeTraversal(this, fn);
             }
             return this;
         }
-    }
+    };
 })();

@@ -1,12 +1,12 @@
 /**
-* Created by JetBrains PhpStorm.
-* User: dongyancen
-* Date: 12-4-12
-* Time: 下午4:47
-* To change this template use File | Settings | File Templates.
-*/
+ * Created by JetBrains PhpStorm.
+ * User: dongyancen
+ * Date: 12-4-12
+ * Time: 下午4:47
+ * To change this template use File | Settings | File Templates.
+ */
 module('ui.table');
-test('TableButton/TablePicker', function() {
+test('TableButton/TablePicker', function () {
 //    var editor = new baidu.editor.ui.Editor();
 //    editor.render("editor");
 //    stop();

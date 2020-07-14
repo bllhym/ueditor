@@ -25,7 +25,6 @@ module("core.Editor");
 test('contentchange在命令调用时的触发机制', function () {
     var editor = te.obj[1];
     var container = te.dom[0];
-
     $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
     editor.render(container);
     editor.ready(function () {
@@ -38,10 +37,9 @@ test('contentchange在命令调用时的触发机制', function () {
         editor.on('contentchange', function () {
             count++;
         });
-
         editor.commands['test'] = {
             execCommand: function () {
-                editor.execCommand('test1')
+                editor.execCommand('test1');
             },
             ignoreContentChange: true
         };
@@ -53,16 +51,18 @@ test('contentchange在命令调用时的触发机制', function () {
             equals(count, 0);
             start();
         }, 200);
-
     });
     stop();
 });
-
 test("initialStyle", function () {
-    if(ua.browser.gecko)return;//todo 1.4.0
+    if (ua.browser.gecko) return;//todo 1.4.0
     var div = document.body.appendChild(document.createElement('div'));
     div.id = 'ue';
-    var editor = UE.getEditor('ue', {initialStyle: "body{font-family: arial black;}.testCss{        color: rgb(192, 0, 0);    }", initialContent: "<p><span class='testCss'>测试样式，红色，字体： arial black</span></p>", autoHeightEnabled: false});
+    var editor = UE.getEditor('ue', {
+        initialStyle: "body{font-family: arial black;}.testCss{        color: rgb(192, 0, 0);    }",
+        initialContent: "<p><span class='testCss'>测试样式，红色，字体： arial black</span></p>",
+        autoHeightEnabled: false
+    });
     editor.ready(function () {
         equal(ua.formatColor(ua.getComputedStyle(editor.body.firstChild.firstChild).color), '#c00000', 'initialStyle中设置的class样式有效');
         ok(/arial black/.test(ua.getComputedStyle(editor.body.firstChild.firstChild).fontFamily), 'initialStyle中设置的body样式有效');
@@ -74,7 +74,6 @@ test("initialStyle", function () {
     });
     stop();
 });
-
 test("autoSyncData:true,textarea容器(由setcontent触发的)", function () {
     var div = document.body.appendChild(document.createElement('div'));
     div.innerHTML = '<form id="form" method="post" target="_blank"><textarea id="myEditor" name="myEditor">这里的内容将会和html，body等标签一块提交</textarea></form>';
@@ -163,7 +162,6 @@ test("hide,show", function () {
     });
     stop();
 });
-
 test("_setDefaultContent--focus", function () {
     var editor = te.obj[1];
     var container = te.dom[0];
@@ -180,7 +178,6 @@ test("_setDefaultContent--focus", function () {
     });
     stop();
 });
-
 test("_setDefaultContent--firstBeforeExecCommand", function () {
     var editor = te.obj[1];
     var container = te.dom[0];
@@ -241,7 +238,6 @@ test("render-- element", function () {
     ok(/ueditor_/.test(div.firstChild.id), 'check iframe id');
     te.dom.push(div);
 });
-
 test("render-- elementid", function () {
     var editor = te.obj[1];
     var div = te.dom[0];
@@ -249,11 +245,14 @@ test("render-- elementid", function () {
     equal(div.firstChild.tagName.toLocaleLowerCase(), 'iframe', 'check iframe');
     ok(/ueditor_/.test(div.firstChild.id), 'check iframe id');
 });
-
 test("render-- options", function () {
-    var options = {'initialContent': '<span class="span">xxx</span><div>xxx<p></p></div>', 'UEDITOR_HOME_URL': '../../../', autoClearinitialContent: false, 'autoFloatEnabled': false};
+    var options = {
+        'initialContent': '<span class="span">xxx</span><div>xxx<p></p></div>',
+        'UEDITOR_HOME_URL': '../../../',
+        autoClearinitialContent: false,
+        'autoFloatEnabled': false
+    };
     var editor = new baidu.editor.Editor(options);
-
     var div = document.body.appendChild(document.createElement('div'));
     editor.render(div);
     /*会自动用p标签包围*/
@@ -266,7 +265,6 @@ test("render-- options", function () {
         start();
     });
 });
-
 test('destroy', function () {
 //    var editor = new baidu.editor.Editor( {'autoFloatEnabled':false} );
     var editor = new UE.ui.Editor({'autoFloatEnabled': false});
@@ -281,11 +279,9 @@ test('destroy', function () {
             document.getElementById('ed') && te.dom.push(document.getElementById('ed'));
             start();
         }, 200);
-
     });
     stop();
 });
-
 //test( "setup--ready event", function() {
 //    //todo
 //} );
@@ -302,12 +298,12 @@ test("testBindshortcutKeys", function () {
         });
         editor.commands["testbindshortcutkeys"] = {
             execCommand: function (cmdName) {
-                ok(1, '')
+                ok(1, '');
             },
             queryCommandState: function () {
                 return 0;
             }
-        }
+        };
         ua.keydown(editor.body, {keyCode: 67, ctrlKey: true});
         setTimeout(function () {
             start();
@@ -333,7 +329,6 @@ test("getContent--转换空格，nbsp与空格相间显示", function () {
         }, 100);
     });
 });
-
 test('getContent--参数为函数', function () {
     var editor = te.obj[1];
     var div = te.dom[0];
@@ -344,7 +339,7 @@ test('getContent--参数为函数', function () {
         editor.setContent("<p><br/>dd</p>");
         equal(editor.getContent(), "<p><br/>dd</p>", 'hasContents判断不为空');
         equal(editor.getContent(function () {
-            return false
+            return false;
         }), "", '为空');
         setTimeout(function () {
 //            UE.delEditor('test1');
@@ -354,7 +349,6 @@ test('getContent--参数为函数', function () {
         }, 100);
     });
 });
-
 test('getContent--2个参数，第一个参数为参数为函数', function () {
     var editor = te.obj[1];
     var div = te.dom[0];
@@ -365,7 +359,7 @@ test('getContent--2个参数，第一个参数为参数为函数', function () {
         editor.setContent("<p><br/>dd</p>");
         equal(editor.getContent(), "<p><br/>dd</p>", 'hasContents判断不为空');
         equal(editor.getContent("", function () {
-            return false
+            return false;
         }), "", '为空');
         setTimeout(function () {
 //            UE.delEditor('test1');
@@ -375,7 +369,6 @@ test('getContent--2个参数，第一个参数为参数为函数', function () {
         }, 100);
     });
 });
-
 /*ie自动把左边的空格去掉，所以就不测这个了*/
 //test( "getContent--空格不会被去掉", function() {
 //    var editor = te.obj[1];
@@ -411,7 +404,6 @@ test("setContent", function () {
         start();
     });
 });
-
 test("setContent 追加", function () {
     var editor = te.obj[1];
     var container = te.dom[0];
@@ -459,15 +451,13 @@ test("focus(false)", function () {
         setTimeout(function () {
             editor.focus(false);
             setTimeout(function () {
-
                 var range = editor.selection.getRange();
                 equal(range.startOffset, 0, "focus(false)焦点在最前面");
                 equal(range.endOffset, 0, "focus(false)焦点在最前面");
-                if (ua.browser.gecko||ua.browser.webkit) {
+                if (ua.browser.gecko || ua.browser.webkit) {
                     equal(range.startContainer, editor.body.firstChild, "focus(false)焦点在最前面");
                     equal(range.collapsed, true, "focus(false)焦点在最前面");
-                }
-                else {
+                } else {
                     equal(range.startContainer, editor.body.firstChild.firstChild, "focus(false)焦点在最前面");
                     equal(range.endContainer, editor.body.firstChild.firstChild, "focus(false)焦点在最前面");
                 }
@@ -476,7 +466,6 @@ test("focus(false)", function () {
         }, 100);
     });
 });
-
 test("focus(true)", function () {
     var editor = te.obj[1];
     var container = te.dom[0];
@@ -486,17 +475,14 @@ test("focus(true)", function () {
     editor.ready(function () {
         editor.setContent("<p>hello1</p><p>hello2</p>");
         setTimeout(function () {
-
             editor.focus(true);
             setTimeout(function () {
-
-                if (ua.browser.gecko||ua.browser.webkit) {
+                if (ua.browser.gecko || ua.browser.webkit) {
                     equal(editor.selection.getRange().startContainer, editor.body.lastChild, "focus( true)焦点在最后面");
                     equal(editor.selection.getRange().endContainer, editor.body.lastChild, "focus( true)焦点在最后面");
                     equal(editor.selection.getRange().startOffset, editor.body.lastChild.childNodes.length, "focus( true)焦点在最后面");
                     equal(editor.selection.getRange().endOffset, editor.body.lastChild.childNodes.length, "focus( true)焦点在最后面");
-                }
-                else {
+                } else {
                     equal(editor.selection.getRange().startContainer, editor.body.lastChild.lastChild, "focus( true)焦点在最后面");
                     equal(editor.selection.getRange().endContainer, editor.body.lastChild.lastChild, "focus( true)焦点在最后面");
                     equal(editor.selection.getRange().startOffset, editor.body.lastChild.lastChild.length, "focus( true)焦点在最后面");
@@ -505,10 +491,8 @@ test("focus(true)", function () {
                 start();
             }, 200);
         }, 100);
-
     });
 });
-
 test("isFocus()", function () {
     var editor = te.obj[1];
     var container = te.dom[0];
@@ -523,7 +507,6 @@ test("isFocus()", function () {
         }, 200);
     });
 });
-
 test("blur()", function () {
     var editor = te.obj[1];
     var container = te.dom[0];
@@ -557,7 +540,6 @@ test("_initEvents,_proxyDomEvent--click", function () {
         ua.click(editor.document);
     });
 });
-
 //test("_initEvents,_proxyDomEvent--focus", function() {
 //    var editor = te.obj[1];
 //
@@ -569,7 +551,6 @@ test("_initEvents,_proxyDomEvent--click", function () {
 //    editor.setContent("<p>hello1</p><p>hello2</p>");
 //    editor.focus();
 //});
-
 ////TODO
 //test( "_selectionChange--测试event是否被触发", function() {
 //    var editor = te.obj[1];
@@ -595,14 +576,12 @@ test("_initEvents,_proxyDomEvent--click", function () {
 //        start();
 //    }, 200 );
 //} );
-
 //test("_selectionChange--fillData", function() {
 //    var editor = te.obj[1];
 //    var div = te.dom[0];
 //    editor.focus();
 //    //TODO fillData干嘛用的
 //});
-
 /*按钮高亮、正常和灰色*/
 test("queryCommandState", function () {
     var editor = te.obj[1];
@@ -659,19 +638,16 @@ test("execCommand", function () {
         range.selectNode(p).select();
         editor.execCommand("forecolor", "red");
         /*span发生了变化，需要重新获取*/
-
         var span = doc.getElementsByTagName('span')[0];
         equal(span.style['color'], 'red', 'check execCommand color');
         var div_new = document.createElement('div');
         div_new.innerHTML = '<p><span style="color: red; ">xx</span></p><p style="text-align: right; ">xxx</p>';
-
         var div1 = document.createElement('div');
         div1.innerHTML = editor.body.innerHTML;
         ok(ua.haveSameAllChildAttribs(div_new, div1), 'check style');
         start();
     });
 });
-
 test("hasContents", function () {
     var editor = te.obj[1];
     var container = te.dom[0];
@@ -697,7 +673,6 @@ test("hasContents", function () {
 //    editor.setContent( "<p> \t\n      </p>" );
 //    ok( editor.hasContents(), "空格不过滤" );
 //} );
-
 /*参数是对原有认为是空的标签的一个扩展，即原来的dtd认为br为空，加上这个参数可以认为br存在时body也不是空*/
 test("hasContents--有参数", function () {
     var editor = te.obj[1];
@@ -723,7 +698,6 @@ test("hasContents--有参数", function () {
 //    equal( editor.getContentTxt(), '你 好\t\n' )
 //    equal( editor.getContentTxt().length, 3, '3个字符，空格不会被过滤' )
 //} );
-
 test('trace 1964 getPlainTxt--得到有格式的编辑器的纯文本内容', function () {
     var editor = te.obj[1];
     var container = te.dom[0];
@@ -738,20 +712,17 @@ test('trace 1964 getPlainTxt--得到有格式的编辑器的纯文本内容', fu
         start();
     });
 });
-
 test('getContentTxt--文本前后的空格,&nbs p转成空格', function () {
     var editor = te.obj[1];
     var container = te.dom[0];
     $(container).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
     editor.render(container);
-
     stop();
     editor.ready(function () {
         editor.focus();
         editor.setContent('&nbsp;&nbsp;你 好&nbsp;&nbsp; ');
         equal(editor.getContentTxt(), '  你 好   ');
         equal(editor.getContentTxt().length, 8, '8个字符，空格不被过滤');
-
         start();
     });
 });
@@ -765,7 +736,6 @@ test('getAllHtml', function () {
         editor.focus();
         var html = editor.getAllHtml();
         ok(/iframe.css/.test(html), '引入样式');
-
         start();
     });
 });
@@ -784,7 +754,11 @@ test('2个实例采用2个配置文件', function () {
         div1.style.height = '200px';
         var div2 = document.body.appendChild(document.createElement('div'));
         div2.id = 'div2';
-        var editor1 = UE.getEditor('div1', {'UEDITOR_HOME_URL': '../../../', 'initialContent': '欢迎使用ueditor', 'autoFloatEnabled': false});
+        var editor1 = UE.getEditor('div1', {
+            'UEDITOR_HOME_URL': '../../../',
+            'initialContent': '欢迎使用ueditor',
+            'autoFloatEnabled': false
+        });
         editor1.ready(function () {
             var editor2 = UE.getEditor('div2', UEDITOR_CONFIG2);
             editor2.ready(function () {

@@ -1,5 +1,4 @@
 module("plugins.undo");
-
 //test('', function () {
 //    stop()
 //});
@@ -18,7 +17,6 @@ test('trace 856 输入文本后撤销按钮不亮', function () {
     }, 500);
     stop();
 });
-
 /*trace 583,1726*/
 test('trace 583,1726 插入表格、表情,撤销', function () {
     var editor = te.obj[0];
@@ -33,7 +31,6 @@ test('trace 583,1726 插入表格、表情,撤销', function () {
     ua.manualDeleteFillData(editor.body);
     equal(editor.getContent().toLowerCase(), '', '插入表格、表情,撤销');
 });
-
 /*trace 595*/
 test('trace 595 撤销合并单元格后再合并单元格', function () {
     var editor = te.obj[0];
@@ -52,7 +49,6 @@ test('trace 595 撤销合并单元格后再合并单元格', function () {
         var cellsRange = ut.getCellsRange(trs[0].cells[0], trs[1].cells[1]);
         ut.setSelected(cellsRange);
         range.setStart(trs[0].cells[0], 0).collapse(true).select();
-
         editor.execCommand('mergecells');
         ua.manualDeleteFillData(editor.body);
         var tds = editor.body.getElementsByTagName('td');
@@ -60,13 +56,11 @@ test('trace 595 撤销合并单元格后再合并单元格', function () {
         equal(trs[0].cells[0].colSpan, 2, '合并--[0][0]单元格colspan');
         equal(trs[0].cells[0].rowSpan, 2, '合并--[0][0]单元格rowspan');
         equal(trs[0].cells[0].innerHTML.toLowerCase(), 'hello<br>hello<br>hello<br>hello', '内容复制正确');
-
         //撤销合并单元格的操作
         editor.execCommand('undo');
         ua.manualDeleteFillData(editor.body);
         ok(tds[0].colSpan == 1 && tds[0].rowSpan == 1 && tds.length == 9, '撤销后，单元格回复成多个');
         ok(tds[0].innerHTML.toLowerCase() == 'hello' && tds[1].innerHTML.toLowerCase() == 'hello' && tds[3].innerHTML.toLowerCase() == 'hello' && tds[4].innerHTML.toLowerCase() == 'hello', '内容复制正确');
-
         //再次合并单元格
         setTimeout(function () {
             var trs = editor.body.firstChild.getElementsByTagName('tr');
@@ -84,7 +78,6 @@ test('trace 595 撤销合并单元格后再合并单元格', function () {
     }, 50);
     stop();
 });
-
 /*trace 599*/
 test('trace 599 插入表格、表情、超链接、表情,撤销2次', function () {
     var editor = te.obj[0];
@@ -98,7 +91,6 @@ test('trace 599 插入表格、表情、超链接、表情,撤销2次', function
     editor.execCommand('link', {href: 'http://www.baidu.com/'});       //插入超链接
     range.setStartAfter(editor.body.lastChild).collapse(true).select();
     editor.execCommand('insertimage', {src: 'http://img.baidu.com/hi/jx2/j_0001.gif', width: 50, height: 50});   //插入表情
-
     editor.execCommand('Undo');
     editor.execCommand('Undo');
     ua.manualDeleteFillData(editor.body);
@@ -107,20 +99,18 @@ test('trace 599 插入表格、表情、超链接、表情,撤销2次', function
     ok(tag == 'table' || tag == 'tbody', '表格');
     equal(editor.body.childNodes[1].firstChild.tagName.toLowerCase(), 'img', '表情');
 });
-
 /*trace 617*/
 test('trace 617 插入文本、分割线、文本,撤销2次，撤销掉分割线', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-
     editor.setContent('<p></p>');
-
     //输入文本
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     ua.keydown(editor.body);
     range.insertNode(editor.document.createTextNode('hello'));
-    if (!ua.browser.ie)
+    if (!ua.browser.ie) {
         ua.compositionstart(editor.body);
+    }
     ua.keyup(editor.body);
     //输入分割符
     range.setStartAfter(editor.body.lastChild).collapse(true).select();
@@ -129,16 +119,14 @@ test('trace 617 插入文本、分割线、文本,撤销2次，撤销掉分割�
     range.setStartAfter(editor.body.lastChild).collapse(true).select();
     ua.keydown(editor.body);
     range.insertNode(editor.document.createTextNode('hello'));
-    if (!ua.browser.ie)
+    if (!ua.browser.ie) {
         ua.compositionend(editor.body);
+    }
     ua.keyup(editor.body);
-
     editor.execCommand('Undo');
     editor.execCommand('Undo');
     equal(editor.body.getElementsByTagName('hr').length, 0, '分割线已删除');
-
 });
-
 /*trace 632*/
 test('trace 632 合并单元格后撤销再合并单元格不会丢字', function () {
     var editor = te.obj[0];
@@ -161,7 +149,6 @@ test('trace 632 合并单元格后撤销再合并单元格不会丢字', functio
         ua.manualDeleteFillData(editor.body);
         tds = editor.body.firstChild.getElementsByTagName('td');
         equal(tds[0].innerHTML.toLowerCase(), 'hello<br>hello<br>hello<br>hello', '合并单元格,内容复制正确');
-
         //撤销合并单元格的操作,再次合并单元格
         editor.execCommand('Undo');
         setTimeout(function () {
@@ -179,7 +166,6 @@ test('trace 632 合并单元格后撤销再合并单元格不会丢字', functio
     }, 50);
     stop();
 });
-
 /*trace 675  这个trace用例中的操作已经设为非法*/
 /*trace 685*/
 test('trace 685 合并单元格后,删除行,再撤销,再删除行', function () {
@@ -188,7 +174,6 @@ test('trace 685 合并单元格后,删除行,再撤销,再删除行', function (
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     editor.execCommand('inserttable', {numCols: 4, numRows: 4});
-
     //选择第一行的4格单元格，合并
     setTimeout(function () {
         var trs = editor.body.firstChild.getElementsByTagName('tr');
@@ -199,7 +184,6 @@ test('trace 685 合并单元格后,删除行,再撤销,再删除行', function (
         var tds = editor.body.getElementsByTagName('td');
         editor.execCommand('mergecells');
         ok(tds[0].colSpan == 4 && tds[0].rowSpan == 1, '第一行的4个单元格合并成一个');
-
         //选择第2，3，4行的第1个单元格，合并
         setTimeout(function () {
             var trs = editor.body.firstChild.getElementsByTagName('tr');
@@ -210,7 +194,6 @@ test('trace 685 合并单元格后,删除行,再撤销,再删除行', function (
             var tds = editor.body.getElementsByTagName('td');
             editor.execCommand('mergecells');
             ok(tds[1].colSpan == 1 && tds[1].rowSpan == 3, '第2，3，4行的第一个单元格合并成一个');
-
             //单击第二步合并的单元格，点击删除行
             range.setStart(tds[4], 0).collapse(true).select();
             editor.execCommand('deleterow');
@@ -227,7 +210,6 @@ test('trace 685 合并单元格后,删除行,再撤销,再删除行', function (
     }, 50);
     stop();
 });
-
 /*trace 711 这个要中文输入法再模拟键盘输入，貌似不能写？？？*/
 /*trace 718*/
 test('trace 718 合并单元格后,删除列,再撤销,再删除列', function () {
@@ -236,7 +218,6 @@ test('trace 718 合并单元格后,删除列,再撤销,再删除列', function (
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     editor.execCommand('inserttable', {numCols: 4, numRows: 4});
-
     //选择中间的4格单元格，合并
     setTimeout(function () {
         var trs = editor.body.firstChild.getElementsByTagName('tr');
@@ -266,7 +247,6 @@ test('trace 718 合并单元格后,删除列,再撤销,再删除列', function (
     }, 50);
     stop();
 });
-
 /*trace 722 需要中文输入法*/
 /*trace 743*/
 test('trace 743 合并单元格后,删除列,再撤销', function () {
@@ -275,7 +255,6 @@ test('trace 743 合并单元格后,删除列,再撤销', function () {
     editor.setContent('<p></p>');
     range.setStart(editor.body.firstChild, 0).collapse(true).select();
     editor.execCommand('inserttable', {numCols: 4, numRows: 4});
-
     //第一行的4格单元格，合并
     setTimeout(function () {
         var trs = editor.body.firstChild.getElementsByTagName('tr');
@@ -297,7 +276,6 @@ test('trace 743 合并单元格后,删除列,再撤销', function () {
     }, 50);
     stop();
 });
-
 /*trace 808 需要观察光标延迟，这个问题已经被标为不修*/
 /*trace 855 这个用例描述有问题，而且可以跟trace 584合成一个*/
 /*trace 873*/
@@ -313,7 +291,6 @@ test('trace 743 合并单元格后,删除列,再撤销', function () {
 //    ua.manualDeleteFillData( editor.body );
 //    equal( editor.body.firstChild.innerHTML, '欢迎使用ueditor', '撤销' );
 //} );
-
 /*trace 942*/
 test('trace 942 用格式刷后撤销', function () {
     var editor = te.obj[0];
@@ -322,13 +299,13 @@ test('trace 942 用格式刷后撤销', function () {
     stop();
     expect(1);
     editor.setContent('<p><strong>hello</strong></p><p><a href="http://www.baidu.com/">hello</a></p>');
-
-    range.setStart(editor.body.firstChild.firstChild.firstChild, 2).setEnd(editor.body.firstChild.firstChild.firstChild, 4).select();
+    range.setStart(editor.body.firstChild.firstChild.firstChild, 2)
+         .setEnd(editor.body.firstChild.firstChild.firstChild, 4)
+         .select();
     editor.addListener('mouseup', function () {
         ua.manualDeleteFillData(editor.body);
         //从浏览器复制了不可见的空文本
         equal(editor.body.lastChild.firstChild.innerHTML.toLowerCase(), 'h<strong></strong>ello');
-
     });
     editor.execCommand('formatmatch');
     range.setStart(editor.body.lastChild.firstChild.firstChild, 1).collapse(true).select();
@@ -337,7 +314,6 @@ test('trace 942 用格式刷后撤销', function () {
         start();
     }, 100);
 });
-
 test('undo--redo', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
@@ -354,10 +330,11 @@ test('undo--redo', function () {
 //    equal(cs,'anchorclass','锚点class');
 //    equal(an,'hello','锚点name');
 //    var br = (ua.browser.ie) ? '' : '<br>';
-    if (ua.browser.ie)
+    if (ua.browser.ie) {
         equal(ua.getChildHTML(editor.body), '<p><img class=\"anchorclass\" anchorname=\"hello\">' + spase + '</p>', '');
-    else
+    } else {
         equal(ua.getChildHTML(editor.body), '<p><img anchorname=\"hello\" class=\"anchorclass\">' + spase + '</p>', '');
+    }
 });
 test('reset,index', function () {
     var editor = te.obj[0];
@@ -379,15 +356,12 @@ test('reset,index', function () {
     ua.manualDeleteFillData(editor.body);
     var spase = ua.browser.ie ? '&nbsp;' : '<br>';
     equal(ua.getChildHTML(editor.body), '<p>' + spase + '</p>', '检查内容');
-
 });
 /*trace 1068  格式刷图片*/
 test('trace 1068 默认样式的图片刷左浮动图片，撤销，左浮动图片刷默认样式的图片', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-
     var num = 0;
-
     var body = editor.body;
     editor.setContent('<p><br></p>');
     range.setStart(body.firstChild, 0).collapse(1).select();
@@ -412,8 +386,7 @@ test('trace 1068 默认样式的图片刷左浮动图片，撤销，左浮动图
             range.selectNode(body.getElementsByTagName('img')[1]).select();
             num = 2;
             ua.mouseup(editor.body);
-        }
-        else if (num == 2) {
+        } else if (num == 2) {
             if (!ua.browser.opera) {
                 equal(ua.getFloatStyle(body.getElementsByTagName('img')[1]), 'left', '左浮动刷默认');
             }
@@ -428,7 +401,6 @@ test('trace 1068 默认样式的图片刷左浮动图片，撤销，左浮动图
     ua.mouseup(body.getElementsByTagName('img')[0]);
     stop();
 });
-
 //test(
 //		'undo',
 //		function() {
@@ -452,11 +424,9 @@ test('trace 1068 默认样式的图片刷左浮动图片，撤销，左浮动图
 //			editor.execCommand('Undo');
 //			equals(getHTML(editor.document.body), 'test');
 //		});
-
 test('ctrl+z/y', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-
     var body = editor.body;
     editor.setContent('<p>没有加粗的文本</p>');
     range.selectNode(body.firstChild).select();
@@ -480,7 +450,6 @@ test('ctrl+z/y', function () {
     }, 100);
     stop();
 });
-
 /*trace 3209  格式刷图片*/
 test('trace 3209 插入表格,undo redo', function () {
     var editor = te.obj[0];

@@ -1,4 +1,4 @@
-module( 'plugins.enterkey' );
+module('plugins.enterkey');
 ///*
 // 闭合选区
 // 1.p末尾或中间回车
@@ -12,7 +12,6 @@ module( 'plugins.enterkey' );
 // 1.选中部分表格后回车
 // 2.选中文本后回车
 //
-
 // 复合操作
 // 1.回车后撤销
 // */
@@ -69,72 +68,17 @@ module( 'plugins.enterkey' );
 //        },50);
 //    });
 //} );
-
-test( 'br做回车,选区非闭合', function () {
+test('br做回车,选区非闭合', function () {
     te.dom[0].parentNode.removeChild(te.dom[0]);
-    var div2 = document.body.appendChild( document.createElement( 'div' ) );
-    $( div2 ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
+    var div2 = document.body.appendChild(document.createElement('div'));
+    $(div2).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
     te.dom.push(div2);
-    baidu.editor.plugins.table = function(){};
-    var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','autoFloatEnabled':false,'enterTag':'br'});
-    te.obj.push(editor);
-    editor.render(div2);
-    stop();
-    editor.ready(function(){
-        var range = new baidu.editor.dom.Range( editor.document );
-        te.obj.push(range);
-        editor.setContent('<p>hello</p>' );
-        te.obj[4].setStart(editor.body.firstChild.firstChild,1).setEnd(editor.body.firstChild.firstChild,3).select();
-        ua.keydown(editor.body,{'keyCode':13});
-        setTimeout(function(){
-            ua.manualDeleteFillData(te.obj[3].body);
-            var html = 'h<br>lo';
-            equal(ua.getChildHTML(te.obj[3].body.firstChild),html,'<br>做回车');
-            editor.setContent('<h1>hello<br></h1><p><img src="http://img.baidu.com/hi/jx2/j_0015.gif" /><a href="http://www.baidu.com"></a></p>' );
-            te.obj[4].setStart( editor.body.lastChild,0 ).setEnd(editor.body.lastChild,1).select();
-            ua.keydown(editor.body,{'keyCode':13});
-            setTimeout(function(){
-                ua.manualDeleteFillData(te.obj[3].body);
-                var html = 'hello<br>';
-                equal(ua.getChildHTML(te.obj[3].body.firstChild),html,'<br>做回车');
-                editor.setContent('<h1>hello<br></h1><p>he<img src="http://img.baidu.com/hi/jx2/j_0015.gif" />oll</p>' );
-                te.obj[4].setStart( editor.body.lastChild,1 ).setEnd(editor.body.lastChild,2).select();
-                ua.keydown(editor.body,{'keyCode':13});
-                setTimeout(function(){
-                    ua.manualDeleteFillData(te.obj[3].body);
-                    var html = 'hello<br>';
-                    equal(ua.getChildHTML(te.obj[3].body.firstChild),html,'<br>做回车');
-                    editor.setContent('<h1>hello<br></h1><p><img src="http://img.baidu.com/hi/jx2/j_0015.gif" /><br></p>' );
-                    te.obj[4].setStart( editor.body.lastChild,0 ).setEnd(editor.body.lastChild,1).select();
-                    ua.keydown(editor.body,{'keyCode':13});
-                    setTimeout(function(){
-                        ua.manualDeleteFillData(te.obj[3].body);
-                        var html = 'hello<br>';
-                        equal(ua.getChildHTML(te.obj[3].body.firstChild),html,'<br>做回车');
-                        editor.setContent('<h1>hello<br></h1><p><img src="http://img.baidu.com/hi/jx2/j_0015.gif" /><a href="http://www.baidu.com">www.baidu.com</a></p>' );
-                        te.obj[4].setStart( editor.body.lastChild,0 ).setEnd(editor.body.lastChild,1).select();
-                        ua.keydown(editor.body,{'keyCode':13});
-                        setTimeout(function(){
-                            ua.manualDeleteFillData(te.obj[3].body);
-                            var html = 'hello<br>';
-                            equal(ua.getChildHTML(te.obj[3].body.firstChild),html,'<br>做回车');
-                            te.dom[1].parentNode.removeChild(te.dom[1]);
-                            start();
-                        },20);
-                    },20);
-                },20);
-            },20);
-        },20);
+    baidu.editor.plugins.table = function () {};
+    var editor = new baidu.editor.Editor({
+        'initialContent': '<p>欢迎使用ueditor</p>',
+        'autoFloatEnabled': false,
+        'enterTag': 'br'
     });
-} );
-
-test( 'br做回车，选区闭合', function () {
-    te.dom[0].parentNode.removeChild(te.dom[0]);
-    var div2 = document.body.appendChild( document.createElement( 'div' ) );
-    $( div2 ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
-    te.dom.push(div2);
-    baidu.editor.plugins.table = function(){};
-    var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>','autoFloatEnabled':false,'enterTag':'br'});
     te.obj.push(editor);
     editor.render(div2);
     stop();
@@ -142,10 +86,70 @@ test( 'br做回车，选区闭合', function () {
         var range = new baidu.editor.dom.Range(editor.document);
         te.obj.push(range);
         editor.setContent('<p>hello</p>');
-
+        te.obj[4].setStart(editor.body.firstChild.firstChild, 1).setEnd(editor.body.firstChild.firstChild, 3).select();
+        ua.keydown(editor.body, {'keyCode': 13});
+        setTimeout(function () {
+            ua.manualDeleteFillData(te.obj[3].body);
+            var html = 'h<br>lo';
+            equal(ua.getChildHTML(te.obj[3].body.firstChild), html, '<br>做回车');
+            editor.setContent('<h1>hello<br></h1><p><img src="http://img.baidu.com/hi/jx2/j_0015.gif" /><a href="http://www.baidu.com"></a></p>');
+            te.obj[4].setStart(editor.body.lastChild, 0).setEnd(editor.body.lastChild, 1).select();
+            ua.keydown(editor.body, {'keyCode': 13});
+            setTimeout(function () {
+                ua.manualDeleteFillData(te.obj[3].body);
+                var html = 'hello<br>';
+                equal(ua.getChildHTML(te.obj[3].body.firstChild), html, '<br>做回车');
+                editor.setContent('<h1>hello<br></h1><p>he<img src="http://img.baidu.com/hi/jx2/j_0015.gif" />oll</p>');
+                te.obj[4].setStart(editor.body.lastChild, 1).setEnd(editor.body.lastChild, 2).select();
+                ua.keydown(editor.body, {'keyCode': 13});
+                setTimeout(function () {
+                    ua.manualDeleteFillData(te.obj[3].body);
+                    var html = 'hello<br>';
+                    equal(ua.getChildHTML(te.obj[3].body.firstChild), html, '<br>做回车');
+                    editor.setContent('<h1>hello<br></h1><p><img src="http://img.baidu.com/hi/jx2/j_0015.gif" /><br></p>');
+                    te.obj[4].setStart(editor.body.lastChild, 0).setEnd(editor.body.lastChild, 1).select();
+                    ua.keydown(editor.body, {'keyCode': 13});
+                    setTimeout(function () {
+                        ua.manualDeleteFillData(te.obj[3].body);
+                        var html = 'hello<br>';
+                        equal(ua.getChildHTML(te.obj[3].body.firstChild), html, '<br>做回车');
+                        editor.setContent('<h1>hello<br></h1><p><img src="http://img.baidu.com/hi/jx2/j_0015.gif" /><a href="http://www.baidu.com">www.baidu.com</a></p>');
+                        te.obj[4].setStart(editor.body.lastChild, 0).setEnd(editor.body.lastChild, 1).select();
+                        ua.keydown(editor.body, {'keyCode': 13});
+                        setTimeout(function () {
+                            ua.manualDeleteFillData(te.obj[3].body);
+                            var html = 'hello<br>';
+                            equal(ua.getChildHTML(te.obj[3].body.firstChild), html, '<br>做回车');
+                            te.dom[1].parentNode.removeChild(te.dom[1]);
+                            start();
+                        }, 20);
+                    }, 20);
+                }, 20);
+            }, 20);
+        }, 20);
+    });
+});
+test('br做回车，选区闭合', function () {
+    te.dom[0].parentNode.removeChild(te.dom[0]);
+    var div2 = document.body.appendChild(document.createElement('div'));
+    $(div2).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
+    te.dom.push(div2);
+    baidu.editor.plugins.table = function () {};
+    var editor = new baidu.editor.Editor({
+        'initialContent': '<p>欢迎使用ueditor</p>',
+        'autoFloatEnabled': false,
+        'enterTag': 'br'
+    });
+    te.obj.push(editor);
+    editor.render(div2);
+    stop();
+    editor.ready(function () {
+        var range = new baidu.editor.dom.Range(editor.document);
+        te.obj.push(range);
+        editor.setContent('<p>hello</p>');
         setTimeout(function () {
             te.obj[4].setStart(editor.body.firstChild.firstChild, 1).collapse(true).select();
-            ua.keydown(editor.body, {'keyCode':13});
+            ua.keydown(editor.body, {'keyCode': 13});
             setTimeout(function () {
                 ua.manualDeleteFillData(te.obj[3].body);
                 var html = 'h<br>ello';
@@ -155,16 +159,19 @@ test( 'br做回车，选区闭合', function () {
             }, 50);
         }, 50);
     });
-} );
-
-test( 'br做回车，选区闭合,在节点尾部输入回车，要插入2个br', function () {
+});
+test('br做回车，选区闭合,在节点尾部输入回车，要插入2个br', function () {
     te.dom[0].parentNode.removeChild(te.dom[0]);
-    var div2 = document.body.appendChild( document.createElement( 'div' ) );
+    var div2 = document.body.appendChild(document.createElement('div'));
     $(div2).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
     te.dom.push(div2);
     baidu.editor.plugins.table = function () {
     };
-    var editor = new baidu.editor.Editor({'initialContent':'<p>欢迎使用ueditor</p>', 'autoFloatEnabled':false, 'enterTag':'br'});
+    var editor = new baidu.editor.Editor({
+        'initialContent': '<p>欢迎使用ueditor</p>',
+        'autoFloatEnabled': false,
+        'enterTag': 'br'
+    });
     te.obj.push(editor);
     editor.render(div2);
     stop();
@@ -174,7 +181,7 @@ test( 'br做回车，选区闭合,在节点尾部输入回车，要插入2个br'
         editor.setContent('<p>hello</p>');
         setTimeout(function () {
             te.obj[4].setStart(editor.body.firstChild.firstChild, 5).collapse(true).select();
-            ua.keydown(editor.body, {'keyCode':13});
+            ua.keydown(editor.body, {'keyCode': 13});
             setTimeout(function () {
                 ua.manualDeleteFillData(te.obj[3].body);
                 var html = 'hello<br><br>';
@@ -185,91 +192,88 @@ test( 'br做回车，选区闭合,在节点尾部输入回车，要插入2个br'
         }, 50);
     });
 });
-
-test( 'table首行中回车', function () {
+test('table首行中回车', function () {
     var editor = te.obj[0];
-    if(!ua.browser.ie){
-        var range = new baidu.editor.dom.Range( editor.document );
-        editor.setContent(' <table width="100%" border="1" bordercolor="#000000"><tbody><tr><td ><br /></td></tr></tbody></table>' );
+    if (!ua.browser.ie) {
+        var range = new baidu.editor.dom.Range(editor.document);
+        editor.setContent(' <table width="100%" border="1" bordercolor="#000000"><tbody><tr><td ><br /></td></tr></tbody></table>');
         range.selectNode(editor.body.firstChild.firstChild.firstChild.firstChild).select();
-        ua.keydown(editor.body,{'keyCode':13});
+        ua.keydown(editor.body, {'keyCode': 13});
         stop();
-        setTimeout(function(){
-            equal(ua.getChildHTML(te.obj[0].body.firstChild),'<br>','加入p');//opera中，由原生方法实现p标签
+        setTimeout(function () {
+            equal(ua.getChildHTML(te.obj[0].body.firstChild), '<br>', '加入p');//opera中，由原生方法实现p标签
             start();
-        },20);
+        }, 20);
     }
-} );
-
-test( '去除_moz_dirty', function () {
-    if(browser.gecko){
+});
+test('去除_moz_dirty', function () {
+    if (browser.gecko) {
         var editor = te.obj[0];
         var range = te.obj[1];
-        editor.setContent( '<strong>迎使</strong><em  _moz_dirty=""><strong  _moz_dirty="">用ued</strong>it</em>' );
+        editor.setContent('<strong>迎使</strong><em  _moz_dirty=""><strong  _moz_dirty="">用ued</strong>it</em>');
         range.selectNode(editor.body.firstChild.lastChild.firstChild).select();
-        ua.keydown(editor.body,{'keyCode':13});
-        setTimeout( function () {
-            equal(ua.getChildHTML(editor.body),'<p><strong>迎使</strong><em><strong>用ued</strong>it</em></p>','');
+        ua.keydown(editor.body, {'keyCode': 13});
+        setTimeout(function () {
+            equal(ua.getChildHTML(editor.body), '<p><strong>迎使</strong><em><strong>用ued</strong>it</em></p>', '');
             start();
-        }, 20 );
+        }, 20);
         stop();
     }
-} );
-
+});
 ///*不作处理chrome会产生div*/
-test( 'chrome删除div', function () {
+test('chrome删除div', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     var body = editor.body;
-    if(ua.browser.webkit){
+    if (ua.browser.webkit) {
         editor.body.innerHTML = '<h1>一级标题</h1><div><br/></div>';
-        range.setStart( body.firstChild.firstChild, 4 ).collapse( 1 ).select();
-        ua.keydown(editor.body,{'keyCode':13});
+        range.setStart(body.firstChild.firstChild, 4).collapse(1).select();
+        ua.keydown(editor.body, {'keyCode': 13});
         range.selectNode(body.lastChild.firstChild).select();
         var index = editor.undoManger.index;
         var br = ua.browser.ie ? '' : '<br>';
-        ua.keyup(editor.body,{'keyCode':13});
-        equal(editor.undoManger.list.length,2,'保存现场');
-        setTimeout( function () {
-            equal( body.childNodes.length, 2, '2个子节点' );
-            equal(body.lastChild.tagName.toLowerCase(),'p','div转成p');
-            equal(ua.getChildHTML(body),'<h1>一级标题</h1><p><br></p>','检查内容');
+        ua.keyup(editor.body, {'keyCode': 13});
+        equal(editor.undoManger.list.length, 2, '保存现场');
+        setTimeout(function () {
+            equal(body.childNodes.length, 2, '2个子节点');
+            equal(body.lastChild.tagName.toLowerCase(), 'p', 'div转成p');
+            equal(ua.getChildHTML(body), '<h1>一级标题</h1><p><br></p>', '检查内容');
             start();
-        }, 60 );
+        }, 60);
         stop();
-    }else{
+    } else {
     }
-} );
-test( 'formatBlock', function () {
-    if(ua.browser.ie)return; //这个处理不针对ie
+});
+test('formatBlock', function () {
+    if (ua.browser.ie) return; //这个处理不针对ie
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent( '<table><tbody><tr><td>  hello1</td><td ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table>' );
-    setTimeout( function () {
-    var tds = editor.body.getElementsByTagName('td');
-    range.setStart(tds[0],1).collapse(true).select();
-    ua.keydown(editor.body,{'keyCode':13});
-    setTimeout( function () {
-    ua.keyup(editor.body,{'keyCode':13});
-        setTimeout( function () {
-            var td = editor.body.getElementsByTagName('td')[0];
-            equal(td.firstChild&&td.firstChild.tagName.toLowerCase(),'p','加上p');
-            equal(td.firstChild.innerHTML,'hello1','hello1');
-            start();
-        }, 60 );
-    }, 60 );
-    }, 60 );
+    editor.setContent('<table><tbody><tr><td>  hello1</td><td ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table>');
+    setTimeout(function () {
+        var tds = editor.body.getElementsByTagName('td');
+        range.setStart(tds[0], 1).collapse(true).select();
+        ua.keydown(editor.body, {'keyCode': 13});
+        setTimeout(function () {
+            ua.keyup(editor.body, {'keyCode': 13});
+            setTimeout(function () {
+                var td = editor.body.getElementsByTagName('td')[0];
+                equal(td.firstChild && td.firstChild.tagName.toLowerCase(), 'p', '加上p');
+                equal(td.firstChild.innerHTML, 'hello1', 'hello1');
+                start();
+            }, 60);
+        }, 60);
+    }, 60);
     stop();
-} );
-test( '跨td不删', function () {
+});
+test('跨td不删', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent( '<table><tbody><tr><td>  hello1</td><td ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table>' );
+    editor.setContent('<table><tbody><tr><td>  hello1</td><td ></td></tr><tr><td >hello2</td><td ></td></tr></tbody></table>');
     editor.addListener("keydown", function (type, evt) {
-        setTimeout( function () {
-            ok(evt.defaultPrevented||!evt.returnValue, "keydown");
+        setTimeout(function () {
+            ok(evt.defaultPrevented || !evt.returnValue, "keydown");
             start();
-        }, 60 );
+        }, 60);
     });
     setTimeout(function () {
         var tds = editor.body.getElementsByTagName('td');
@@ -277,7 +281,7 @@ test( '跨td不删', function () {
         ua.keydown(editor.body, {'keyCode': 13});
     }, 60);
     stop();
-} );
+});
 ////presskey相关，先不测
 //test( '普通文本<strong><span style="color: red">中间</span></strong>回车', function () {
 //    var editor = te.obj[0];

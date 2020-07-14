@@ -1,34 +1,33 @@
-module( 'plugins.paste' );
-
+module('plugins.paste');
 //不能模拟出真实的粘贴效果，此用例用于检查中间值
-test( '粘贴', function() {
-    if(ua.browser.ie || ua.browser.opera)return;
-    var div = document.body.appendChild( document.createElement( 'div' ) );
-    $( div ).css( 'width', '500px' ).css( 'height', '500px' ).css( 'border', '1px solid #ccc' );
+test('粘贴', function () {
+    if (ua.browser.ie || ua.browser.opera) return;
+    var div = document.body.appendChild(document.createElement('div'));
+    $(div).css('width', '500px').css('height', '500px').css('border', '1px solid #ccc');
     var me = te.obj[2];
     me.render(div);
     stop();
-    me.ready(function(){
-        var range = new baidu.editor.dom.Range( te.obj[2].document );
+    me.ready(function () {
+        var range = new baidu.editor.dom.Range(te.obj[2].document);
         me.focus();
         me.setContent('<p>hello</p>');
-        range.setStart(me.body.firstChild,0).collapse(true).select();
-        ua.keydown(me.body,{'keyCode':65,'ctrlKey':true});
-        ua.keydown(me.body,{'keyCode':67,'ctrlKey':true});
-        setTimeout(function(){
+        range.setStart(me.body.firstChild, 0).collapse(true).select();
+        ua.keydown(me.body, {'keyCode': 65, 'ctrlKey': true});
+        ua.keydown(me.body, {'keyCode': 67, 'ctrlKey': true});
+        setTimeout(function () {
             me.focus();
-            range.setStart(me.body.firstChild,0).collapse(true).select();
-            ua.paste(me.body,{'keyCode':86,'ctrlKey':true});
-            equal(me.body.lastChild.id,'baidu_pastebin','检查id');
-            equal(me.body.lastChild.style.position,'absolute','检查style');
+            range.setStart(me.body.firstChild, 0).collapse(true).select();
+            ua.paste(me.body, {'keyCode': 86, 'ctrlKey': true});
+            equal(me.body.lastChild.id, 'baidu_pastebin', '检查id');
+            equal(me.body.lastChild.style.position, 'absolute', '检查style');
             div.parentNode.removeChild(div);
             start();
-        },50);
+        }, 50);
         stop();
     });
-} );
+});
 //me.fireEvent('pasteTransfer','paste');//todo
-test( 'getClipboardData--ctrl+v', function() {
+test('getClipboardData--ctrl+v', function () {
 //    var editor = new baidu.editor.Editor( {'plugins':['paste']} )
 //    var div = te.dom[0];
 //    editor.render( div );
@@ -49,9 +48,8 @@ test( 'getClipboardData--ctrl+v', function() {
 //        start();
 //    } );
 //    stop();
-    equal('','','');
-} );
-
+    equal('', '', '');
+});
 //需要点击授权弹出框,暂时去除
 //test('检查IE下粘贴命令是否执行正常', function () {
 //

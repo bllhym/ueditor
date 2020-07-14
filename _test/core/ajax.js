@@ -1,7 +1,5 @@
 module('core.ajax');
 var ajax_request_baseurl = upath + 'ajax.php';
-
-
 test("post请求，无数据", function () {
     UE.ajax.request(ajax_request_baseurl, {
         onsuccess: function (xhr) {
@@ -15,7 +13,6 @@ test("post请求，无数据", function () {
     });
     stop();
 });
-
 test("get请求，无数据,url中有数据", function () {
     UE.ajax.request(ajax_request_baseurl + "?get1=ueditor&get2=baidu", {
         method: 'GET',
@@ -30,8 +27,6 @@ test("get请求，无数据,url中有数据", function () {
     });
     stop();
 });
-
-
 test("get请求,有数据,url中有数据", function () {
     UE.ajax.request(ajax_request_baseurl + "?get1=ueditor&get2=baidu", {
         method: 'GET',
@@ -47,7 +42,6 @@ test("get请求,有数据,url中有数据", function () {
     });
     stop();
 });
-
 test("get请求，有data字段，无数据,url中有数据", function () {
     UE.ajax.request(ajax_request_baseurl + "?get1=ueditor&get2=baidu", {
         method: 'GET',
@@ -65,7 +59,6 @@ test("get请求，有data字段，无数据,url中有数据", function () {
     });
     stop();
 });
-
 test("post请求，有data字段", function () {
     UE.ajax.request(ajax_request_baseurl, {
         data: {
@@ -82,7 +75,6 @@ test("post请求，有data字段", function () {
     });
     stop();
 });
-
 test("post请求，没有data字段，有其他数据", function () {
     UE.ajax.request(ajax_request_baseurl, {
         content: "img1=http://www.baidu.com&img2=http://ueditor.baidu.com",
@@ -97,7 +89,6 @@ test("post请求，没有data字段，有其他数据", function () {
     });
     stop();
 });
-
 test("post请求，有data字段，有其他数据", function () {
     UE.ajax.request(ajax_request_baseurl, {
         data: {
@@ -115,7 +106,6 @@ test("post请求，有data字段，有其他数据", function () {
     });
     stop();
 });
-
 test("get请求，有data字段，有其他数据", function () {
     UE.ajax.request(ajax_request_baseurl, {
         method: 'GET',
@@ -134,10 +124,7 @@ test("get请求，有data字段，有其他数据", function () {
     });
     stop();
 });
-
-
 test("并发多个post请求", function () {
-
     UE.ajax.request(ajax_request_baseurl, {
         data: {
             img1: 'http://ueditor.baidu.com', img2: 'http://www.google.com'
@@ -150,7 +137,6 @@ test("并发多个post请求", function () {
             ok(false, 'fail to send ajax request');
         }
     });
-
     UE.ajax.request(ajax_request_baseurl, {
         data: {
             img1: 'http://map.baidu.com', img2: 'http://www.google.com'
@@ -167,9 +153,7 @@ test("并发多个post请求", function () {
     });
     stop();
 });
-
 test("jsonp请求,无数据", function () {
-
     UE.ajax.request(ajax_request_baseurl, {
         dataType: 'jsonp',
         onsuccess: function (r) {
@@ -183,11 +167,8 @@ test("jsonp请求,无数据", function () {
         }
     });
     stop();
-
 });
-
 test("jsonp请求,无数据,url上有数据", function () {
-
     UE.ajax.request(ajax_request_baseurl + '?get1=getcontent1&get2=getcontent2', {
         dataType: 'jsonp',
         onsuccess: function (r) {
@@ -201,11 +182,8 @@ test("jsonp请求,无数据,url上有数据", function () {
         }
     });
     stop();
-
 });
-
 test("jsonp请求,有数据,url上有数据", function () {
-
     UE.ajax.request(ajax_request_baseurl + '?get1=getcontent1&get2=getcontent2', {
         key1: 'keycontent1',
         key2: 'keycontent2',
@@ -223,11 +201,8 @@ test("jsonp请求,有数据,url上有数据", function () {
         }
     });
     stop();
-
 });
-
 test("jsonp请求,有数据,data上有数据,url上有数据", function () {
-
     UE.ajax.request(ajax_request_baseurl + '?get1=getcontent1&get2=getcontent2', {
         key1: 'keycontent1',
         key2: 'keycontent2',
@@ -251,11 +226,8 @@ test("jsonp请求,有数据,data上有数据,url上有数据", function () {
         }
     });
     stop();
-
 });
-
 test("通过getJSONP方法发送jsonp请求", function () {
-
     UE.ajax.getJSONP(ajax_request_baseurl + '?get1=getcontent1&get2=getcontent2', {
         'datakey1': 'datakeycontent1',
         'datakey2': 'datakeycontent2'
@@ -267,5 +239,4 @@ test("通过getJSONP方法发送jsonp请求", function () {
         start();
     });
     stop();
-
 });

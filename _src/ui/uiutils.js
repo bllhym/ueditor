@@ -1,29 +1,27 @@
-(function (){
+(function () {
     var browser = baidu.editor.browser,
         domUtils = baidu.editor.dom.domUtils;
-
-    var magic = '$EDITORUI';
-    var root = window[magic] = {};
-    var uidMagic = 'ID' + magic;
+    var magic = "$EDITORUI";
+    var root = (window[magic] = {});
+    var uidMagic = "ID" + magic;
     var uidCount = 0;
-
-    var uiUtils = baidu.editor.ui.uiUtils = {
-        uid: function (obj){
-            return (obj ? obj[uidMagic] || (obj[uidMagic] = ++ uidCount) : ++ uidCount);
+    var uiUtils = (baidu.editor.ui.uiUtils = {
+        uid: function (obj) {
+            return obj ? obj[uidMagic] || (obj[uidMagic] = ++uidCount) : ++uidCount;
         },
-        hook: function ( fn, callback ) {
+        hook: function (fn, callback) {
             var dg;
             if (fn && fn._callbacks) {
                 dg = fn;
             } else {
-                dg = function (){
+                dg = function () {
                     var q;
                     if (fn) {
                         q = fn.apply(this, arguments);
                     }
                     var callbacks = dg._callbacks;
                     var k = callbacks.length;
-                    while (k --) {
+                    while (k--) {
                         var r = callbacks[k].apply(this, arguments);
                         if (q === undefined) {
                             q = r;
@@ -36,24 +34,25 @@
             dg._callbacks.push(callback);
             return dg;
         },
-        createElementByHtml: function (html){
-            var el = document.createElement('div');
+        createElementByHtml: function (html) {
+            var el = document.createElement("div");
             el.innerHTML = html;
             el = el.firstChild;
             el.parentNode.removeChild(el);
             return el;
         },
-        getViewportElement: function (){
-            return (browser.ie && browser.quirks) ?
-                document.body : document.documentElement;
+        getViewportElement: function () {
+            return browser.ie && browser.quirks
+                   ? document.body
+                   : document.documentElement;
         },
-        getClientRect: function (element){
+        getClientRect: function (element) {
             var bcr;
             //trace  IE6下在控制编辑器显隐时可能会报错，catch一下
-            try{
+            try {
                 bcr = element.getBoundingClientRect();
-            }catch(e){
-                bcr={left:0,top:0,height:0,width:0}
+            } catch (e) {
+                bcr = {left: 0, top: 0, height: 0, width: 0};
             }
             var rect = {
                 left: Math.round(bcr.left),
@@ -62,8 +61,10 @@
                 width: Math.round(bcr.right - bcr.left)
             };
             var doc;
-            while ((doc = element.ownerDocument) !== document &&
-                (element = domUtils.getWindow(doc).frameElement)) {
+            while (
+                (doc = element.ownerDocument) !== document &&
+                (element = domUtils.getWindow(doc).frameElement)
+                ) {
                 bcr = element.getBoundingClientRect();
                 rect.left += bcr.left;
                 rect.top += bcr.top;
@@ -72,10 +73,10 @@
             rect.right = rect.left + rect.width;
             return rect;
         },
-        getViewportRect: function (){
+        getViewportRect: function () {
             var viewportEl = uiUtils.getViewportElement();
             var width = (window.innerWidth || viewportEl.clientWidth) | 0;
-            var height = (window.innerHeight ||viewportEl.clientHeight) | 0;
+            var height = (window.innerHeight || viewportEl.clientHeight) | 0;
             return {
                 left: 0,
                 top: 0,
@@ -85,17 +86,17 @@
                 right: width
             };
         },
-        setViewportOffset: function (element, offset){
+        setViewportOffset: function (element, offset) {
             var rect;
             var fixedLayer = uiUtils.getFixedLayer();
             if (element.parentNode === fixedLayer) {
-                element.style.left = offset.left + 'px';
-                element.style.top = offset.top + 'px';
+                element.style.left = offset.left + "px";
+                element.style.top = offset.top + "px";
             } else {
                 domUtils.setViewportOffset(element, offset);
             }
         },
-        getEventOffset: function (evt){
+        getEventOffset: function (evt) {
             var el = evt.target || evt.srcElement;
             var rect = uiUtils.getClientRect(el);
             var offset = uiUtils.getViewportOffsetByEvent(evt);
@@ -104,7 +105,7 @@
                 top: offset.top - rect.top
             };
         },
-        getViewportOffsetByEvent: function (evt){
+        getViewportOffsetByEvent: function (evt) {
             var el = evt.target || evt.srcElement;
             var frameEl = domUtils.getWindow(el).frameElement;
             var offset = {
@@ -118,110 +119,125 @@
             }
             return offset;
         },
-        setGlobal: function (id, obj){
+        setGlobal: function (id, obj) {
             root[id] = obj;
-            return magic + '["' + id  + '"]';
+            return magic + '["' + id + '"]';
         },
-        unsetGlobal: function (id){
+        unsetGlobal: function (id) {
             delete root[id];
         },
-        copyAttributes: function (tgt, src){
+        copyAttributes: function (tgt, src) {
             var attributes = src.attributes;
             var k = attributes.length;
-            while (k --) {
+            while (k--) {
                 var attrNode = attributes[k];
-                if ( attrNode.nodeName != 'style' && attrNode.nodeName != 'class' && (!browser.ie || attrNode.specified) ) {
+                if (
+                    attrNode.nodeName != "style" &&
+                    attrNode.nodeName != "class" &&
+                    (!browser.ie || attrNode.specified)
+                ) {
                     tgt.setAttribute(attrNode.nodeName, attrNode.nodeValue);
                 }
             }
             if (src.className) {
-                domUtils.addClass(tgt,src.className);
+                domUtils.addClass(tgt, src.className);
             }
             if (src.style.cssText) {
-                tgt.style.cssText += ';' + src.style.cssText;
+                tgt.style.cssText += ";" + src.style.cssText;
             }
         },
-        removeStyle: function (el, styleName){
+        removeStyle: function (el, styleName) {
             if (el.style.removeProperty) {
                 el.style.removeProperty(styleName);
             } else if (el.style.removeAttribute) {
                 el.style.removeAttribute(styleName);
-            } else throw '';
+            } else {
+                throw "";
+            }
         },
-        contains: function (elA, elB){
-            return elA && elB && (elA === elB ? false : (
-                elA.contains ? elA.contains(elB) :
-                    elA.compareDocumentPosition(elB) & 16
-                ));
+        contains: function (elA, elB) {
+            return (
+                elA &&
+                elB &&
+                (elA === elB
+                 ? false
+                 : elA.contains
+                   ? elA.contains(elB)
+                   : elA.compareDocumentPosition(elB) & 16)
+            );
         },
-        startDrag: function (evt, callbacks,doc){
+        startDrag: function (evt, callbacks, doc) {
             var doc = doc || document;
             var startX = evt.clientX;
             var startY = evt.clientY;
-            function handleMouseMove(evt){
+
+            function handleMouseMove(evt) {
                 var x = evt.clientX - startX;
                 var y = evt.clientY - startY;
-                callbacks.ondragmove(x, y,evt);
+                callbacks.ondragmove(x, y, evt);
                 if (evt.stopPropagation) {
                     evt.stopPropagation();
                 } else {
                     evt.cancelBubble = true;
                 }
             }
+
             if (doc.addEventListener) {
-                function handleMouseUp(evt){
-                    doc.removeEventListener('mousemove', handleMouseMove, true);
-                    doc.removeEventListener('mouseup', handleMouseUp, true);
-                    window.removeEventListener('mouseup', handleMouseUp, true);
+                function handleMouseUp(evt) {
+                    doc.removeEventListener("mousemove", handleMouseMove, true);
+                    doc.removeEventListener("mouseup", handleMouseUp, true);
+                    window.removeEventListener("mouseup", handleMouseUp, true);
                     callbacks.ondragstop();
                 }
-                doc.addEventListener('mousemove', handleMouseMove, true);
-                doc.addEventListener('mouseup', handleMouseUp, true);
-                window.addEventListener('mouseup', handleMouseUp, true);
 
+                doc.addEventListener("mousemove", handleMouseMove, true);
+                doc.addEventListener("mouseup", handleMouseUp, true);
+                window.addEventListener("mouseup", handleMouseUp, true);
                 evt.preventDefault();
             } else {
                 var elm = evt.srcElement;
                 elm.setCapture();
-                function releaseCaptrue(){
+
+                function releaseCaptrue() {
                     elm.releaseCapture();
-                    elm.detachEvent('onmousemove', handleMouseMove);
-                    elm.detachEvent('onmouseup', releaseCaptrue);
-                    elm.detachEvent('onlosecaptrue', releaseCaptrue);
+                    elm.detachEvent("onmousemove", handleMouseMove);
+                    elm.detachEvent("onmouseup", releaseCaptrue);
+                    elm.detachEvent("onlosecaptrue", releaseCaptrue);
                     callbacks.ondragstop();
                 }
-                elm.attachEvent('onmousemove', handleMouseMove);
-                elm.attachEvent('onmouseup', releaseCaptrue);
-                elm.attachEvent('onlosecaptrue', releaseCaptrue);
+
+                elm.attachEvent("onmousemove", handleMouseMove);
+                elm.attachEvent("onmouseup", releaseCaptrue);
+                elm.attachEvent("onlosecaptrue", releaseCaptrue);
                 evt.returnValue = false;
             }
             callbacks.ondragstart();
         },
-        getFixedLayer: function (){
-            var layer = document.getElementById('edui_fixedlayer');
+        getFixedLayer: function () {
+            var layer = document.getElementById("edui_fixedlayer");
             if (layer == null) {
-                layer = document.createElement('div');
-                layer.id = 'edui_fixedlayer';
+                layer = document.createElement("div");
+                layer.id = "edui_fixedlayer";
                 document.body.appendChild(layer);
                 if (browser.ie && browser.version <= 8) {
-                    layer.style.position = 'absolute';
+                    layer.style.position = "absolute";
                     bindFixedLayer();
                     setTimeout(updateFixedOffset);
                 } else {
-                    layer.style.position = 'fixed';
+                    layer.style.position = "fixed";
                 }
-                layer.style.left = '0';
-                layer.style.top = '0';
-                layer.style.width = '0';
-                layer.style.height = '0';
+                layer.style.left = "0";
+                layer.style.top = "0";
+                layer.style.width = "0";
+                layer.style.height = "0";
             }
             return layer;
         },
-        makeUnselectable: function (element){
+        makeUnselectable: function (element) {
             if (browser.opera || (browser.ie && browser.version < 9)) {
-                element.unselectable = 'on';
+                element.unselectable = "on";
                 if (element.hasChildNodes()) {
-                    for (var i=0; i<element.childNodes.length; i++) {
+                    for (var i = 0; i < element.childNodes.length; i++) {
                         if (element.childNodes[i].nodeType == 1) {
                             uiUtils.makeUnselectable(element.childNodes[i]);
                         }
@@ -229,29 +245,34 @@
                 }
             } else {
                 if (element.style.MozUserSelect !== undefined) {
-                    element.style.MozUserSelect = 'none';
+                    element.style.MozUserSelect = "none";
                 } else if (element.style.WebkitUserSelect !== undefined) {
-                    element.style.WebkitUserSelect = 'none';
+                    element.style.WebkitUserSelect = "none";
                 } else if (element.style.KhtmlUserSelect !== undefined) {
-                    element.style.KhtmlUserSelect = 'none';
+                    element.style.KhtmlUserSelect = "none";
                 }
             }
         }
-    };
-    function updateFixedOffset(){
-        var layer = document.getElementById('edui_fixedlayer');
+    });
+
+    function updateFixedOffset() {
+        var layer = document.getElementById("edui_fixedlayer");
         uiUtils.setViewportOffset(layer, {
             left: 0,
             top: 0
         });
-//        layer.style.display = 'none';
-//        layer.style.display = 'block';
-
+        //        layer.style.display = 'none';
+        //        layer.style.display = 'block';
         //#trace: 1354
-//        setTimeout(updateFixedOffset);
+        //        setTimeout(updateFixedOffset);
     }
-    function bindFixedLayer(adjOffset){
-        domUtils.on(window, 'scroll', updateFixedOffset);
-        domUtils.on(window, 'resize', baidu.editor.utils.defer(updateFixedOffset, 0, true));
+
+    function bindFixedLayer(adjOffset) {
+        domUtils.on(window, "scroll", updateFixedOffset);
+        domUtils.on(
+            window,
+            "resize",
+            baidu.editor.utils.defer(updateFixedOffset, 0, true)
+        );
     }
 })();

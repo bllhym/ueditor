@@ -5,27 +5,27 @@
  * Time: 下午1:26
  * To change this template use File | Settings | File Templates.
  */
-(function() {
+(function () {
     function mySetup() {
         for (var config in window.UEDITOR_CONFIG) {
-            if (typeof(window.UEDITOR_CONFIG[config]) == 'string')
+            if (typeof (window.UEDITOR_CONFIG[config]) == 'string') {
                 window.UEDITOR_CONFIG[config] = window.UEDITOR_CONFIG[config].replace('_test/tools/br/', '');
+            }
         }
-
         var ui = baidu.editor.ui;
         var div = document.createElement('div');
         document.body.appendChild(div);
         div.id = 'editor';
-        var ue = new UE.ui.Editor({'UEDITOR_HOME_URL':'../../../','autoFloatEnabled':true});
-        setTimeout(function(){
+        var ue = new UE.ui.Editor({'UEDITOR_HOME_URL': '../../../', 'autoFloatEnabled': true});
+        setTimeout(function () {
             te.dom.push(div);
             te.obj.push(ui);
-            te.obj.push( ue );
-            QUnit.readyFlag =1;
-        },20);
+            te.obj.push(ue);
+            QUnit.readyFlag = 1;
+        }, 20);
         stop();
-        QUnit.readyFlag =0;
-        document.getElementsByClassName = function(eleClassName) {
+        QUnit.readyFlag = 0;
+        document.getElementsByClassName = function (eleClassName) {
             var getEleClass = [];//定义一个数组
             var myclass = new RegExp("\\b" + eleClassName + "\\b");//创建一个正则表达式对像
             var elem = this.getElementsByTagName("*");//获取文档里所有的元素
@@ -34,32 +34,29 @@
                 if (myclass.test(classes)) getEleClass.push(elem[h]);//正则比较，取到想要的CLASS对像
             }
             return getEleClass;//返回数组
-        }
+        };
     }
 
-    var _d = function() {
+    var _d = function () {
         if (te) {
             if (te.dom && te.dom.length) {
                 for (var i = 0; i < te.dom.length; i++) {
-                    if (te.dom[i] && te.dom[i].parentNode)
+                    if (te.dom[i] && te.dom[i].parentNode) {
                         te.dom[i].parentNode.removeChild(te.dom[i]);
+                    }
                 }
-
             }
         }
-
         te.dom = [];
         te.obj = [];
-    }
-
-    var s = QUnit.testStart,d = QUnit.testDone;
-    QUnit.testStart = function() {
+    };
+    var s = QUnit.testStart, d = QUnit.testDone;
+    QUnit.testStart = function () {
         s.apply(this, arguments);
         mySetup();
     };
-    QUnit.testDone = function() {
+    QUnit.testDone = function () {
         _d();
         d.apply(this, arguments);
     }
-
 })()

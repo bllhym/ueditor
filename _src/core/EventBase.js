@@ -5,13 +5,11 @@
  * @class EventBase
  * @since 1.2.6.1
  */
-
 /**
  * UEditor公用空间，UEditor所有的功能都挂载在该空间下
  * @unfile
  * @module UE
  */
-
 /**
  * UE采用的事件基类，继承此类的对应类将获取addListener,removeListener,fireEvent方法。
  * 在UE中，Editor以及所有ui实例都继承了该类，故可以在对应的ui对象以及editor对象上使用上述方法。
@@ -19,7 +17,6 @@
  * @module UE
  * @class EventBase
  */
-
 /**
  * 通过此构造器，子类可以继承EventBase获取事件监听的方法
  * @constructor
@@ -28,10 +25,8 @@
  * UE.EventBase.call(editor);
  * ```
  */
-var EventBase = UE.EventBase = function () {};
-
+var EventBase = (UE.EventBase = function () {});
 EventBase.prototype = {
-
     /**
      * 注册事件监听器
      * @method addListener
@@ -54,21 +49,20 @@ EventBase.prototype = {
      * ```
      * @see UE.EventBase:fireEvent(String)
      */
-    addListener:function (types, listener) {
+    addListener: function (types, listener) {
         types = utils.trim(types).split(/\s+/);
-        for (var i = 0, ti; ti = types[i++];) {
+        for (var i = 0, ti; (ti = types[i++]);) {
             getListener(this, ti, true).push(listener);
         }
     },
-
-    on : function(types, listener){
-      return this.addListener(types,listener);
+    on: function (types, listener) {
+        return this.addListener(types, listener);
     },
-    off : function(types, listener){
-        return this.removeListener(types, listener)
+    off: function (types, listener) {
+        return this.removeListener(types, listener);
     },
-    trigger:function(){
-        return this.fireEvent.apply(this,arguments);
+    trigger: function () {
+        return this.fireEvent.apply(this, arguments);
     },
     /**
      * 移除事件监听器
@@ -81,13 +75,12 @@ EventBase.prototype = {
      * editor.removeListener("selectionchange",changeCallback);
      * ```
      */
-    removeListener:function (types, listener) {
+    removeListener: function (types, listener) {
         types = utils.trim(types).split(/\s+/);
-        for (var i = 0, ti; ti = types[i++];) {
+        for (var i = 0, ti; (ti = types[i++]);) {
             utils.removeItem(getListener(this, ti) || [], listener);
         }
     },
-
     /**
      * 触发事件
      * @method fireEvent
@@ -120,18 +113,20 @@ EventBase.prototype = {
      * editor.fireEvent("selectionchange", "Hello", "World");
      * ```
      */
-    fireEvent:function () {
+    fireEvent: function () {
         var types = arguments[0];
-        types = utils.trim(types).split(' ');
-        for (var i = 0, ti; ti = types[i++];) {
+        types = utils.trim(types).split(" ");
+        for (var i = 0, ti; (ti = types[i++]);) {
             var listeners = getListener(this, ti),
-                r, t, k;
+                r,
+                t,
+                k;
             if (listeners) {
                 k = listeners.length;
                 while (k--) {
-                    if(!listeners[k])continue;
+                    if (!listeners[k]) continue;
                     t = listeners[k].apply(this, arguments);
-                    if(t === true){
+                    if (t === true) {
                         return t;
                     }
                     if (t !== undefined) {
@@ -139,13 +134,14 @@ EventBase.prototype = {
                     }
                 }
             }
-            if (t = this['on' + ti.toLowerCase()]) {
+            if ((t = this["on" + ti.toLowerCase()])) {
                 r = t.apply(this, arguments);
             }
         }
         return r;
     }
 };
+
 /**
  * 获得对象所拥有监听类型的所有监听器
  * @unfile
@@ -161,7 +157,9 @@ EventBase.prototype = {
 function getListener(obj, type, force) {
     var allListeners;
     type = type.toLowerCase();
-    return ( ( allListeners = ( obj.__allListeners || force && ( obj.__allListeners = {} ) ) )
-        && ( allListeners[type] || force && ( allListeners[type] = [] ) ) );
+    return (
+        (allListeners =
+            obj.__allListeners || (force && (obj.__allListeners = {}))) &&
+        (allListeners[type] || (force && (allListeners[type] = [])))
+    );
 }
-

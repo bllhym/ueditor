@@ -1,7 +1,6 @@
-module( 'plugins.indent' );
-
+module('plugins.indent');
 /*trace 1030*/
-test( '同时加缩进和段前距', function() {
+test('同时加缩进和段前距', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<p>hello1</p><p>hello2</p>');
@@ -12,35 +11,32 @@ test( '同时加缩进和段前距', function() {
         editor.execCommand('rowspacing', 15, 'top');
         editor.execCommand('indent');
 //    stop()
-
         equal(editor.body.firstChild.style['textIndent'], '2em', '查看缩进量');
         equal(editor.queryCommandValue('rowspacing', 'top'), 15, '查询段前距');
         start();
     }, 50);
     stop();
-} );
-
-test( 'trace1241--首行缩进的状态反射', function() {
+});
+test('trace1241--首行缩进的状态反射', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent( '<h1>hello1</h1>' );
-    setTimeout(function(){
-        range.setStart( editor.body.firstChild, 1 ).collapse( 1 ).select();
-        equal( editor.queryCommandState( 'indent' ), 0, '开始没有缩进' );
-        editor.execCommand( 'indent' );
-        equal( editor.queryCommandState( 'indent' ), 1, '有缩进' );
-        editor.execCommand( 'indent' );
-        equal( editor.queryCommandState( 'indent' ), 0, '没有缩进' );
+    editor.setContent('<h1>hello1</h1>');
+    setTimeout(function () {
+        range.setStart(editor.body.firstChild, 1).collapse(1).select();
+        equal(editor.queryCommandState('indent'), 0, '开始没有缩进');
+        editor.execCommand('indent');
+        equal(editor.queryCommandState('indent'), 1, '有缩进');
+        editor.execCommand('indent');
+        equal(editor.queryCommandState('indent'), 0, '没有缩进');
         start();
-    },50);
+    }, 50);
     stop();
-} );
-
+});
 /*trace 1031*/
-test( '缩进后再h1', function() {
+test('缩进后再h1', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent( '<p>hello1</p><p>hello2</p>' );
+    editor.setContent('<p>hello1</p><p>hello2</p>');
     setTimeout(function () {
         range.setStart(editor.body.firstChild, 0).setEnd(editor.body.lastChild, 1).select();
         editor.execCommand('indent');
@@ -50,13 +46,11 @@ test( '缩进后再h1', function() {
         start();
     }, 50);
     stop();
-} );
-
-
-test( '先设h1再缩进', function() {
+});
+test('先设h1再缩进', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent( '<p>hello1</p><p>hello2</p>' );
+    editor.setContent('<p>hello1</p><p>hello2</p>');
     setTimeout(function () {
         range.setStart(editor.body.firstChild, 0).setEnd(editor.body.lastChild, 1).select();
         editor.execCommand('paragraph', 'h1');
@@ -66,9 +60,9 @@ test( '先设h1再缩进', function() {
         start();
     }, 50);
     stop();
-} );
+});
 /*trace 1479 首行缩进按钮功能有效*/
-test('trace 1479 首行缩进按钮功能有效',function(){
+test('trace 1479 首行缩进按钮功能有效', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<p>hello</p>');
@@ -82,23 +76,23 @@ test('trace 1479 首行缩进按钮功能有效',function(){
     stop();
 });
 /*trace 1516 选Heading格式的文字首行缩进按钮高亮*/
-test('trace 1516 选Heading格式的文字首行缩进按钮高亮',function(){
+test('trace 1516 选Heading格式的文字首行缩进按钮高亮', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent( '<h1>hello</h1>' );
-    setTimeout(function(){
-        range.setStart(editor.body.firstChild,0).collapse(true).select();
-        editor.execCommand( 'indent' );
+    editor.setContent('<h1>hello</h1>');
+    setTimeout(function () {
+        range.setStart(editor.body.firstChild, 0).collapse(true).select();
+        editor.execCommand('indent');
         equal(editor.body.firstChild.style['textIndent'], '2em', '选Heading格式的文字首行缩进');//text-indent:2em
         equal(editor.queryCommandState('indent'), 1, '缩进按钮高亮');
         start();
-    },50);
+    }, 50);
     stop();
 });
-test( '先对齐方式再缩进', function() {
+test('先对齐方式再缩进', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent( '<p>hello1</p><p>hello2</p>' );
+    editor.setContent('<p>hello1</p><p>hello2</p>');
     setTimeout(function () {
         range.setStart(editor.body.firstChild, 0).setEnd(editor.body.lastChild, 1).select();
         editor.execCommand('justify', 'right');
@@ -108,12 +102,11 @@ test( '先对齐方式再缩进', function() {
         start();
     }, 50);
     stop();
-} );
-
-test( '先缩进再对齐方式', function() {
+});
+test('先缩进再对齐方式', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent( '<p>hello1</p><p>hello2</p>' );
+    editor.setContent('<p>hello1</p><p>hello2</p>');
     setTimeout(function () {
         range.setStart(editor.body.firstChild, 0).setEnd(editor.body.lastChild, 1).select();
         editor.execCommand('indent');
@@ -123,10 +116,9 @@ test( '先缩进再对齐方式', function() {
         start();
     }, 50);
     stop();
-} );
-
+});
 /*trace 1033*/
-test( '非闭合取消缩进', function() {
+test('非闭合取消缩进', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
     editor.setContent('<p>hello1</p><p>hello2</p>');
@@ -139,12 +131,11 @@ test( '非闭合取消缩进', function() {
         start();
     }, 50);
     stop();
-} );
-
-test( '闭合取消缩进', function() {
+});
+test('闭合取消缩进', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent( '<p>hello1</p><p>hello2</p>' );
+    editor.setContent('<p>hello1</p><p>hello2</p>');
     setTimeout(function () {
         range.setStart(editor.body.firstChild, 0).setEnd(editor.body.lastChild, 1).select();
         editor.execCommand('indent');
@@ -156,8 +147,7 @@ test( '闭合取消缩进', function() {
         start();
     }, 50);
     stop();
-} );
-
+});
 //test( '表格内闭合缩进和取消缩进', function() {
 //    var editor = te.obj[0];
 //    var range = te.obj[1];
@@ -185,11 +175,10 @@ test( '闭合取消缩进', function() {
 //    }, 30 );
 //    stop();
 //} );
-
-test( '多个单元格缩进和取消缩进', function() {
+test('多个单元格缩进和取消缩进', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent( '<table><tbody><tr><td>hello1</td><td>hello2<img /></td></tr><tr><td><div>hello3</div></td><td><p>hello4</p></td></tr></tbody></table>' );
+    editor.setContent('<table><tbody><tr><td>hello1</td><td>hello2<img /></td></tr><tr><td><div>hello3</div></td><td><p>hello4</p></td></tr></tbody></table>');
     setTimeout(function () {
         var tds = editor.body.firstChild.getElementsByTagName('td');
         range.selectNode(editor.body.firstChild).select();
@@ -208,13 +197,12 @@ test( '多个单元格缩进和取消缩进', function() {
         start();
     }, 50);
     stop();
-} );
-
+});
 /*trace 1097*/
-test( '列表中缩进', function() {
+test('列表中缩进', function () {
     var editor = te.obj[0];
     var range = te.obj[1];
-    editor.setContent( '<ul><li>nihao</li><li>hello</li></ul>' );
+    editor.setContent('<ul><li>nihao</li><li>hello</li></ul>');
     setTimeout(function () {
         range.setStart(editor.body.firstChild.firstChild, 0).collapse(true).select();
         editor.execCommand('indent');
@@ -230,4 +218,4 @@ test( '列表中缩进', function() {
         start();
     }, 50);
     stop();
-} )
+});

@@ -3,13 +3,11 @@
  * @file
  * @since 1.2.6.1
  */
-UE.plugin.register('serverparam', function (){
-
+UE.plugin.register("serverparam", function () {
     var me = this,
         serverParam = {};
-
     return {
-        commands:{
+        commands: {
             /**
              * 修改服务器提交的额外参数列表,清除所有项
              * @command serverparam
@@ -82,26 +80,30 @@ UE.plugin.register('serverparam', function (){
              * editor.queryCommandValue( 'serverparam' ); //返回对象 {'key': 'value'}
              * ```
              */
-            'serverparam':{
-                execCommand:function (cmd, key, value) {
-                    if (key === undefined || key === null) { //不传参数,清空列表
+            serverparam: {
+                execCommand: function (cmd, key, value) {
+                    if (key === undefined || key === null) {
+                        //不传参数,清空列表
                         serverParam = {};
-                    } else if (utils.isString(key)) { //传入键值
-                        if(value === undefined || value === null) {
+                    } else if (utils.isString(key)) {
+                        //传入键值
+                        if (value === undefined || value === null) {
                             delete serverParam[key];
                         } else {
                             serverParam[key] = value;
                         }
-                    } else if (utils.isObject(key)) { //传入对象,覆盖列表项
-                        utils.extend(serverParam, key, true);
-                    } else if (utils.isFunction(key)){ //传入函数,添加列表项
-                        utils.extend(serverParam, key(), true);
+                    } else if (utils.isObject(key)) {
+                        //传入对象,覆盖列表项
+                        utils.extend(serverParam, key, false);
+                    } else if (utils.isFunction(key)) {
+                        //传入函数,添加列表项
+                        utils.extend(serverParam, key(), false);
                     }
                 },
-                queryCommandValue: function(){
+                queryCommandValue: function () {
                     return serverParam || {};
                 }
             }
         }
-    }
+    };
 });

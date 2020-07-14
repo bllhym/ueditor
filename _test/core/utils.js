@@ -1,5 +1,4 @@
 module("core.utils");
-
 test('cssRule', function () {
     var utils = te.obj[0];
     utils.cssRule('test1', '.test{width:300px;}');
@@ -18,7 +17,6 @@ test('cssRule', function () {
     utils.cssRule('style_test', '');
     equals(UE.dom.domUtils.getComputedStyle(div.firstChild, 'font-size'), '16px');
 });
-
 test("makeInstance", function () {
     var utils = te.obj[0];
     var obj = {
@@ -34,7 +32,7 @@ test("makeInstance", function () {
 });
 test("isArray--普通对象", function () {
     var utils = te.obj[0];
-    var arr = [ '1', '2' ], ob = {}, str = "array", fun = function () {
+    var arr = ['1', '2'], ob = {}, str = "array", fun = function () {
     };
     var div = te.dom[0];
     ok(utils.isArray(arr), 'arr is a array');
@@ -44,7 +42,6 @@ test("isArray--普通对象", function () {
     ok(!utils.isArray(null), 'null is not a array');
     ok(!utils.isArray(div), 'dom element is not a array');
 });
-
 test("isArray--类数组对象", function () {
     var utils = te.obj[0];
     var arrayLike = {
@@ -57,9 +54,7 @@ test("isArray--类数组对象", function () {
     div.innerHTML = '<span><label></label></span>xxxxx<p></p>';
     ok(!utils.isArray(arrayLike), '类数组对象不是数组');
     ok(!utils.isArray(div.childNodes), 'nodeList 不是数组');
-
 });
-
 test("inherits", function () {
     var utils = te.obj[0];
     var superClass = function () {
@@ -93,12 +88,10 @@ test("inherits", function () {
     /*覆盖父类中的method方法*/
     sub.method();
 });
-
-
 test("bind", function () {
     var utils = te.obj[0];
-    var first_object = { num: 4 };
-    var second_object = { num: 2 };
+    var first_object = {num: 4};
+    var second_object = {num: 2};
 
     function multiply(mult) {
         return this.num * mult;
@@ -109,7 +102,6 @@ test("bind", function () {
     var second_multiply = utils.bind(multiply, second_object);
     equal(second_multiply(5), 10, "second_object");
 });
-
 test('defer--一个defer', function () {
     var utils = te.obj[0];
     var delay = 100;
@@ -122,7 +114,6 @@ test('defer--一个defer', function () {
         start();
     }, delay)();
 });
-
 test('defer--多个defer', function () {
     var utils = te.obj[0];
     var delay = 40;
@@ -131,13 +122,11 @@ test('defer--多个defer', function () {
     utils.defer(function () {
         ok(true, '第一个触发');
     }, delay)();
-
     utils.defer(function () {
         ok(true, '第二个触发');
         start();
     }, delay)();
 });
-
 /*若互斥，则前一个注册的setTimeout事件被删除*/
 test('defer--考虑互斥', function () {
     var utils = te.obj[0];
@@ -155,12 +144,13 @@ test('defer--考虑互斥', function () {
         start();
     }, 100);
 });
-
 test("extend--true", function () {
     var utils = te.obj[0];
-    var obj1 = {a: 3, b: "str", fun: function () {
-        ok(true, "fun");
-    }, n: null};
+    var obj1 = {
+        a: 3, b: "str", fun: function () {
+            ok(true, "fun");
+        }, n: null
+    };
     var obj2 = {a: 2, c: 1};
     utils.extend(obj2, obj1, true);
     equal(obj2.a, 2, "obj2 a");
@@ -171,9 +161,11 @@ test("extend--true", function () {
 });
 test("extend--false", function () {
     var utils = te.obj[0];
-    var obj1 = {a: 3, b: "str", fun: function () {
-        ok(true, "fun");
-    }, n: null};
+    var obj1 = {
+        a: 3, b: "str", fun: function () {
+            ok(true, "fun");
+        }, n: null
+    };
     var obj2 = {a: 2, c: 1};
     utils.extend(obj2, obj1, false);
     equal(obj2.a, 3, "obj2 a");
@@ -184,7 +176,7 @@ test("extend--false", function () {
 });
 test('indexOf', function () {
     var utils = te.obj[0];
-    var s = [ 1, 2, 3, 4, 5 ];
+    var s = [1, 2, 3, 4, 5];
     equals(utils.indexOf(s, 3), 2);
     equals(utils.indexOf(s, 6), -1);
     equals(utils.indexOf(s, 5), 4);
@@ -193,20 +185,18 @@ test('indexOf', function () {
 });
 test('removeItem&&itemexist', function () {
     var utils = te.obj[0];
-    var s = [ 1, 2, 3, 4, 5 , 4, 3];
+    var s = [1, 2, 3, 4, 5, 4, 3];
     equal(s[5], 4, "before remove 4");
     utils.removeItem(s, 4);
     equal(s.length, 5, "4 be removed");
     equal(s[4], 3, "4 be removed");
 });
-
 test('removeItem&&itemnotexist', function () {
     var utils = te.obj[0];
-    var s = [ 1, 2, 3, 4, 5 , 4];
+    var s = [1, 2, 3, 4, 5, 4];
     utils.removeItem(s, 6);
     equal(s.length, 6, "itemnotexist");
 });
-
 test("trim", function () {
     var utils = te.obj[0];
     var s = ' sss ';
@@ -253,11 +243,11 @@ test('unhtml 字符转义', function () {
     var str = '<p>"as&cd"</p>';
     var str_html = utils.unhtml(str);
     equal(str_html, '&lt;p&gt;&quot;as&amp;cd&quot;&lt;/p&gt;', '转义字符成功');
-    str = 'border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;"'
+    str = 'border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;"';
     equal(utils.unhtml(str), 'border:&lt;script&gt;alert(&quot;&quot;)&lt;/script&gt;&quot;', '转义字符成功');
     str = "'";
     equal(utils.unhtml('比如&#23567;这个汉字的unicode编码'), '比如&#23567;这个汉字的unicode编码');
-    equal(utils.unhtml('比如&#<23567;这个汉字的unicode编码<>'), '比如&amp;#&lt;23567;这个汉字的unicode编码&lt;&gt;')
+    equal(utils.unhtml('比如&#<23567;这个汉字的unicode编码<>'), '比如&amp;#&lt;23567;这个汉字的unicode编码&lt;&gt;');
 });
 test('html 反转义', function () {
     var utils = te.obj[0];
@@ -282,7 +272,6 @@ test('cssStyleToDomStyle', function () {
     }
     equal(utils.cssStyleToDomStyle("styleFloat").toLowerCase(), "stylefloat", "styleFloat");
 });
-
 //zhuwenxuan add
 test("isEmptyObject", function () {
     var utils = te.obj[0];
@@ -301,16 +290,18 @@ test("fixColor", function () {
 test("sort", function () {
     var utils = te.obj[0];
     same(["a", "df", "sdf", "asdf"], utils.sort(['a', 'asdf', 'df', 'sdf'], function (a, b) {
-        if (a.length > b.length)
+        if (a.length > b.length) {
             return 1;
-        else return 0;
+        } else {
+            return 0;
+        }
     }), 'sort');
 });
 test("domReady", function () {
     var utils = te.obj[0];
     expect(1);
     utils.domReady(function () {
-        ok(1, 'domReady')
+        ok(1, 'domReady');
     });
 });
 test('4个padding属性', function () {
@@ -328,7 +319,6 @@ test('4个padding属性', function () {
     result = UE.utils.optCss(css);
     equal(result, 'padding-bottom:2px;padding-left:2px;', '2个属性就不合');
 });
-
 test('4个margin属性', function () {
     /*上下相同，左右相同*/
     var css = 'margin-bottom:3px;margin-left:2px;margin-right:2px;margin-top:3px';
@@ -346,7 +336,6 @@ test('4个margin属性', function () {
     result = UE.utils.optCss(css);
     equal(result, 'margin-top:2px;', '1个属性就不合');
 });
-
 test('合并;的问题', function () {
     equal(UE.utils.optCss('font-size:12px;&quot;;&lt;dssdfs&gt;;;'), 'font-size:12px;&quot;;&lt;dssdfs&gt;;', '');
 });
@@ -376,9 +365,7 @@ test('margin，border，padding属性混杂', function () {
     var css = 'margin-bottom:3px;margin-left:2px;margin-right:2px;margin-top:3px;padding:4px;border-image:initial;border-top-color:red;';
     var result = UE.utils.optCss(css);
     equal(result, 'padding:4px;border-top-color:red;margin:3px 2px;', 'margin，border，padding属性混同');
-
 });
-
 test('each 遍历方法', function () {
     var div = te.dom[0];
     div.innerHTML = '<span></span><span></span><span id="a"></span><span></span>';
@@ -388,8 +375,9 @@ test('each 遍历方法', function () {
     var count = 0;
     UE.utils.each(div.getElementsByTagName('span'), function (node, i) {
         count++;
-        if (node.id == 'a')
-            return false
+        if (node.id == 'a') {
+            return false;
+        }
     });
     equal(count, 3);
     UE.utils.each(['a', 'b'], function (v, i) {
@@ -409,139 +397,133 @@ test('clone 转换', function () {
             b: 1
         },
         c: [1, 2]
-    }
+    };
     obj1 = UE.utils.clone(obj);
     obj.a.b = 2;
     equal(obj1.a.b, 1);
     obj.c[1] = 3;
     equal(obj1.c[1], 2);
-
-
 });
 test('transUnitToPx 转换', function () {
     equal(UE.utils.transUnitToPx('20pt'), '27px');
     equal(UE.utils.transUnitToPx('0pt'), '0');
 });
-
 test('RegExp', function () {
     var reg = new RegExp(".*");
     equal(ok(utils.isRegExp(reg), 'reg is a RegExp'));
 });
-
 test('isDate', function () {
     var date = new Date();
     equal(ok(utils.isDate(date), 'date is a Date'));
 });
-
 test('isCrossDomainUrl', function () {
-
     var l = location;
-
     ok(!utils.isCrossDomainUrl(location.href), 'location.href 不跨域');
-
     if (l.port == '') {
         ok(!utils.isCrossDomainUrl(l.protocol + '//' + l.hostname + ':80/ueditor/'), '本地没端口,80端口不跨域');
     }
-
     if (l.port == '80') {
         ok(!utils.isCrossDomainUrl(l.protocol + '//' + l.hostname + '/ueditor/'), '本地没80端口,无端口不跨域');
     }
-
     if (l.protocol == 'http:') {
         ok(utils.isCrossDomainUrl('https://' + l.host + '/ueditor/'), '本地http协议,https协议跨域');
     } else {
         ok(utils.isCrossDomainUrl('http://' + l.host + '/ueditor/'), '本地不是http协议,http协议跨域');
     }
-
     ok(utils.isCrossDomainUrl(l.protocol + '//www.baidu.com' + ':' + l.port), '域名不一致跨域');
-
 });
-
 test('formatUrl', function () {
-
     var url1 = 'http://localhost/a.html?&key1=value1&&key2=value2&&&&&&&&&key3=value3&#hash';
     var url2 = 'http://localhost/a.html?&key1=value1&&key2=value2&&&&&&&&&key3=value3&';
-
     equal(utils.formatUrl(url1), 'http://localhost/a.html?key1=value1&key2=value2&key3=value3#hash', '格式化url');
     equal(utils.formatUrl(url2), 'http://localhost/a.html?key1=value1&key2=value2&key3=value3', '格式化url');
-
 });
-
 test('str2json', function () {
-
     same(utils.str2json('{"a":11,"b":"22","c":"cc","d":[1,"2","a",{"a":"aa"}],"e":{"k1":1,"k2":"2","k3":"a","k4":{"a":"aa"}}}'),
-        {"a": 11, "b": "22", "c": "cc", "d": [1, "2", "a", {"a": "aa"}], "e": {"k1": 1, "k2": "2", "k3": "a", "k4": {"a": "aa"}}},
+        {
+            "a": 11,
+            "b": "22",
+            "c": "cc",
+            "d": [1, "2", "a", {"a": "aa"}],
+            "e": {"k1": 1, "k2": "2", "k3": "a", "k4": {"a": "aa"}}
+        },
         '字符串转json对象');
-
 });
-
 test('json2str', function () {
-
-    equal(utils.json2str({"a": 11, "b": "22", "c": "cc", "d": [1, "2", "a", {"a": "aa"}], "e": {"k1": 1, "k2": "2", "k3": "a", "k4": {"a": "aa"}}}),
+    equal(utils.json2str({
+            "a": 11,
+            "b": "22",
+            "c": "cc",
+            "d": [1, "2", "a", {"a": "aa"}],
+            "e": {"k1": 1, "k2": "2", "k3": "a", "k4": {"a": "aa"}}
+        }),
         '{"a":11,"b":"22","c":"cc","d":[1,"2","a",{"a":"aa"}],"e":{"k1":1,"k2":"2","k3":"a","k4":{"a":"aa"}}}',
         'json对象转字符串');
-
 });
 test('json2str 不使用原生方法', function () {
     stop();
     var j = window.JSON;
     var flag = 0;
     ua.readFile("../../../_test/coverage/core/utils.js", function (s) {
-        if(s===null)flag = 1;
+        if (s === null) flag = 1;
         window.JSON = null;
         eval(s);
-        equal(utils.json2str({"a": 11, "b": "22", "c": "cc", "d": [1, "2", "a", {"a": "aa"}], "e": {"k1": 1, "k2": "2", "k3": "a", "k4": {"a": "aa"}}}),
+        equal(utils.json2str({
+                "a": 11,
+                "b": "22",
+                "c": "cc",
+                "d": [1, "2", "a", {"a": "aa"}],
+                "e": {"k1": 1, "k2": "2", "k3": "a", "k4": {"a": "aa"}}
+            }),
             '{"a":11,"b":"22","c":"cc","d":[1,"2","a",{"a":"aa"}],"e":{"k1":1,"k2":"2","k3":"a","k4":{"a":"aa"}}}',
             'json对象转字符串');
-
         window.JSON = j;
-
     });
-    if(flag){
+    if (flag) {
         ua.readFile("../../../_src/core/utils.js", function (s) {
             window.JSON = null;
             eval(s);
-            equal(utils.json2str({"a": 11, "b": "22", "c": "cc", "d": [1, "2", "a", {"a": "aa"}], "e": {"k1": 1, "k2": "2", "k3": "a", "k4": {"a": "aa"}}}),
+            equal(utils.json2str({
+                    "a": 11,
+                    "b": "22",
+                    "c": "cc",
+                    "d": [1, "2", "a", {"a": "aa"}],
+                    "e": {"k1": 1, "k2": "2", "k3": "a", "k4": {"a": "aa"}}
+                }),
                 '{"a":11,"b":"22","c":"cc","d":[1,"2","a",{"a":"aa"}],"e":{"k1":1,"k2":"2","k3":"a","k4":{"a":"aa"}}}',
                 'json对象转字符串');
-
             window.JSON = j;
-
         });
     }
-
-    setTimeout(function(){start();},50);
+    setTimeout(function () {start();}, 50);
 });
-
 test('clearEmptyAttrs', function () {
     var utils = te.obj[0];
     var ob = utils.clearEmptyAttrs({a: 1, b: ''});
     ok(!ob.hasOwnProperty('b'), 'clearEmptyAttrs');
 });
 test('serializeParam', function () {
-
     equal(utils.serializeParam({
-        key1: 'value1',
-        key2: 'value2',
-        key3: 33,
-        key4: '44',
-        key5: true,
-        key6: null,
-        key7: undefined,
-        key8: [11, 22, '33', 'aa', true, null]
-    }),
+            key1: 'value1',
+            key2: 'value2',
+            key3: 33,
+            key4: '44',
+            key5: true,
+            key6: null,
+            key7: undefined,
+            key8: [11, 22, '33', 'aa', true, null]
+        }),
         'key1=value1&' +
-            'key2=value2&' +
-            'key3=33&' +
-            'key4=44&' +
-            'key5=true&' +
-            'key7=undefined&' +
-            'key8[]=11&' +
-            'key8[]=22&' +
-            'key8[]=33&' +
-            'key8[]=aa&' +
-            'key8[]=true&' +
-            'key8[]=null',
+        'key2=value2&' +
+        'key3=33&' +
+        'key4=44&' +
+        'key5=true&' +
+        'key7=undefined&' +
+        'key8[]=11&' +
+        'key8[]=22&' +
+        'key8[]=33&' +
+        'key8[]=aa&' +
+        'key8[]=true&' +
+        'key8[]=null',
         '序列化obj对象为GET请求字符串');
-
 });

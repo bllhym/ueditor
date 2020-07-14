@@ -24,18 +24,12 @@ test('snapscreen', function () {
                     ok($('.edui-dialog .edui-for-snapscreen')[0] != null, '');
                     $EDITORUI[$('.edui-dialog .edui-for-snapscreen')[0].parentNode.id].close();
                     setTimeout(function () {
-
                         UE.delEditor('ue');
                         te.dom.push(document.getElementById('ue'));
                         start();
                     }, 1000);
                 }, 300);
-
-
             }, 100);
-
-
         }
-
     );
 });

@@ -3,7 +3,6 @@
  * @file
  * @since 1.2.6.1
  */
-
 /**
  * 打印
  * @command print
@@ -15,9 +14,9 @@
  * ```
  */
 UE.commands['print'] = {
-    execCommand : function(){
+    execCommand: function () {
         this.window.print();
     },
-    notNeedUndo : 1
+    notNeedUndo: 1
 };
 

@@ -1,7 +1,6 @@
-module( 'core.plugin' );
-
-test( 'register', function() {
-    UE.plugin.register('test',function(){
+module('core.plugin');
+test('register', function () {
+    UE.plugin.register('test', function () {
         this.testplugin = true;
     });
     $('<div id="ue"></div>').appendTo(document.body);
@@ -10,17 +9,17 @@ test( 'register', function() {
     editor.ready(function () {
         ok(this.testplugin);
         editor.destroy();
-        $('#ue').remove()
+        $('#ue').remove();
         start();
     });
 });
-test( 'load', function() {
-    UE.plugin.register('test',function(){
+test('load', function () {
+    UE.plugin.register('test', function () {
         this.testplugin = true;
     });
     $('<div id="ue"></div>').appendTo(document.body);
-    var editor = UE.getEditor('ue',{
-        test:false
+    var editor = UE.getEditor('ue', {
+        test: false
     });
     stop();
     editor.ready(function () {

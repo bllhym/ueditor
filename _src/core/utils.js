@@ -4,7 +4,6 @@
  * @module UE.utils
  * @since 1.2.6.1
  */
-
 /**
  * UEditor封装使用的静态工具函数
  * @module UE.utils
@@ -12,7 +11,6 @@
  */
 
 var utils = UE.utils = {
-
     /**
      * 用给定的迭代器遍历对象
      * @method each
@@ -51,23 +49,24 @@ var utils = UE.utils = {
      * } );
      * ```
      */
-    each : function(obj, iterator, context) {
+    each: function (obj, iterator, context) {
         if (obj == null) return;
         if (obj.length === +obj.length) {
             for (var i = 0, l = obj.length; i < l; i++) {
-                if(iterator.call(context, obj[i], i, obj) === false)
+                if (iterator.call(context, obj[i], i, obj) === false) {
                     return false;
+                }
             }
         } else {
             for (var key in obj) {
                 if (obj.hasOwnProperty(key)) {
-                    if(iterator.call(context, obj[key], key, obj) === false)
+                    if (iterator.call(context, obj[key], key, obj) === false) {
                         return false;
+                    }
                 }
             }
         }
     },
-
     /**
      * 以给定对象作为原型创建一个新对象
      * @method makeInstance
@@ -83,14 +82,13 @@ var utils = UE.utils = {
      * newObject.sayHello();
      * ```
      */
-    makeInstance:function (obj) {
+    makeInstance: function (obj) {
         var noop = new Function();
         noop.prototype = obj;
         obj = new noop;
         noop.prototype = null;
         return obj;
     },
-
     /**
      * 将source对象中的属性扩展到target对象上
      * @method extend
@@ -134,7 +132,7 @@ var utils = UE.utils = {
      *
      * ```
      */
-    extend:function (t, s, b) {
+    extend: function (t, s, b) {
         if (s) {
             for (var k in s) {
                 if (!b || !t.hasOwnProperty(k)) {
@@ -144,7 +142,6 @@ var utils = UE.utils = {
         }
         return t;
     },
-
     /**
      * 将给定的多个对象的属性复制到目标对象target上
      * @method extend2
@@ -168,7 +165,7 @@ var utils = UE.utils = {
      *
      * ```
      */
-    extend2:function (t) {
+    extend2: function (t) {
         var a = arguments;
         for (var i = 1; i < a.length; i++) {
             var x = a[i];
@@ -180,7 +177,6 @@ var utils = UE.utils = {
         }
         return t;
     },
-
     /**
      * 模拟继承机制， 使得subClass继承自superClass
      * @method inherits
@@ -211,14 +207,13 @@ var utils = UE.utils = {
      * sub.hello("早上好!");
      * ```
      */
-    inherits:function (subClass, superClass) {
+    inherits: function (subClass, superClass) {
         var oldP = subClass.prototype,
             newP = utils.makeInstance(superClass.prototype);
         utils.extend(newP, oldP, true);
         subClass.prototype = newP;
         return (newP.constructor = subClass);
     },
-
     /**
      * 用指定的context对象作为函数fn的上下文
      * @method bind
@@ -245,12 +240,11 @@ var utils = UE.utils = {
      *
      * ```
      */
-    bind:function (fn, context) {
+    bind: function (fn, context) {
         return function () {
             return fn.apply(context, arguments);
         };
     },
-
     /**
      * 创建延迟指定时间后执行的函数fn
      * @method defer
@@ -300,7 +294,7 @@ var utils = UE.utils = {
      * testDefer();
      * ```
      */
-    defer:function (fn, delay, exclusion) {
+    defer: function (fn, delay, exclusion) {
         var timerID;
         return function () {
             if (exclusion) {
@@ -309,7 +303,6 @@ var utils = UE.utils = {
             timerID = setTimeout(fn, delay);
         };
     },
-
     /**
      * 获取元素item在数组array中首次出现的位置, 如果未找到item， 则返回-1
      * @method indexOf
@@ -344,7 +337,7 @@ var utils = UE.utils = {
      * console.log( UE.utils.indexOf( arr, item, 5 ) );
      * ```
      */
-    indexOf:function (array, item, start) {
+    indexOf: function (array, item, start) {
         var index = -1;
         start = this.isNumber(start) ? start : 0;
         this.each(array, function (v, i) {
@@ -355,7 +348,6 @@ var utils = UE.utils = {
         });
         return index;
     },
-
     /**
      * 移除数组array中所有的元素item
      * @method removeItem
@@ -372,7 +364,7 @@ var utils = UE.utils = {
      *
      * ```
      */
-    removeItem:function (array, item) {
+    removeItem: function (array, item) {
         for (var i = 0, l = array.length; i < l; i++) {
             if (array[i] === item) {
                 array.splice(i, 1);
@@ -380,7 +372,6 @@ var utils = UE.utils = {
             }
         }
     },
-
     /**
      * 删除字符串str的首尾空格
      * @method trim
@@ -402,10 +393,9 @@ var utils = UE.utils = {
      *
      *  ```
      */
-    trim:function (str) {
+    trim: function (str) {
         return str.replace(/(^[ \t\n\r]+)|([ \t\n\r]+$)/g, '');
     },
-
     /**
      * 将字符串str以','分隔成数组后，将该数组转换成哈希对象， 其生成的hash对象的key为数组中的元素， value为1
      * @method listToMap
@@ -435,15 +425,14 @@ var utils = UE.utils = {
      *
      * ```
      */
-    listToMap:function (list) {
-        if (!list)return {};
+    listToMap: function (list) {
+        if (!list) return {};
         list = utils.isArray(list) ? list : list.split(',');
         for (var i = 0, ci, obj = {}; ci = list[i++];) {
             obj[ci.toUpperCase()] = obj[ci] = 1;
         }
         return obj;
     },
-
     /**
      * 将str中的html符号转义,将转义“'，&，<，"，>”五个字符
      * @method unhtml
@@ -458,20 +447,21 @@ var utils = UE.utils = {
      *
      * ```
      */
-    unhtml:function (str, reg) {
-        return str ? str.replace(reg || /[&<">'](?:(amp|lt|quot|gt|#39|nbsp|#\d+);)?/g, function (a, b) {
+    unhtml: function (str, reg) {
+        return str ? str.replace(reg || /[&<">'](?:(amp|lt|ldquo|rdquo|quot|gt|#39|nbsp|#\d+);)?/g, function (a, b) {
             if (b) {
                 return a;
             } else {
                 return {
-                    '<':'&lt;',
-                    '&':'&amp;',
-                    '"':'&quot;',
-                    '>':'&gt;',
-                    "'":'&#39;'
-                }[a]
+                    '<': '&lt;',
+                    '&': '&amp;',
+                    '"': '&quot;',
+                    "“": "&ldquo;",
+                    "”": "&rdquo;",
+                    '>': '&gt;',
+                    "'": '&#39;'
+                }[a];
             }
-
         }) : '';
     },
     /**
@@ -480,19 +470,17 @@ var utils = UE.utils = {
      * @param  { RegExp } reg 自定义的正则
      * @return { String }     转义后的字符串
      */
-    unhtmlForUrl:function (str, reg) {
+    unhtmlForUrl: function (str, reg) {
         return str ? str.replace(reg || /[<">']/g, function (a) {
             return {
-                '<':'&lt;',
-                '&':'&amp;',
-                '"':'&quot;',
-                '>':'&gt;',
-                "'":'&#39;'
-            }[a]
-
+                '<': '&lt;',
+                '&': '&amp;',
+                '"': '&quot;',
+                '>': '&gt;',
+                "'": '&#39;'
+            }[a];
         }) : '';
     },
-
     /**
      * 将str中的转义字符还原成html字符
      * @see UE.utils.unhtml(String);
@@ -509,19 +497,20 @@ var utils = UE.utils = {
      *
      * ```
      */
-    html:function (str) {
-        return str ? str.replace(/&((g|l|quo)t|amp|#39|nbsp);/g, function (m) {
+    html: function (str) {
+        return str ? str.replace(/&((g|l|quo|ldquo|rdquo)t|amp|#39|nbsp);/g, function (m) {
             return {
-                '&lt;':'<',
-                '&amp;':'&',
-                '&quot;':'"',
-                '&gt;':'>',
-                '&#39;':"'",
-                '&nbsp;':' '
-            }[m]
+                '&lt;': '<',
+                '&amp;': '&',
+                '&quot;': '"',
+                "&ldquo;": "“",
+                "&rdquo;": "”",
+                '&gt;': '>',
+                '&#39;': "'",
+                '&nbsp;': ' '
+            }[m];
         }) : '';
     },
-
     /**
      * 将css样式转换为驼峰的形式
      * @method cssStyleToDomStyle
@@ -537,19 +526,17 @@ var utils = UE.utils = {
      *
      * ```
      */
-    cssStyleToDomStyle:function () {
+    cssStyleToDomStyle: function () {
         var test = document.createElement('div').style,
             cache = {
-                'float':test.cssFloat != undefined ? 'cssFloat' : test.styleFloat != undefined ? 'styleFloat' : 'float'
+                'float': test.cssFloat != undefined ? 'cssFloat' : test.styleFloat != undefined ? 'styleFloat' : 'float'
             };
-
         return function (cssName) {
             return cache[cssName] || (cache[cssName] = cssName.toLowerCase().replace(/-./g, function (match) {
                 return match.charAt(1).toUpperCase();
             }));
         };
     }(),
-
     /**
      * 动态加载文件到doc中
      * @method loadFile
@@ -590,7 +577,7 @@ var utils = UE.utils = {
      *
      * ```
      */
-    loadFile:function () {
+    loadFile: function () {
         var tmpList = [];
 
         function getItem(doc, obj) {
@@ -603,7 +590,6 @@ var utils = UE.utils = {
             } catch (e) {
                 return null;
             }
-
         }
 
         return function (doc, obj, fn) {
@@ -612,20 +598,20 @@ var utils = UE.utils = {
                 if (item.ready) {
                     fn && fn();
                 } else {
-                    item.funs.push(fn)
+                    item.funs.push(fn);
                 }
                 return;
             }
             tmpList.push({
-                doc:doc,
-                url:obj.src || obj.href,
-                funs:[fn]
+                doc: doc,
+                url: obj.src || obj.href,
+                funs: [fn]
             });
             if (!doc.body) {
                 var html = [];
                 for (var p in obj) {
-                    if (p == 'tag')continue;
-                    html.push(p + '="' + obj[p] + '"')
+                    if (p == 'tag') continue;
+                    html.push(p + '="' + obj[p] + '"');
                 }
                 doc.write('<' + obj.tag + ' ' + html.join(' ') + ' ></' + obj.tag + '>');
                 return;
@@ -651,12 +637,11 @@ var utils = UE.utils = {
                 }
             };
             element.onerror = function () {
-                throw Error('The load ' + (obj.href || obj.src) + ' fails,check the url settings of file ueditor.config.js ')
+                throw Error('The load ' + (obj.href || obj.src) + ' fails,check the url settings of file ueditor.config.js ');
             };
             doc.getElementsByTagName("head")[0].appendChild(element);
-        }
+        };
     }(),
-
     /**
      * 判断obj对象是否为空
      * @method isEmptyObject
@@ -687,13 +672,14 @@ var utils = UE.utils = {
      *
      * ```
      */
-    isEmptyObject:function (obj) {
+    isEmptyObject: function (obj) {
         if (obj == null) return true;
         if (this.isArray(obj) || this.isString(obj)) return obj.length === 0;
-        for (var key in obj) if (obj.hasOwnProperty(key)) return false;
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key)) return false;
+        }
         return true;
     },
-
     /**
      * 把rgb格式的颜色值转换成16进制格式
      * @method fixColor
@@ -702,11 +688,12 @@ var utils = UE.utils = {
      * @example
      * rgb(255,255,255)  => "#ffffff"
      */
-    fixColor:function (name, value) {
+    fixColor: function (name, value) {
         if (/color/i.test(name) && /rgba?/.test(value)) {
             var array = value.split(",");
-            if (array.length > 3)
+            if (array.length > 3) {
                 return "";
+            }
             value = "#";
             for (var i = 0, color; color = array[i++];) {
                 color = parseInt(color.replace(/[^\d]/gi, ''), 10).toString(16);
@@ -714,7 +701,7 @@ var utils = UE.utils = {
             }
             value = value.toUpperCase();
         }
-        return  value;
+        return value;
     },
     /**
      * 只针对border,padding,margin做了处理，因为性能问题
@@ -722,7 +709,7 @@ var utils = UE.utils = {
      * @function
      * @param {String}    val style字符串
      */
-    optCss:function (val) {
+    optCss: function (val) {
         var padding, margin, border;
         val = val.replace(/(padding|margin|border)\-([^:]+):([^;]+);?/gi, function (str, key, name, val) {
             if (val.split(' ').length == 1) {
@@ -746,7 +733,7 @@ var utils = UE.utils = {
             if (!obj) {
                 return '';
             }
-            var t = obj.top , b = obj.bottom, l = obj.left, r = obj.right, val = '';
+            var t = obj.top, b = obj.bottom, l = obj.left, r = obj.right, val = '';
             if (!t || !l || !b || !r) {
                 for (var p in obj) {
                     val += ';' + name + '-' + p + ':' + obj[p] + ';';
@@ -754,19 +741,18 @@ var utils = UE.utils = {
             } else {
                 val += ';' + name + ':' +
                     (t == b && b == l && l == r ? t :
-                        t == b && l == r ? (t + ' ' + l) :
-                            l == r ? (t + ' ' + l + ' ' + b) : (t + ' ' + r + ' ' + b + ' ' + l)) + ';'
+                     t == b && l == r ? (t + ' ' + l) :
+                     l == r ? (t + ' ' + l + ' ' + b) : (t + ' ' + r + ' ' + b + ' ' + l)) + ';';
             }
             return val;
         }
 
         val += opt(padding, 'padding') + opt(margin, 'margin');
         return val.replace(/^[ \n\r\t;]*|[ \n\r\t]*$/, '').replace(/;([ \n\r\t]+)|\1;/g, ';')
-            .replace(/(&((l|g)t|quot|#39))?;{2,}/g, function (a, b) {
-                return b ? b + ";;" : ';'
-            });
+                  .replace(/(&((l|g)t|quot|#39))?;{2,}/g, function (a, b) {
+                      return b ? b + ";;" : ';';
+                  });
     },
-
     /**
      * 克隆对象
      * @method clone
@@ -781,7 +767,7 @@ var utils = UE.utils = {
      * @param { Object } target 目标对象
      * @return { Object } 附加了source对象所有属性的target对象
      */
-    clone:function (source, target) {
+    clone: function (source, target) {
         var tmp;
         target = target || {};
         for (var i in source) {
@@ -789,7 +775,7 @@ var utils = UE.utils = {
                 tmp = source[i];
                 if (typeof tmp == 'object') {
                     target[i] = utils.isArray(tmp) ? [] : {};
-                    utils.clone(source[i], target[i])
+                    utils.clone(source[i], target[i]);
                 } else {
                     target[i] = tmp;
                 }
@@ -797,7 +783,6 @@ var utils = UE.utils = {
         }
         return target;
     },
-
     /**
      * 把cm／pt为单位的值转换为px为单位的值
      * @method transUnitToPx
@@ -814,9 +799,9 @@ var utils = UE.utils = {
      *
      * ```
      */
-    transUnitToPx:function (val) {
+    transUnitToPx: function (val) {
         if (!/(pt|cm)/.test(val)) {
-            return val
+            return val;
         }
         var unit;
         val.replace(/([\d.]+)(\w+)/, function (str, v, u) {
@@ -832,7 +817,6 @@ var utils = UE.utils = {
         }
         return val + (val ? 'px' : '');
     },
-
     /**
      * 在dom树ready之后执行给定的回调函数
      * @method domReady
@@ -849,8 +833,7 @@ var utils = UE.utils = {
      *
      * ```
      */
-    domReady:function () {
-
+    domReady: function () {
         var fnArr = [];
 
         function doReady(doc) {
@@ -880,7 +863,7 @@ var utils = UE.utils = {
                         doReady(doc);
                     })();
                     win.attachEvent('onload', function () {
-                        doReady(doc)
+                        doReady(doc);
                     });
                 } else {
                     doc.addEventListener("DOMContentLoaded", function () {
@@ -888,14 +871,12 @@ var utils = UE.utils = {
                         doReady(doc);
                     }, false);
                     win.addEventListener('load', function () {
-                        doReady(doc)
+                        doReady(doc);
                     }, false);
                 }
             }
-
-        }
+        };
     }(),
-
     /**
      * 动态添加css样式
      * @method cssRule
@@ -906,15 +887,15 @@ var utils = UE.utils = {
      * @grammar UE.utils.cssRule('body',document) => 返回指定key的样式，并且指定是哪个document
      * @grammar UE.utils.cssRule('body','') =>null //清空给定的key值的背景颜色
      */
-    cssRule:browser.ie && browser.version != 11 ? function (key, style, doc) {
+    cssRule: browser.ie && browser.version != 11 ? function (key, style, doc) {
         var indexList, index;
-        if(style === undefined || style && style.nodeType && style.nodeType == 9){
+        if (style === undefined || style && style.nodeType && style.nodeType == 9) {
             //获取样式
             doc = style && style.nodeType && style.nodeType == 9 ? style : (doc || document);
             indexList = doc.indexList || (doc.indexList = {});
             index = indexList[key];
-            if(index !==  undefined){
-                return doc.styleSheets[index].cssText
+            if (index !== undefined) {
+                return doc.styleSheets[index].cssText;
             }
             return undefined;
         }
@@ -922,26 +903,25 @@ var utils = UE.utils = {
         indexList = doc.indexList || (doc.indexList = {});
         index = indexList[key];
         //清除样式
-        if(style === ''){
-            if(index!== undefined){
+        if (style === '') {
+            if (index !== undefined) {
                 doc.styleSheets[index].cssText = '';
                 delete indexList[key];
-                return true
+                return true;
             }
             return false;
         }
-
         //添加样式
-        if(index!== undefined){
-            sheetStyle =  doc.styleSheets[index];
-        }else{
+        if (index !== undefined) {
+            sheetStyle = doc.styleSheets[index];
+        } else {
             sheetStyle = doc.createStyleSheet('', index = doc.styleSheets.length);
             indexList[key] = index;
         }
         sheetStyle.cssText = style;
-    }: function (key, style, doc) {
+    } : function (key, style, doc) {
         var head, node;
-        if(style === undefined || style && style.nodeType && style.nodeType == 9){
+        if (style === undefined || style && style.nodeType && style.nodeType == 9) {
             //获取样式
             doc = style && style.nodeType && style.nodeType == 9 ? style : (doc || document);
             node = doc.getElementById(key);
@@ -949,31 +929,29 @@ var utils = UE.utils = {
         }
         doc = doc || document;
         node = doc.getElementById(key);
-
         //清除样式
-        if(style === ''){
-            if(node){
+        if (style === '') {
+            if (node) {
                 node.parentNode.removeChild(node);
-                return true
+                return true;
             }
             return false;
         }
-
         //添加样式
-        if(node){
+        if (node) {
             node.innerHTML = style;
-        }else{
+        } else {
             node = doc.createElement('style');
             node.id = key;
             node.innerHTML = style;
             doc.getElementsByTagName('head')[0].appendChild(node);
         }
     },
-    sort:function(array,compareFn){
-        compareFn = compareFn || function(item1, item2){ return item1.localeCompare(item2);};
-        for(var i= 0,len = array.length; i<len; i++){
-            for(var j = i,length = array.length; j<length; j++){
-                if(compareFn(array[i], array[j]) > 0){
+    sort: function (array, compareFn) {
+        compareFn = compareFn || function (item1, item2) { return item1.localeCompare(item2);};
+        for (var i = 0, len = array.length; i < len; i++) {
+            for (var j = i, length = array.length; j < length; j++) {
+                if (compareFn(array[i], array[j]) > 0) {
                     var t = array[i];
                     array[i] = array[j];
                     array[j] = t;
@@ -982,24 +960,24 @@ var utils = UE.utils = {
         }
         return array;
     },
-    serializeParam:function (json) {
+    serializeParam: function (json) {
         var strArr = [];
         for (var i in json) {
             //忽略默认的几个参数
-            if(i=="method" || i=="timeout" || i=="async") continue;
+            if (i == "method" || i == "timeout" || i == "async") continue;
             //传递过来的对象和函数不在提交之列
             if (!((typeof json[i]).toLowerCase() == "function" || (typeof json[i]).toLowerCase() == "object")) {
-                strArr.push( encodeURIComponent(i) + "="+encodeURIComponent(json[i]) );
+                strArr.push(encodeURIComponent(i) + "=" + encodeURIComponent(json[i]));
             } else if (utils.isArray(json[i])) {
                 //支持传数组内容
-                for(var j = 0; j < json[i].length; j++) {
-                    strArr.push( encodeURIComponent(i) + "[]="+encodeURIComponent(json[i][j]) );
+                for (var j = 0; j < json[i].length; j++) {
+                    strArr.push(encodeURIComponent(i) + "[]=" + encodeURIComponent(json[i][j]));
                 }
             }
         }
         return strArr.join("&");
     },
-    formatUrl:function (url) {
+    formatUrl: function (url) {
         var u = url.replace(/&&/g, '&');
         u = u.replace(/\?&/g, '?');
         u = u.replace(/&$/g, '');
@@ -1007,48 +985,42 @@ var utils = UE.utils = {
         u = u.replace(/&+/g, '&');
         return u;
     },
-    isCrossDomainUrl:function (url) {
+    isCrossDomainUrl: function (url) {
         var a = document.createElement('a');
         a.href = url;
         if (browser.ie) {
             a.href = a.href;
         }
         return !(a.protocol == location.protocol && a.hostname == location.hostname &&
-        (a.port == location.port || (a.port == '80' && location.port == '') || (a.port == '' && location.port == '80')));
+            (a.port == location.port || (a.port == '80' && location.port == '') || (a.port == '' && location.port == '80')));
     },
-    clearEmptyAttrs : function(obj){
-        for(var p in obj){
-            if(obj[p] === ''){
-                delete obj[p]
+    clearEmptyAttrs: function (obj) {
+        for (var p in obj) {
+            if (obj[p] === '') {
+                delete obj[p];
             }
         }
         return obj;
     },
-    str2json : function(s){
-
+    str2json: function (s) {
         if (!utils.isString(s)) return null;
         if (window.JSON) {
             return JSON.parse(s);
         } else {
             return (new Function("return " + utils.trim(s || '')))();
         }
-
     },
-    json2str : (function(){
-
+    json2str: (function () {
         if (window.JSON) {
-
             return JSON.stringify;
-
         } else {
-
             var escapeMap = {
                 "\b": '\\b',
                 "\t": '\\t',
                 "\n": '\\n',
                 "\f": '\\f',
                 "\r": '\\r',
-                '"' : '\\"',
+                '"': '\\"',
                 "\\": '\\\\'
             };
 
@@ -1063,8 +1035,8 @@ var utils = UE.utils = {
                             }
                             c = match.charCodeAt();
                             return "\\u00"
-                            + Math.floor(c / 16).toString(16)
-                            + (c % 16).toString(16);
+                                + Math.floor(c / 16).toString(16)
+                                + (c % 16).toString(16);
                         });
                 }
                 return '"' + source + '"';
@@ -1074,17 +1046,15 @@ var utils = UE.utils = {
                 var result = ["["],
                     l = source.length,
                     preComma, i, item;
-
                 for (i = 0; i < l; i++) {
                     item = source[i];
-
                     switch (typeof item) {
                         case "undefined":
                         case "function":
                         case "unknown":
                             break;
                         default:
-                            if(preComma) {
+                            if (preComma) {
                                 result.push(',');
                             }
                             result.push(utils.json2str(item));
@@ -1099,29 +1069,25 @@ var utils = UE.utils = {
                 return source < 10 ? '0' + source : source;
             }
 
-            function encodeDate(source){
+            function encodeDate(source) {
                 return '"' + source.getFullYear() + "-"
-                + pad(source.getMonth() + 1) + "-"
-                + pad(source.getDate()) + "T"
-                + pad(source.getHours()) + ":"
-                + pad(source.getMinutes()) + ":"
-                + pad(source.getSeconds()) + '"';
+                    + pad(source.getMonth() + 1) + "-"
+                    + pad(source.getDate()) + "T"
+                    + pad(source.getHours()) + ":"
+                    + pad(source.getMinutes()) + ":"
+                    + pad(source.getSeconds()) + '"';
             }
 
             return function (value) {
                 switch (typeof value) {
                     case 'undefined':
                         return 'undefined';
-
                     case 'number':
                         return isFinite(value) ? String(value) : "null";
-
                     case 'string':
                         return encodeString(value);
-
                     case 'boolean':
                         return String(value);
-
                     default:
                         if (value === null) {
                             return 'null';
@@ -1134,7 +1100,6 @@ var utils = UE.utils = {
                                 encode = utils.json2str,
                                 preComma,
                                 item;
-
                             for (var key in value) {
                                 if (Object.prototype.hasOwnProperty.call(value, key)) {
                                     item = value[key];
@@ -1158,9 +1123,7 @@ var utils = UE.utils = {
                 }
             };
         }
-
     })()
-
 };
 /**
  * 判断给定的对象是否是字符串
@@ -1168,35 +1131,30 @@ var utils = UE.utils = {
  * @param { * } object 需要判断的对象
  * @return { Boolean } 给定的对象是否是字符串
  */
-
 /**
  * 判断给定的对象是否是数组
  * @method isArray
  * @param { * } object 需要判断的对象
  * @return { Boolean } 给定的对象是否是数组
  */
-
 /**
  * 判断给定的对象是否是一个Function
  * @method isFunction
  * @param { * } object 需要判断的对象
  * @return { Boolean } 给定的对象是否是Function
  */
-
 /**
  * 判断给定的对象是否是Number
  * @method isNumber
  * @param { * } object 需要判断的对象
  * @return { Boolean } 给定的对象是否是Number
  */
-
 /**
  * 判断给定的对象是否是一个正则表达式
  * @method isRegExp
  * @param { * } object 需要判断的对象
  * @return { Boolean } 给定的对象是否是正则表达式
  */
-
 /**
  * 判断给定的对象是否是一个普通对象
  * @method isObject

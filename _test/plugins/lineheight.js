@@ -1,4 +1,4 @@
-module( 'plugins.lineheight' );
+module('plugins.lineheight');
 //test( '', function() {
 //    equal('','','');
 //} );
@@ -34,26 +34,25 @@ module( 'plugins.lineheight' );
 //}
 //
 ///*<li>3to1        	collapse	     字号统一</li>*/
-test( '闭合情况，字号统一', function () {
-        var editor = te.obj[0];
-        var range = te.obj[1];
-        var body = editor.body;
-        editor.setContent( '<p style="font-size: 36px">hello</p>' );
-        range.setStart(body.firstChild, 1).collapse(1).select();
-        editor.execCommand('lineheight', 3);
-        setTimeout( function () {
-            var p = body.firstChild;
-            equal( editor.queryCommandValue('lineheight'), "3", '行间距为3');
-            editor.execCommand('lineheight', 1);
-            p = body.firstChild;
-            equal( editor.queryCommandValue('lineheight'), "1", '行间距为1');
-            equal( p.style['lineHeight'], 'normal', '检查行高' );
-            equal( $( p ).css('font-size'), '36px', '检查字体');
-            start();
-        }, 20 );
-        stop();
-} );
-
+test('闭合情况，字号统一', function () {
+    var editor = te.obj[0];
+    var range = te.obj[1];
+    var body = editor.body;
+    editor.setContent('<p style="font-size: 36px">hello</p>');
+    range.setStart(body.firstChild, 1).collapse(1).select();
+    editor.execCommand('lineheight', 3);
+    setTimeout(function () {
+        var p = body.firstChild;
+        equal(editor.queryCommandValue('lineheight'), "3", '行间距为3');
+        editor.execCommand('lineheight', 1);
+        p = body.firstChild;
+        equal(editor.queryCommandValue('lineheight'), "1", '行间距为1');
+        equal(p.style['lineHeight'], 'normal', '检查行高');
+        equal($(p).css('font-size'), '36px', '检查字体');
+        start();
+    }, 20);
+    stop();
+});
 /*<li>1             	multiPara	  36To16To36</li>*/
 //test( '多个段落设置多倍行距，段落中字体大小各不相同', function () {
 //        var editor = te.obj[0];
