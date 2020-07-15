@@ -19,6 +19,7 @@ switch ($action) {
     case 'uploadscrawl':
     /* 上传视频 */
     case 'uploadvideo':
+    case 'uploadmusic':
     /* 上传文件 */
     case 'uploadfile':
         $result = include("action_upload.php");
@@ -26,10 +27,16 @@ switch ($action) {
 
     /* 列出图片 */
     case 'listimage':
+    case 'listvideo':
+    case 'listmusic':
         $result = include("action_list.php");
         break;
     /* 列出文件 */
     case 'listfile':
+        $result = include("action_list.php");
+        break;
+        /*删除文件*/
+    case 'delfile':
         $result = include("action_list.php");
         break;
 

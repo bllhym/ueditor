@@ -429,12 +429,13 @@ UE.I18N['zh-cn'] = {
             'lang_upload_width': "宽度",
             'lang_upload_height': "高度",
             'lang_upload_alignment': "对齐方式",
-            'lang_format_advice': "建议使用mp4格式."
+            'lang_format_advice': "建议使用mp4格式.",
+            'lang_tab_online': '在线管理'
         },
         'numError': "请输入正确的数值，如123,400",
         'floatLeft': "左浮动",
         'floatRight': "右浮动",
-        '"default"': "默认",
+        'default': "默认",
         'block': "独占一行",
         'urlError': "输入的视频地址有误，请检查后再试！",
         'loading': " &nbsp;视频加载中，请等待……",
@@ -489,6 +490,7 @@ UE.I18N['zh-cn'] = {
         'errorUploadRetry': '上传失败，请重试',
         'errorHttp': 'http请求错误',
         'errorServerUpload': '服务器返回出错'
+
     },
     'webapp': {
         'tip1': "本功能由百度APP提供，如看到此页面，请各位站长首先申请百度APPKey!",
@@ -524,16 +526,84 @@ UE.I18N['zh-cn'] = {
         'imageError': "糟糕，图片读取失败了！",
         'backgroundUploading': '背景图片上传中,别急哦~'
     },
-    'music': {
-        'static': {
-            'lang_input_tips': "输入歌手/歌曲/专辑，搜索您感兴趣的音乐！",
-            'J_searchBtn': {value: '搜索歌曲'}
+    'music':{
+        'static':{
+            'lang_tab_insertV':"插入音频",
+            'lang_tab_uploadV':"上传音频",
+            'lang_tab_online':"在线管理",
+            'lang_music_url':"音频网址",
+            'lang_music_size':"显示尺寸",
+            'lang_musicW':"宽度",
+            'lang_alignment':"对齐方式",
+
+            'lang_input_fileStatus':' 当前未上传文件',
+            'startUpload':{'style':"background:url(upload.png) no-repeat;"},
+
+            'lang_upload_size':"显示尺寸",
+            'lang_upload_width':"宽度",
+            'lang_upload_alignment':"对齐方式",
+
         },
-        'emptyTxt': '未搜索到相关音乐结果，请换一个关键词试试。',
-        'chapter': '歌曲',
-        'singer': '歌手',
-        'special': '专辑',
-        'listenTest': '试听'
+        'numError':"请输入正确的数值，如123,400",
+        'floatLeft':"左浮动",
+        'floatRight':"右浮动",
+        'default':"默认",
+        'block':"独占一行",
+        'urlError':"输入的音频地址有误，请检查后再试！",
+        'loading':" &nbsp;音频加载中，请等待……",
+        'clickToSelect':"点击选中",
+        'goToSource':'访问源音频',
+        'noMusic':" &nbsp; &nbsp;抱歉，找不到对应的文件，请重试！",
+
+        'browseFiles':'浏览文件',
+        'uploadSuccess':'上传成功!',
+        'delSuccessFile':'从成功队列中移除',
+        'delFailSaveFile':'移除保存失败文件',
+        'statusPrompt':' 个文件已上传！ ',
+        'flashVersionError':'当前Flash版本过低，请更新FlashPlayer后重试！',
+        'flashLoadingError':'Flash加载失败!请检查路径或网络状态',
+        'fileUploadReady':'等待上传……',
+        'delUploadQueue':'从上传队列中移除',
+        'limitPrompt1':'单次不能选择超过',
+        'limitPrompt2':'个文件！请重新选择！',
+        'delFailFile':'移除失败文件',
+        'fileSizeLimit':'文件大小超出限制！',
+        'emptyFile':'空文件无法上传！',
+        'fileTypeError':'文件类型不允许！',
+        'unknownError':'未知错误！',
+        'fileUploading':'上传中，请等待……',
+        'cancelUpload':'取消上传',
+        'netError':'网络错误',
+        'failUpload':'上传失败!',
+        'serverIOError':'服务器IO错误！',
+        'noAuthority':'无权限！',
+        'fileNumLimit':'上传个数限制',
+        'failCheck':'验证失败，本次上传被跳过！',
+        'fileCanceling':'取消中，请等待……',
+        'stopUploading':'上传已停止……',
+
+        'uploadSelectFile':'点击选择文件',
+        'uploadAddFile':'继续添加',
+        'uploadStart':'开始上传',
+        'uploadPause':'暂停上传',
+        'uploadContinue':'继续上传',
+        'uploadRetry':'重试上传',
+        'uploadDelete':'删除',
+        'uploadTurnLeft':'向左旋转',
+        'uploadTurnRight':'向右旋转',
+        'uploadPreview':'预览中',
+        'updateStatusReady': '选中_个文件，共_KB。',
+        'updateStatusConfirm': '成功上传_个，_个失败',
+        'updateStatusFinish': '共_个(_KB)，_个成功上传',
+        'updateStatusError': '，_张上传失败。',
+        'errorNotSupport': 'WebUploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器。',
+        'errorLoadConfig': '后端配置项没有正常加载，上传插件不能正常使用！',
+        'errorExceedSize':'文件大小超出',
+        'errorFileType':'文件格式不允许',
+        'errorInterrupt':'文件传输中断',
+        'errorUploadRetry':'上传失败，请重试',
+        'errorHttp':'http请求错误',
+        'errorServerUpload':'服务器返回出错'
     },
     'anchor': {
         'static': {
@@ -726,5 +796,6 @@ UE.I18N['zh-cn'] = {
     'autosave': {
         'saving': '保存中...',
         'success': '本地保存成功'
-    }
+    },
+    'errorDelete':'删除出错'
 };

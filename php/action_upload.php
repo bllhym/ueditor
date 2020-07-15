@@ -36,6 +36,14 @@ switch (htmlspecialchars($_GET['action'])) {
         );
         $fieldName = $CONFIG['videoFieldName'];
         break;
+    case 'uploadmusic':
+        $config = array(
+          "pathFormat" => $CONFIG['musicPathFormat'],
+          "maxSize" => $CONFIG['musicMaxSize'],
+          "allowFiles" => $CONFIG['musicAllowFiles']
+        );
+        $fieldName = $CONFIG['musicFieldName'];
+        break;
     case 'uploadfile':
     default:
         $config = array(

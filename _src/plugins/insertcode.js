@@ -28,15 +28,15 @@ UE.plugins["insertcode"] = function () {
         jfx: "JavaFx",
         js: "Javascript",
         pl: "Perl",
-        php: "Php",
+        php: "PHP",
         plain: "Plain Text",
         ps: "PowerShell",
         python: "Python",
         ruby: "Ruby",
         scala: "Scala",
-        sql: "Sql",
-        vb: "Vb",
-        xml: "Xml"
+        sql: "SQL",
+        vb: "VB",
+        xml: "XML"
     });
     /**
      * 插入代码

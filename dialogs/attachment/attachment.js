@@ -565,7 +565,12 @@
             domUtils.on(this.list, 'click', function (e) {
                 var target = e.target || e.srcElement,
                     li = target.parentNode;
-                if (li.tagName.toLowerCase() == 'li') {
+                if (editor.getOpt('allowFileDel')&&domUtils.hasClass(target, 'del')){//删除按钮
+                    var id=target.getAttribute('data-id');
+                    li=domUtils.findParentByTagName(target,'li',true);
+                    return _this.delFile(id,li);
+
+                }else if (li.tagName.toLowerCase() == 'li') {
                     if (domUtils.hasClass(li, 'selected')) {
                         domUtils.removeClasses(li, 'selected');
                     } else {
@@ -641,10 +646,16 @@
                         })(preview));
                         preview.width = 113;
                         preview.setAttribute('src', urlPrefix + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=' : '&noCache=') + (+new Date()).toString(36));
+
+                        var title=document.createElement('div');
+                        domUtils.addClass(title, 'file-panel');
+                        title.innerHTML=(editor.getOpt('allowFileDel')?'<span class="del" data-id="'+list[i].id+'"></span>':'')+list[i].title;
+                        item.appendChild(title);
+
                     } else {
                         var ic = document.createElement('i'),
                             textSpan = document.createElement('span');
-                        textSpan.innerHTML = list[i].url.substr(list[i].url.lastIndexOf('/') + 1);
+                        textSpan.innerHTML = (editor.getOpt('allowFileDel')?'<span class="del" data-id="'+list[i].id+'"></span>':'')+list[i].url.substr(list[i].url.lastIndexOf('/') + 1);
                         preview = document.createElement('div');
                         preview.appendChild(ic);
                         preview.appendChild(textSpan);
@@ -703,6 +714,33 @@
                 }
             }
             return list;
+        },
+        delFile:function(id,obj) {
+            var url = editor.getActionUrl(editor.getOpt('fileDelActionName')),
+                isJsonp = utils.isCrossDomainUrl(url);
+            ajax.request(url, {
+                'timeout': 100000,
+                'dataType': isJsonp ? 'jsonp':'',
+                'data': utils.extend({
+                    id: id
+                }, editor.queryCommandValue('serverparam')),
+                'method': 'get',
+                'onsuccess': function (r) {
+                    try {
+                        var json = isJsonp ? r:eval('(' + r.responseText + ')');
+                        if (json.state == 'SUCCESS') {
+                            obj.style.display='none';
+                        }else{
+                            alert(json.state);
+                        }
+                    } catch (e) {
+                        alert(editor.getLang("errorDelete"));
+                    }
+                },
+                'onerror': function () {
+                    alert(editor.getLang("errorDelete"));
+                }
+            });
         }
     };
 })();

@@ -8,7 +8,8 @@
 (function () {
     var video = {},
         uploadVideoList = [],
-        isModifyUploadVideo = false,
+        isModifyUploadVideo = true,
+        onlineVideo,
         uploadFile;
     window.onload = function () {
         $focus($G("videoUrl"));
@@ -28,6 +29,10 @@
                     if (tabs[j] == target) {
                         domUtils.addClass(tabs[j], 'focus');
                         domUtils.addClass($G(bodyId), 'focus');
+                        if (bodyId == 'online') {
+                            onlineVideo = onlineVideo || new OnlineVideo('videoList');
+                            onlineVideo.reset();
+                        }
                     } else {
                         domUtils.removeClasses(tabs[j], 'focus');
                         domUtils.removeClasses($G(bodyId), 'focus');
@@ -45,10 +50,10 @@
         (function () {
             var img = editor.selection.getRange().getClosedNode(), url;
             if (img && img.className) {
-                var hasFakedClass = (img.className == "edui-faked-video"),
+                var hasFakedClass = img.className.indexOf("edui-faked-video") != -1,
                     hasUploadClass = img.className.indexOf("edui-upload-video") != -1;
                 if (hasFakedClass || hasUploadClass) {
-                    $G("videoUrl").value = url = img.getAttribute("_url");
+                    $G("videoUrl").value = url = img.getAttribute("_url") || img.getAttribute("url");
                     $G("videoWidth").value = img.width;
                     $G("videoHeight").value = img.height;
                     var align = domUtils.getComputedStyle(img, "float"),
@@ -79,6 +84,9 @@
                     break;
                 case "upload":
                     return insertUpload();
+                    break;
+                case 'online':
+                    list = onlineVideo.getInsertList();
                     break;
             }
         };
@@ -163,7 +171,7 @@
 
     function convert_url(url) {
         if (!url) return '';
-        url = utils.trim(url)
+        /*url = utils.trim(url)
                    .replace(/v\.youku\.com\/v_show\/id_([\w\-=]+)\.html/i, 'player.youku.com/player.php/sid/$1/v.swf')
                    .replace(/(www\.)?youtube\.com\/watch\?v=([\w\-]+)/i, "www.youtube.com/v/$2")
                    .replace(/youtu.be\/(\w+)$/i, "www.youtube.com/v/$1")
@@ -175,7 +183,7 @@
                    .replace(/www\.tudou\.com\/programs\/view\/([\w\-]+)\/?/i, "www.tudou.com/v/$1")
                    .replace(/v\.qq\.com\/cover\/[\w]+\/[\w]+\/([\w]+)\.html/i, "static.video.qq.com/TPout.swf?vid=$1")
                    .replace(/v\.qq\.com\/.+[\?\&]vid=([^&]+).*$/i, "static.video.qq.com/TPout.swf?vid=$1")
-                   .replace(/my\.tv\.sohu\.com\/[\w]+\/[\d]+\/([\d]+)\.shtml.*$/i, "share.vrs.sohu.com/my/v.swf&id=$1");
+                   .replace(/my\.tv\.sohu\.com\/[\w]+\/[\d]+\/([\d]+)\.shtml.*$/i, "share.vrs.sohu.com/my/v.swf&id=$1");*/
         return url;
     }
 
@@ -270,13 +278,19 @@
         if (!url) return;
         var conUrl = convert_url(url);
         conUrl = utils.unhtmlForUrl(conUrl);
-        $G("preview").innerHTML = '<div class="previewMsg"><span>' + lang.urlError + '</span></div>' +
-            '<embed class="previewVideo" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"' +
-            ' src="' + conUrl + '"' +
-            ' width="' + 420 + '"' +
-            ' height="' + 280 + '"' +
-            ' wmode="transparent" play="true" loop="false" menu="false" allowscriptaccess="never" allowfullscreen="true" >' +
-            '</embed>';
+        if (conUrl.indexOf('<iframe ') != -1) {//腾讯视频等框架
+            $G("preview").innerHTML = conUrl;
+            $G("preview").childNodes[0].style.width = '100%';
+            $G("preview").childNodes[0].style.height = '280px';
+        } else {
+            $G("preview").innerHTML = '<div class="previewMsg"><span>' + lang.urlError + '</span></div>' +
+                '<video controls preload="meta" class="previewVideo" ' +
+                ' src="' + conUrl + '"' +
+                ' width="' + 420 + '"' +
+                ' height="' + 280 + '"' +
+                ' >' +
+                '</video>';
+        }
     }
 
     /* 插入上传视频 */
@@ -686,7 +700,7 @@
             uploader.on('uploadBeforeSend', function (file, data, header) {
                 //这里可以通过data对象添加POST参数
                 if (actionUrl.toLowerCase().indexOf('jsp') != -1) {
-                header['X_Requested_With'] = 'XMLHttpRequest';
+                    header['X_Requested_With'] = 'XMLHttpRequest';
                 }
             });
             uploader.on('uploadProgress', function (file, percentage) {
@@ -749,6 +763,192 @@
         },
         refresh: function () {
             this.uploader.refresh();
+        }
+    };
+
+    /* 在线视频 */
+    function OnlineVideo(target) {
+        this.container = utils.isString(target) ? document.getElementById(target) : target;
+        this.init();
+    }
+
+    OnlineVideo.prototype = {
+        init: function () {
+            this.reset();
+            this.initEvents();
+        },
+        /* 初始化容器 */
+        initContainer: function () {
+            this.container.innerHTML = '';
+            this.list = document.createElement('ul');
+            this.clearFloat = document.createElement('li');
+            domUtils.addClass(this.list, 'list');
+            domUtils.addClass(this.clearFloat, 'clearFloat');
+            this.list.appendChild(this.clearFloat);
+            this.container.appendChild(this.list);
+        },
+        /* 初始化滚动事件,滚动到地步自动拉取数据 */
+        initEvents: function () {
+            var _this = this;
+            /* 滚动拉取图片 */
+            domUtils.on($G('videoList'), 'scroll', function (e) {
+                var panel = this;
+                if (panel.scrollHeight - (panel.offsetHeight + panel.scrollTop) < 10) {
+                    _this.getVideoData();
+                }
+            });
+            /* 选中图片 */
+            domUtils.on(this.container, 'click', function (e) {
+                var target = e.target || e.srcElement,
+                    li = target.parentNode;
+                if (domUtils.hasClass(target, 'del')) {//删除按钮
+                    var id = target.getAttribute('data-id');
+                    li = domUtils.findParentByTagName(target, 'li', true);
+                    return _this.delFile(id, li);
+                } else if (li.tagName.toLowerCase() == 'li') {
+                    if (domUtils.hasClass(li, 'selected')) {
+                        domUtils.removeClasses(li, 'selected');
+                    } else {
+                        domUtils.addClass(li, 'selected');
+                    }
+                }
+            });
+        },
+        /* 初始化第一次的数据 */
+        initData: function () {
+            /* 拉取数据需要使用的值 */
+            this.state = 0;
+            this.listSize = editor.getOpt('videoManagerListSize');
+            this.listIndex = 0;
+            this.listEnd = false;
+            /* 第一次拉取数据 */
+            this.getVideoData();
+        },
+        /* 重置界面 */
+        reset: function () {
+            this.initContainer();
+            this.initData();
+        },
+        /* 向后台拉取图片列表数据 */
+        getVideoData: function () {
+            var _this = this;
+            if (!_this.listEnd && !this.isLoadingData) {
+                this.isLoadingData = true;
+                var url = editor.getActionUrl(editor.getOpt('videoManagerActionName')),
+                    isJsonp = utils.isCrossDomainUrl(url);
+                ajax.request(url, {
+                    'timeout': 100000,
+                    'dataType': isJsonp ? 'jsonp' : '',
+                    'data': utils.extend({
+                        start: this.listIndex,
+                        size: this.listSize
+                    }, editor.queryCommandValue('serverparam')),
+                    'method': 'get',
+                    'onsuccess': function (r) {
+                        try {
+                            var json = isJsonp ? r : eval('(' + r.responseText + ')');
+                            if (json.state == 'SUCCESS') {
+                                _this.pushData(json.list);
+                                _this.listIndex = parseInt(json.start) + parseInt(json.list.length);
+                                if (_this.listIndex >= json.total) {
+                                    _this.listEnd = true;
+                                }
+                                _this.isLoadingData = false;
+                            }
+                        } catch (e) {
+                            if (r.responseText.indexOf('ue_separate_ue') != -1) {
+                                var list = r.responseText.split(r.responseText);
+                                _this.pushData(list);
+                                _this.listIndex = parseInt(list.length);
+                                _this.listEnd = true;
+                                _this.isLoadingData = false;
+                            }
+                        }
+                    },
+                    'onerror': function () {
+                        _this.isLoadingData = false;
+                    }
+                });
+            }
+        },
+        /* 添加图片到列表界面上 */
+        pushData: function (list) {
+            var i, item, img, icon, _this = this,
+                urlPrefix = editor.getOpt('videoManagerUrlPrefix');
+            for (i = 0; i < list.length; i++) {
+                if (list[i] && list[i].url) {
+                    item = document.createElement('li');
+                    img = document.createElement('video');
+                    icon = document.createElement('span');
+                    /*domUtils.on(img, 'loadstart', (function(video){
+                        return function(){
+                            _this.scale(video);//
+                        }
+                    })(img));*/
+                    img.width = 113;
+                    img.setAttribute('src', urlPrefix + list[i].url + (list[i].url.indexOf('?') == -1 ? '?noCache=' : '&noCache=') + (+new Date()).toString(36));
+                    img.setAttribute('_src', urlPrefix + list[i].url);
+                    //img.setAttribute('controls','controls');
+                    img.setAttribute('preload', 'meta');
+                    img.setAttribute('width', 128);
+                    img.setAttribute('height', 100);
+                    domUtils.addClass(icon, 'icon');
+                    item.appendChild(img);
+                    item.appendChild(icon);
+                    var title = document.createElement('div');
+                    domUtils.addClass(title, 'file-panel');
+                    title.innerHTML = (editor.getOpt('allowFileDel') ? '<span class="del" data-id="' + list[i].id + '"></span>' : '') + list[i].title;
+                    item.appendChild(title);
+                    this.list.insertBefore(item, this.clearFloat);
+                }
+            }
+        },
+        /* 改变图片大小 */
+        scale: function (video) {
+        },
+        getInsertList: function () {
+            var i, lis = this.list.children, list = [];
+            for (i = 0; i < lis.length; i++) {
+                if (domUtils.hasClass(lis[i], 'selected')) {
+                    var img = lis[i].firstChild,
+                        src = img.getAttribute('_src');
+                    list.push({
+                        url: convert_url(src),
+                        width: 420,
+                        height: 280,
+                        align: "none"
+                    });
+                }
+            }
+            editor.execCommand('insertvideo', list,'upload');
+            return list;
+        },
+        delFile: function (id, obj) {
+            var url = editor.getActionUrl(editor.getOpt('fileDelActionName')),
+                isJsonp = utils.isCrossDomainUrl(url);
+            ajax.request(url, {
+                'timeout': 100000,
+                'dataType': isJsonp ? 'jsonp' : '',
+                'data': utils.extend({
+                    id: id
+                }, editor.queryCommandValue('serverparam')),
+                'method': 'get',
+                'onsuccess': function (r) {
+                    try {
+                        var json = isJsonp ? r : eval('(' + r.responseText + ')');
+                        if (json.state == 'SUCCESS') {
+                            obj.style.display = 'none';
+                        } else {
+                            alert(json.state);
+                        }
+                    } catch (e) {
+                        alert(editor.getLang("errorDelete"));
+                    }
+                },
+                'onerror': function () {
+                    alert(editor.getLang("errorDelete"));
+                }
+            });
         }
     };
 })();

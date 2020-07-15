@@ -95,7 +95,7 @@
                 'music',
                 'attachment',
                 'map',
-                'gmap',
+                //'gmap', 已去除
                 'insertframe',
                 'insertcode',
                 //'webapp',//已去除
@@ -387,7 +387,7 @@
         //,allowDivTransToP:true      //允许进入编辑器的div标签自动变成p标签
         //,rgb2Hex:true               //默认产出的数据中的color自动从rgb格式变成16进制格式
 
-        //allowFileDel:true //允许附件、图片、视频、音乐等在线删除
+        ,allowFileDel:true //允许附件、图片、视频、音乐等在线删除
 
         // xss 过滤是否开启,inserthtml等操作
         , xssFilterRules: true
@@ -403,7 +403,7 @@
             area: ['shape', 'coords', 'href', 'alt'],
             article: [],
             aside: [],
-            audio: ['autoplay', 'controls', 'loop', 'preload', 'src', 'class', 'style'],
+            audio: ['autoplay', 'controls', 'loop', 'preload', 'src', 'class', 'style', '_src'],
             b: ['class', 'style'],
             bdi: ['dir'],
             bdo: ['dir'],
@@ -459,7 +459,7 @@
             tt: [],
             u: [],
             ul: ['class', 'style'],
-            video: ['autoplay', 'controls', 'loop', 'preload', 'src', 'height', 'width', 'class', 'style']
+            video: ['autoplay', 'controls', 'loop', 'preload', 'src', 'height', 'width', 'class', 'style','_src']
         }
     };
 

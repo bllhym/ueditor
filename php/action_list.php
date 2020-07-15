@@ -15,6 +15,23 @@ switch ($_GET['action']) {
         $listSize = $CONFIG['fileManagerListSize'];
         $path = $CONFIG['fileManagerListPath'];
         break;
+    case 'listvideo':
+        $allowFiles = $CONFIG['videoAllowFiles'];
+        $listSize = $CONFIG['videoManagerListSize'];
+        $path = $CONFIG['videoManagerListPath'];
+        break;
+    case 'listmusic':
+        $allowFiles = $CONFIG['musicAllowFiles'];
+        $listSize = $CONFIG['musicManagerListSize'];
+        $path = $CONFIG['musicManagerListPath'];
+        break;
+    case 'delfile':
+        $id=trim($_REQUEST['id']);
+        $res=delfile($id);
+        return json_encode(array(
+          "state" =>$res?'SUCCESS':'删除失败'
+        ));
+        break;
     /* 列出图片 */
     case 'listimage':
     default:
@@ -44,6 +61,8 @@ if (!count($files)) {
 /* 获取指定范围的列表 */
 $len = count($files);
 for ($i = min($end, $len) - 1, $list = array(); $i < $len && $i >= 0 && $i >= $start; $i--){
+    $filename=substr('/',-1,-1);
+    echo $filename;
     $list[] = $files[$i];
 }
 //倒序
@@ -82,11 +101,20 @@ function getfiles($path, $allowFiles, &$files = array())
                 if (preg_match("/\.(".$allowFiles.")$/i", $file)) {
                     $files[] = array(
                         'url'=> substr($path2, strlen($_SERVER['DOCUMENT_ROOT'])),
-                        'mtime'=> filemtime($path2)
+                        'mtime'=> filemtime($path2),
+                        'title'=>$file,
+                        'id'=>$path2,
                     );
                 }
             }
         }
     }
     return $files;
+}
+
+/*删除文件*/
+function delfile($id){
+    @unlink($id);
+    return true;
+
 }
