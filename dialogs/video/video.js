@@ -171,6 +171,10 @@
 
     function convert_url(url) {
         if (!url) return '';
+        if (url.indexOf('<iframe ') != -1&&!/src=("|')(http:|https:)?\/\/(player.bilibili.com|open.iqiyi.com|v.qq.com|www.acfun.cn|player.youku.com|tv.sohu.com|player.pptv.com)/.test(url)){
+            return '';
+        }
+
         /*url = utils.trim(url)
                    .replace(/v\.youku\.com\/v_show\/id_([\w\-=]+)\.html/i, 'player.youku.com/player.php/sid/$1/v.swf')
                    .replace(/(www\.)?youtube\.com\/watch\?v=([\w\-]+)/i, "www.youtube.com/v/$2")
@@ -277,12 +281,13 @@
     function createPreviewVideo(url) {
         if (!url) return;
         var conUrl = convert_url(url);
-        conUrl = utils.unhtmlForUrl(conUrl);
+        //console.log(conUrl);
         if (conUrl.indexOf('<iframe ') != -1) {//腾讯视频等框架
             $G("preview").innerHTML = conUrl;
             $G("preview").childNodes[0].style.width = '100%';
             $G("preview").childNodes[0].style.height = '280px';
         } else {
+            conUrl = utils.unhtmlForUrl(conUrl);
             $G("preview").innerHTML = '<div class="previewMsg"><span>' + lang.urlError + '</span></div>' +
                 '<video controls preload="meta" class="previewVideo" ' +
                 ' src="' + conUrl + '"' +

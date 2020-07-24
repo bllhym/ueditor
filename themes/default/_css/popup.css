@@ -73,3 +73,7 @@
     width:auto;
     height:auto;
 }
+@media screen and (max-width: 640px) {
+    .edui-default .edui-popup{left:0 !important;right: 2px;}
+    .edui-popup>div{width: 100% !important;box-sizing: border-box;}
+}

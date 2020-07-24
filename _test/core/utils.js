@@ -498,7 +498,8 @@ test('json2str 不使用原生方法', function () {
     setTimeout(function () {start();}, 50);
 });
 test('clearEmptyAttrs', function () {
-    var utils = te.obj[0];
+    //var utils = te.obj[0];
+    //console.log(utils);
     var ob = utils.clearEmptyAttrs({a: 1, b: ''});
     ok(!ob.hasOwnProperty('b'), 'clearEmptyAttrs');
 });

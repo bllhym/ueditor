@@ -68,5 +68,9 @@ em{font-style: normal;}
 */
 .brushIcon{display: inline-block;width:16px;height:16px;background-image: url('images/brush.png')}
 .eraserIcon{display: inline-block;width:16px;height:16px;background-image: url('images/eraser.png')}
-
+@media screen and (max-width: 480px) {
+    .wrapper,.wrapper *{box-sizing: border-box}
+    .wrapper{width: 100%;}
+    .drawToolbar{float: left;width: 360px}
+}
 

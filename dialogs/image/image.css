@@ -131,3 +131,19 @@
 #imageList .file-panel .del { position:absolute; right:0; width:24px; height:24px; display:inline; text-indent:-9999px; overflow:hidden; background:url(./images/icons.png) no-repeat; background:url(./images/icons.gif) no-repeat \9; margin:0; cursor:pointer; -webkit-tap-highlight-color:rgba(0,0,0,0); -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; background-color:#42a5f5; background-position:-44px -21px; z-index:4; }
 #imageList li.selected .del { display:none; }
 #imageList li:hover .file-panel { -webkit-transition:height .5s ease; -o-transition:height .5s ease; transition:height .5s ease; height:24px; }
+#btn_catch{height: 28px;line-height: 28px;background: #00b7ee;font-size: 12px;text-align: center;display: inline-block;border: none;outline: none;color: #fff;border-radius:3px;padding: 0 15px;cursor: pointer}
+
+@media screen and (max-width: 480px) {
+    .wrapper,.wrapper *{box-sizing: border-box}
+    .wrapper{width: 100%;}
+    #remote #url{width: 100%}
+    #remote .top{margin-top: 10px}
+    #remote .row{margin-left: 0;height: auto;padding:5px 10px}
+    #remote .left,#remote .right{height: auto;overflow: hidden;width: 100%}
+    .tabbody{height: auto}
+    .tabbody .panel.focus{width: 100%;padding:0 0 20px;left: 0;height: auto}
+    #upload .queueList{padding: 0 10px}
+    #remote #preview{margin: 0 auto;}
+    #upload .placeholder{height: 282px}
+    #online li .icon{box-sizing: initial}
+}

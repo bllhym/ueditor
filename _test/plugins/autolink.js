@@ -130,7 +130,7 @@ test('trace 1709 在与其他文本相连的链接后空格', function () {
     }
 });
 ////修改：对P中的文字内容，原：<p>你好htp://ww.baidu.com</p>
-test('你好htp://ww.baidu.com  后面回车', function () {
+test('你好http://ww.baidu.com  后面回车', function () {
     if (!UE.browser.ie) {
         var editor = te.obj[0];
         var range = te.obj[1];

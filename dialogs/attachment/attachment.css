@@ -103,3 +103,12 @@ i.file-preview.file-type-jpg,i.file-preview.file-type-jpeg,i.file-preview.file-t
 #fileList li:hover .file-panel { -webkit-transition:height .5s ease; -o-transition:height .5s ease; transition:height .5s ease; height:24px; }
 #fileList li .file-title .del { position:absolute; width:24px; height:24px; display:inline; text-indent:-9999px; overflow:hidden; background:url(./images/icons.png) no-repeat; background:url(./images/icons.gif) no-repeat \9; margin:0; cursor:pointer; -webkit-tap-highlight-color:rgba(0,0,0,0); -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; background-color:#42a5f5; background-position:-44px -21px; z-index:4; -webkit-transition:bottom .5s ease; -o-transition:bottom .5s ease; transition:bottom .5s ease; right:0; bottom:-25px; }
 #fileList li:hover .file-title .del { -webkit-transition:bottom .5s ease; -o-transition:bottom .5s ease; transition:bottom .5s ease; bottom:0; }
+@media screen and (max-width: 480px) {
+    .wrapper,.wrapper *{box-sizing: border-box}
+    .wrapper{width: 100%;}
+    #upload .queueList{padding: 0}
+    .tabbody{height: auto}
+    .tabbody .panel.focus{width: 100%;padding:0 0 20px;left: 0;height: auto}
+    #upload .placeholder{height: 282px;width: auto;margin: 10px;float: none}
+    #fileList li .icon{box-sizing: initial}
+}

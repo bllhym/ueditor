@@ -50,3 +50,7 @@
 .edui-default .edui-editor-toolbarmsg-upload { font-size:14px; color:blue; width:100px; height:16px; line-height:16px; cursor:pointer; position:absolute; top:5px; left:350px; }
 .edui-default .edui-editor-toolbarmsg-label { font-size:12px; line-height:16px; padding:4px; }
 .edui-default .edui-editor-toolbarmsg-close { float:right; width:20px; height:16px; line-height:16px; cursor:pointer; color:red; }
+@media screen and (max-width: 640px) {
+    #editor,.edui-default .edui-dialog,#edui_fixedlayer{width: 100%;}
+    .edui-dialog *{box-sizing: border-box}
+}

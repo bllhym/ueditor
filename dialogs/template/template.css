@@ -16,3 +16,7 @@ p{margin: 5px 0}
 table{clear:both;margin-bottom:10px;border-collapse:collapse;word-break:break-all;}
 li{clear:both}
 ol{padding-left:40px; }
+@media screen and (max-width: 480px) {
+    .left{width: 260px;}
+    .right{width: 110px}
+}

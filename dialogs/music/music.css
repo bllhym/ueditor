@@ -132,3 +132,18 @@ i.file-preview.file-type-jpg,i.file-preview.file-type-jpeg,i.file-preview.file-t
 #musicList li.selected .del { display:none; }
 #musicList li:hover .file-panel .del { -webkit-transition:bottom .5s ease; -o-transition:bottom .5s ease; transition:bottom .5s ease; bottom:0; }
 #musicList li audio{position: relative;z-index: 3}
+@media screen and (max-width: 480px) {
+    .wrapper,.wrapper *{box-sizing: border-box}
+    .wrapper{width: 100%;}
+    #upload .queueList{padding: 0}
+    .tabbody{height: auto}
+    .tabbody #upload.panel.focus,.tabbody .panel.focus{width: 100%;padding:0 0 20px;left: 0;height: auto}
+    #upload .placeholder{height: 282px;width: auto;margin: 10px;float: none}
+    #musicUrl{width: 320px}
+    #preview{margin: 0 10px 10px 10px;width: auto;float: none;position: relative}
+    #musicInfo{float: none;width: auto;overflow: hidden}
+    #musicInfo fieldset,#uploadMusicInfo fieldset{float: left}
+    #musicInfo>fieldset:nth-child(2),#uploadMusicInfo>fieldset:nth-child(2){width: 250px;margin-left: 15px}
+    #upload_left{width: 100%}
+    #uploadMusicInfo{float: none;width: auto;overflow: hidden}
+}

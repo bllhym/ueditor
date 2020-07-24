@@ -89,3 +89,8 @@
 
 /*music-dialog*/
 .edui-default .edui-for-music .edui-dialog-content { width:590px; height:390px; }
+@media screen and (max-width: 640px) {
+    .edui-default .edui-default.edui-dialog-content{margin-right: 2px;width: auto}
+    .edui-default .edui-dialog-titlebar{margin-right: 2px;}
+    .edui-default .edui-dialog-foot{margin-right: 2px;position: relative;bottom: 3px}
+}

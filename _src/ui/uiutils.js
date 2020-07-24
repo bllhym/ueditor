@@ -228,7 +228,7 @@
                 }
                 layer.style.left = "0";
                 layer.style.top = "0";
-                layer.style.width = "0";
+                //layer.style.width = "0";
                 layer.style.height = "0";
             }
             return layer;

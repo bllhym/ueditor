@@ -92,3 +92,8 @@ div.alignment,#custom{margin-left: 23px;margin-left: 28px\9;}
     border: 3px solid #1094fa;
     background-position: 72px 72px;
 }
+@media screen and (max-width: 480px) {
+    .wrapper,.wrapper *{box-sizing: border-box}
+    .wrapper{width: 100%;}
+    #imgManager  li .icon{box-sizing: initial}
+}

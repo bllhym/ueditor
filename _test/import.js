@@ -1,3 +1,4 @@
+
 ///import editor;
 ///import core/browser;
 ///import core/utils;
@@ -19,6 +20,7 @@
 ///import core/localstorage;
 ///import plugins/defaultfilter;
 ///import plugins/inserthtml;
+///import plugins/insertfile;
 ///import plugins/autotypeset;
 ///import plugins/background;
 ///import plugins/image;
@@ -58,6 +60,7 @@
 ///import plugins/autolink;
 ///import plugins/autoheight;
 ///import plugins/autofloat;
+///import plugins/autosubmit;
 ///import plugins/video;
 ///import plugins/table.core;
 ///import plugins/table.cmds;
@@ -81,6 +84,8 @@
 ///import plugins/charts;
 ///import plugins/section;
 ///import plugins/serverparam;
+
+
 ///import ui/ui;
 ///import ui/uiutils;
 ///import ui/uibase;
@@ -109,6 +114,7 @@
 ///import ui/autotypesetbutton;
 ///import ui/shortcutmenu;
 ///import ui/message;
+
 ///import adapter/editor;
 ///import adapter/editorui;
 ///import adapter/message;
