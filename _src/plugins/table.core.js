@@ -32,10 +32,7 @@
     UETable.isEmptyBlock = function (node) {
         var reg = new RegExp(domUtils.fillChar, "g");
         if (
-            node[browser.ie ? "innerText" : "textContent"]
-                .replace(/^\s*$/, "")
-                .replace(reg, "").length > 0
-        ) {
+            node[browser.ie ? "innerText" : "textContent"].replace(/^\s*$/, "").replace(reg, "").length > 0) {
             return 0;
         }
         for (var i in dtd.$isNotEmpty) {
@@ -68,10 +65,7 @@
                 tempStatus = cellNode.getAttribute(currentState);
                 if (!result[currentState] && tempStatus) {
                     result[currentState] = tempStatus;
-                } else if (
-                    !result[currentState] ||
-                    tempStatus !== result[currentState]
-                ) {
+                } else if (!result[currentState] || tempStatus !== result[currentState]) {
                     isSame = false;
                     return false;
                 }
@@ -88,18 +82,15 @@
         var start = editor.selection.getStart();
         //ff下会选中bookmark
         if (
-            start &&
-            start.id &&
-            start.id.indexOf("_baidu_bookmark_start_") === 0 &&
-            start.nextSibling
-        ) {
+            start && start.id && start.id.indexOf("_baidu_bookmark_start_") === 0 && start.nextSibling) {
             start = start.nextSibling;
         }
         //在table或者td边缘有可能存在选中tr的情况
         var cell = start && domUtils.findParentByTagName(start, ["td", "th"], true),
             tr = cell && cell.parentNode,
-            table = tr && domUtils.findParentByTagName(tr, ["table"]),
-            caption = table && table.getElementsByTagName("caption")[0];
+            caption = start && domUtils.findParentByTagName(start, 'caption', true),
+            table = caption ? caption.parentNode : tr && tr.parentNode.parentNode;
+
         return {
             cell: cell,
             tr: tr,
@@ -120,10 +111,7 @@
                 medium: "1px",
                 thick: "2px"
             },
-            tableBorder,
-            tdPadding,
-            tdBorder,
-            tmpValue;
+            tableBorder, tdPadding, tdBorder, tmpValue;
         if (!table) {
             table = editor.document.createElement("table");
             table.insertRow(0).insertCell(0).innerHTML = "xxx";
@@ -162,9 +150,7 @@
      */
     UETable.getUETable = function (tdOrTable) {
         var tag = tdOrTable.tagName.toLowerCase();
-        tdOrTable = tag == "td" || tag == "th" || tag == "caption"
-                    ? domUtils.findParentByTagName(tdOrTable, "table", true)
-                    : tdOrTable;
+        tdOrTable = tag == "td" || tag == "th" || tag == "caption" ? domUtils.findParentByTagName(tdOrTable, "table", true) : tdOrTable;
         if (!tdOrTable.ueTable) {
             tdOrTable.ueTable = new UETable(tdOrTable);
         }
@@ -196,9 +182,11 @@
         getMaxRows: function () {
             var rows = this.table.rows,
                 maxLen = 1;
-            for (var i = 0, row; (row = rows[i]); i++) {
+            for (var i = 0, row;
+                 (row = rows[i]); i++) {
                 var currentMax = 1;
-                for (var j = 0, cj; (cj = row.cells[j++]);) {
+                for (var j = 0, cj;
+                     (cj = row.cells[j++]);) {
                     currentMax = Math.max(cj.rowSpan || 1, currentMax);
                 }
                 maxLen = Math.max(currentMax + i, maxLen);
@@ -212,9 +200,11 @@
             var rows = this.table.rows,
                 maxLen = 0,
                 cellRows = {};
-            for (var i = 0, row; (row = rows[i]); i++) {
+            for (var i = 0, row;
+                 (row = rows[i]); i++) {
                 var cellsNum = 0;
-                for (var j = 0, cj; (cj = row.cells[j++]);) {
+                for (var j = 0, cj;
+                     (cj = row.cells[j++]);) {
                     cellsNum += cj.colSpan || 1;
                     if (cj.rowSpan && cj.rowSpan > 1) {
                         for (var k = 1; k < cj.rowSpan; k++) {
@@ -240,30 +230,17 @@
         getHSideCell: function (cell, right) {
             try {
                 var cellInfo = this.getCellInfo(cell),
-                    previewRowIndex,
-                    previewColIndex;
+                    previewRowIndex, previewColIndex;
                 var len = this.selectedTds.length,
                     range = this.cellsRange;
                 //首行或者首列没有前置单元格
-                if (
-                    (!right && (!len ? !cellInfo.colIndex : !range.beginColIndex)) ||
-                    (right &&
-                        (!len
-                         ? cellInfo.colIndex == this.colsNum - 1
-                         : range.endColIndex == this.colsNum - 1))
-                ) {
+                if ((!right && (!len ? !cellInfo.colIndex : !range.beginColIndex)) || (right && (!len ? cellInfo.colIndex == this.colsNum - 1 : range.endColIndex == this.colsNum - 1))) {
                     return null;
                 }
                 previewRowIndex = !len ? cellInfo.rowIndex : range.beginRowIndex;
-                previewColIndex = !right
-                                  ? !len
-                                    ? cellInfo.colIndex < 1 ? 0 : cellInfo.colIndex - 1
-                                    : range.beginColIndex - 1
-                                  : !len ? cellInfo.colIndex + 1 : range.endColIndex + 1;
+                previewColIndex = !right ? !len ? cellInfo.colIndex < 1 ? 0 : cellInfo.colIndex - 1 : range.beginColIndex - 1 : !len ? cellInfo.colIndex + 1 : range.endColIndex + 1;
                 return this.getCell(
-                    this.indexTable[previewRowIndex][previewColIndex].rowIndex,
-                    this.indexTable[previewRowIndex][previewColIndex].cellIndex
-                );
+                    this.indexTable[previewRowIndex][previewColIndex].rowIndex, this.indexTable[previewRowIndex][previewColIndex].cellIndex);
             } catch (e) {
                 showError(e);
             }
@@ -275,17 +252,13 @@
                 nextCell;
             try {
                 nextCell = this.getCell(
-                    this.indexTable[rowIndex][colIndex].rowIndex,
-                    this.indexTable[rowIndex][colIndex].cellIndex
-                );
+                    this.indexTable[rowIndex][colIndex].rowIndex, this.indexTable[rowIndex][colIndex].cellIndex);
             } catch (e) {
                 try {
                     rowIndex = rowIndex * 1 + 1;
                     colIndex = 0;
                     nextCell = this.getCell(
-                        this.indexTable[rowIndex][colIndex].rowIndex,
-                        this.indexTable[rowIndex][colIndex].cellIndex
-                    );
+                        this.indexTable[rowIndex][colIndex].rowIndex, this.indexTable[rowIndex][colIndex].cellIndex);
                 } catch (e) {}
             }
             return nextCell;
@@ -298,28 +271,17 @@
         getVSideCell: function (cell, bottom, ignoreRange) {
             try {
                 var cellInfo = this.getCellInfo(cell),
-                    nextRowIndex,
-                    nextColIndex;
+                    nextRowIndex, nextColIndex;
                 var len = this.selectedTds.length && !ignoreRange,
                     range = this.cellsRange;
                 //末行或者末列没有后置单元格
-                if (
-                    (!bottom && cellInfo.rowIndex == 0) ||
-                    (bottom &&
-                        (!len
-                         ? cellInfo.rowIndex + cellInfo.rowSpan > this.rowsNum - 1
-                         : range.endRowIndex == this.rowsNum - 1))
-                ) {
+                if ((!bottom && cellInfo.rowIndex == 0) || (bottom && (!len ? cellInfo.rowIndex + cellInfo.rowSpan > this.rowsNum - 1 : range.endRowIndex == this.rowsNum - 1))) {
                     return null;
                 }
-                nextRowIndex = !bottom
-                               ? !len ? cellInfo.rowIndex - 1 : range.beginRowIndex - 1
-                               : !len ? cellInfo.rowIndex + cellInfo.rowSpan : range.endRowIndex + 1;
+                nextRowIndex = !bottom ? !len ? cellInfo.rowIndex - 1 : range.beginRowIndex - 1 : !len ? cellInfo.rowIndex + cellInfo.rowSpan : range.endRowIndex + 1;
                 nextColIndex = !len ? cellInfo.colIndex : range.beginColIndex;
                 return this.getCell(
-                    this.indexTable[nextRowIndex][nextColIndex].rowIndex,
-                    this.indexTable[nextRowIndex][nextColIndex].cellIndex
-                );
+                    this.indexTable[nextRowIndex][nextColIndex].rowIndex, this.indexTable[nextRowIndex][nextColIndex].cellIndex);
             } catch (e) {
                 showError(e);
             }
@@ -330,18 +292,15 @@
         getSameEndPosCells: function (cell, xOrY) {
             try {
                 var flag = xOrY.toLowerCase() === "x",
-                    end =
-                        domUtils.getXY(cell)[flag ? "x" : "y"] +
-                        cell["offset" + (flag ? "Width" : "Height")],
+                    end = domUtils.getXY(cell)[flag ? "x" : "y"] + cell["offset" + (flag ? "Width" : "Height")],
                     rows = this.table.rows,
                     cells = null,
                     returns = [];
                 for (var i = 0; i < this.rowsNum; i++) {
                     cells = rows[i].cells;
-                    for (var j = 0, tmpCell; (tmpCell = cells[j++]);) {
-                        var tmpEnd =
-                            domUtils.getXY(tmpCell)[flag ? "x" : "y"] +
-                            tmpCell["offset" + (flag ? "Width" : "Height")];
+                    for (var j = 0, tmpCell;
+                         (tmpCell = cells[j++]);) {
+                        var tmpEnd = domUtils.getXY(tmpCell)[flag ? "x" : "y"] + tmpCell["offset" + (flag ? "Width" : "Height")];
                         //对应行的td已经被上面行rowSpan了
                         if (tmpEnd > end && flag) break;
                         if (cell == tmpCell || end == tmpEnd) {
@@ -370,11 +329,11 @@
             try {
                 var start = domUtils.getXY(cell).x + cell.offsetWidth,
                     rows = this.table.rows,
-                    cells,
-                    returns = [];
+                    cells, returns = [];
                 for (var i = 0; i < this.rowsNum; i++) {
                     cells = rows[i].cells;
-                    for (var j = 0, tmpCell; (tmpCell = cells[j++]);) {
+                    for (var j = 0, tmpCell;
+                         (tmpCell = cells[j++]);) {
                         var tmpStart = domUtils.getXY(tmpCell).x;
                         if (tmpStart > start) break;
                         if (tmpStart == start && tmpCell.colSpan == 1) {
@@ -409,12 +368,12 @@
                 this.indexTable[i] = new Array(colsNum);
             }
             //填充索引表
-            for (var rowIndex = 0, row; (row = rows[rowIndex]); rowIndex++) {
+            for (var rowIndex = 0, row;
+                 (row = rows[rowIndex]); rowIndex++) {
                 for (
                     var cellIndex = 0, cell, cells = row.cells;
                     (cell = cells[cellIndex]);
-                    cellIndex++
-                ) {
+                    cellIndex++) {
                     //修正整行被rowSpan时导致的行数计算错误
                     if (cell.rowSpan > rowsNum) {
                         cell.rowSpan = rowsNum;
@@ -445,9 +404,7 @@
                     if (this.indexTable[j][k] === undefined) {
                         row = rows[j];
                         cell = row.cells[row.cells.length - 1];
-                        cell = cell
-                               ? cell.cloneNode(true)
-                               : this.table.ownerDocument.createElement("td");
+                        cell = cell ? cell.cloneNode(true) : this.table.ownerDocument.createElement("td");
                         this.setCellContent(cell);
                         if (cell.colSpan !== 1) cell.colSpan = 1;
                         if (cell.rowSpan !== 1) cell.rowSpan = 1;
@@ -503,9 +460,7 @@
             for (var colIndex = cellIndex; colIndex < numCols; colIndex++) {
                 var cellInfo = rowInfo[colIndex];
                 if (
-                    cellInfo.rowIndex === rowIndex &&
-                    cellInfo.cellIndex === cellIndex
-                ) {
+                    cellInfo.rowIndex === rowIndex && cellInfo.cellIndex === cellIndex) {
                     return cellInfo;
                 }
             }
@@ -514,19 +469,13 @@
          * 根据行列号获取单元格
          */
         getCell: function (rowIndex, cellIndex) {
-            return (
-                (rowIndex < this.rowsNum &&
-                    this.table.rows[rowIndex].cells[cellIndex]) ||
-                null
-            );
+            return ((rowIndex < this.rowsNum && this.table.rows[rowIndex].cells[cellIndex]) || null);
         },
         /**
          * 删除单元格
          */
         deleteCell: function (cell, rowIndex) {
-            rowIndex = typeof rowIndex == "number"
-                       ? rowIndex
-                       : cell.parentNode.rowIndex;
+            rowIndex = typeof rowIndex == "number" ? rowIndex : cell.parentNode.rowIndex;
             var row = this.table.rows[rowIndex];
             row.deleteCell(cell.cellIndex);
         },
@@ -535,18 +484,12 @@
          */
         getCellsRange: function (cellA, cellB) {
             function checkRange(
-                beginRowIndex,
-                beginColIndex,
-                endRowIndex,
-                endColIndex
-            ) {
+                beginRowIndex, beginColIndex, endRowIndex, endColIndex) {
                 var tmpBeginRowIndex = beginRowIndex,
                     tmpBeginColIndex = beginColIndex,
                     tmpEndRowIndex = endRowIndex,
                     tmpEndColIndex = endColIndex,
-                    cellInfo,
-                    colIndex,
-                    rowIndex;
+                    cellInfo, colIndex, rowIndex;
                 // 通过indexTable检查是否存在超出TableRange上边界的情况
                 if (beginRowIndex > 0) {
                     for (colIndex = beginColIndex; colIndex < endColIndex; colIndex++) {
@@ -589,17 +532,9 @@
                 }
                 //递归调用直至所有完成所有框选单元格的扩展
                 if (
-                    tmpBeginRowIndex != beginRowIndex ||
-                    tmpBeginColIndex != beginColIndex ||
-                    tmpEndRowIndex != endRowIndex ||
-                    tmpEndColIndex != endColIndex
-                ) {
+                    tmpBeginRowIndex != beginRowIndex || tmpBeginColIndex != beginColIndex || tmpEndRowIndex != endRowIndex || tmpEndColIndex != endColIndex) {
                     return checkRange(
-                        tmpBeginRowIndex,
-                        tmpBeginColIndex,
-                        tmpEndRowIndex,
-                        tmpEndColIndex
-                    );
+                        tmpBeginRowIndex, tmpBeginColIndex, tmpEndRowIndex, tmpEndColIndex);
                 } else {
                     // 不需要扩展TableRange的情况
                     return {
@@ -627,19 +562,11 @@
                 var beginRowIndex = Math.min(cellAInfo.rowIndex, cellBInfo.rowIndex),
                     beginColIndex = Math.min(cellAInfo.colIndex, cellBInfo.colIndex),
                     endRowIndex = Math.max(
-                        cellAInfo.rowIndex + cellAInfo.rowSpan - 1,
-                        cellBInfo.rowIndex + cellBInfo.rowSpan - 1
-                    ),
+                        cellAInfo.rowIndex + cellAInfo.rowSpan - 1, cellBInfo.rowIndex + cellBInfo.rowSpan - 1),
                     endColIndex = Math.max(
-                        cellAInfo.colIndex + cellAInfo.colSpan - 1,
-                        cellBInfo.colIndex + cellBInfo.colSpan - 1
-                    );
+                        cellAInfo.colIndex + cellAInfo.colSpan - 1, cellBInfo.colIndex + cellBInfo.colSpan - 1);
                 return checkRange(
-                    beginRowIndex,
-                    beginColIndex,
-                    endRowIndex,
-                    endColIndex
-                );
+                    beginRowIndex, beginColIndex, endRowIndex, endColIndex);
             } catch (e) {
                 //throw e;
             }
@@ -654,10 +581,7 @@
                 beginColIndex = range.beginColIndex,
                 endRowIndex = range.endRowIndex,
                 endColIndex = range.endColIndex,
-                cellInfo,
-                rowIndex,
-                colIndex,
-                tdHash = {},
+                cellInfo, rowIndex, colIndex, tdHash = {},
                 returnTds = [];
             for (var i = beginRowIndex; i <= endRowIndex; i++) {
                 for (var j = beginColIndex; j <= endColIndex; j++) {
@@ -669,11 +593,7 @@
                     if (tdHash[key]) continue;
                     tdHash[key] = 1;
                     if (
-                        rowIndex < i ||
-                        colIndex < j ||
-                        rowIndex + cellInfo.rowSpan - 1 > endRowIndex ||
-                        colIndex + cellInfo.colSpan - 1 > endColIndex
-                    ) {
+                        rowIndex < i || colIndex < j || rowIndex + cellInfo.rowSpan - 1 > endRowIndex || colIndex + cellInfo.colSpan - 1 > endColIndex) {
                         return null;
                     }
                     returnTds.push(this.getCell(rowIndex, cellInfo.cellIndex));
@@ -707,9 +627,7 @@
                 table = this.table,
                 ths = table.getElementsByTagName("th"),
                 rows = range.endRowIndex - range.beginRowIndex + 1;
-            return !ths.length
-                   ? rows == this.rowsNum
-                   : rows == this.rowsNum || rows == this.rowsNum - 1;
+            return !ths.length ? rows == this.rowsNum : rows == this.rowsNum || rows == this.rowsNum - 1;
         },
         /**
          * 获取视觉上的前置单元格，默认是左边，top传入时
@@ -719,28 +637,17 @@
         getNextCell: function (cell, bottom, ignoreRange) {
             try {
                 var cellInfo = this.getCellInfo(cell),
-                    nextRowIndex,
-                    nextColIndex;
+                    nextRowIndex, nextColIndex;
                 var len = this.selectedTds.length && !ignoreRange,
                     range = this.cellsRange;
                 //末行或者末列没有后置单元格
-                if (
-                    (!bottom && cellInfo.rowIndex == 0) ||
-                    (bottom &&
-                        (!len
-                         ? cellInfo.rowIndex + cellInfo.rowSpan > this.rowsNum - 1
-                         : range.endRowIndex == this.rowsNum - 1))
-                ) {
+                if ((!bottom && cellInfo.rowIndex == 0) || (bottom && (!len ? cellInfo.rowIndex + cellInfo.rowSpan > this.rowsNum - 1 : range.endRowIndex == this.rowsNum - 1))) {
                     return null;
                 }
-                nextRowIndex = !bottom
-                               ? !len ? cellInfo.rowIndex - 1 : range.beginRowIndex - 1
-                               : !len ? cellInfo.rowIndex + cellInfo.rowSpan : range.endRowIndex + 1;
+                nextRowIndex = !bottom ? !len ? cellInfo.rowIndex - 1 : range.beginRowIndex - 1 : !len ? cellInfo.rowIndex + cellInfo.rowSpan : range.endRowIndex + 1;
                 nextColIndex = !len ? cellInfo.colIndex : range.beginColIndex;
                 return this.getCell(
-                    this.indexTable[nextRowIndex][nextColIndex].rowIndex,
-                    this.indexTable[nextRowIndex][nextColIndex].cellIndex
-                );
+                    this.indexTable[nextRowIndex][nextColIndex].rowIndex, this.indexTable[nextRowIndex][nextColIndex].cellIndex);
             } catch (e) {
                 showError(e);
             }
@@ -748,34 +655,17 @@
         getPreviewCell: function (cell, top) {
             try {
                 var cellInfo = this.getCellInfo(cell),
-                    previewRowIndex,
-                    previewColIndex;
+                    previewRowIndex, previewColIndex;
                 var len = this.selectedTds.length,
                     range = this.cellsRange;
                 //首行或者首列没有前置单元格
-                if (
-                    (!top && (!len ? !cellInfo.colIndex : !range.beginColIndex)) ||
-                    (top &&
-                        (!len
-                         ? cellInfo.rowIndex > this.colsNum - 1
-                         : range.endColIndex == this.colsNum - 1))
-                ) {
+                if ((!top && (!len ? !cellInfo.colIndex : !range.beginColIndex)) || (top && (!len ? cellInfo.rowIndex > this.colsNum - 1 : range.endColIndex == this.colsNum - 1))) {
                     return null;
                 }
-                previewRowIndex = !top
-                                  ? !len ? cellInfo.rowIndex : range.beginRowIndex
-                                  : !len
-                                    ? cellInfo.rowIndex < 1 ? 0 : cellInfo.rowIndex - 1
-                                    : range.beginRowIndex;
-                previewColIndex = !top
-                                  ? !len
-                                    ? cellInfo.colIndex < 1 ? 0 : cellInfo.colIndex - 1
-                                    : range.beginColIndex - 1
-                                  : !len ? cellInfo.colIndex : range.endColIndex + 1;
+                previewRowIndex = !top ? !len ? cellInfo.rowIndex : range.beginRowIndex : !len ? cellInfo.rowIndex < 1 ? 0 : cellInfo.rowIndex - 1 : range.beginRowIndex;
+                previewColIndex = !top ? !len ? cellInfo.colIndex < 1 ? 0 : cellInfo.colIndex - 1 : range.beginColIndex - 1 : !len ? cellInfo.colIndex : range.endColIndex + 1;
                 return this.getCell(
-                    this.indexTable[previewRowIndex][previewColIndex].rowIndex,
-                    this.indexTable[previewRowIndex][previewColIndex].cellIndex
-                );
+                    this.indexTable[previewRowIndex][previewColIndex].rowIndex, this.indexTable[previewRowIndex][previewColIndex].cellIndex);
             } catch (e) {
                 showError(e);
             }
@@ -805,9 +695,7 @@
                 rightColIndex = cellInfo.colIndex + cellInfo.colSpan,
                 rightCellInfo = this.indexTable[cellInfo.rowIndex][rightColIndex],
                 rightCell = this.getCell(
-                    rightCellInfo.rowIndex,
-                    rightCellInfo.cellIndex
-                );
+                    rightCellInfo.rowIndex, rightCellInfo.cellIndex);
             //合并
             cell.colSpan = cellInfo.colSpan + rightCellInfo.colSpan;
             //被合并的单元格不应存在宽度属性
@@ -839,9 +727,7 @@
             //由于合并操作可以在任意时刻进行，所以无法通过鼠标位置等信息实时生成range，只能通过缓存实例中的cellsRange对象来访问
             var range = this.cellsRange,
                 leftTopCell = this.getCell(
-                    range.beginRowIndex,
-                    this.indexTable[range.beginRowIndex][range.beginColIndex].cellIndex
-                );
+                    range.beginRowIndex, this.indexTable[range.beginRowIndex][range.beginColIndex].cellIndex);
             // 这段关于行表头或者列表头的特殊处理会导致表头合并范围错误
             // 为什么有这段代码的原因未明，暂且注释掉，希望原作者看到后出面说明下
             // if (
@@ -861,7 +747,8 @@
             // }
             // 删除剩余的Cells
             var cells = this.getCells(range);
-            for (var i = 0, ci; (ci = cells[i++]);) {
+            for (var i = 0, ci;
+                 (ci = cells[i++]);) {
                 if (ci !== leftTopCell) {
                     this.moveContent(leftTopCell, ci);
                     this.deleteCell(ci);
@@ -880,12 +767,9 @@
                 //解决IE下的表格操作问题
                 if (this.table.deleteRow) {
                     for (
-                        var i = rowIndex + 1,
-                            curIndex = rowIndex + 1,
-                            len = leftTopCell.rowSpan;
+                        var i = rowIndex + 1, curIndex = rowIndex + 1, len = leftTopCell.rowSpan;
                         i < len;
-                        i++
-                    ) {
+                        i++) {
                         this.table.deleteRow(curIndex);
                     }
                 } else {
@@ -905,10 +789,8 @@
             var numCols = this.colsNum,
                 table = this.table,
                 row = table.insertRow(rowIndex),
-                cell,
-                thead = null,
-                isInsertTitle =
-                    typeof sourceCell == "string" && sourceCell.toUpperCase() == "TH";
+                cell, thead = null,
+                isInsertTitle = typeof sourceCell == "string" && sourceCell.toUpperCase() == "TH";
 
             function replaceTdToTh(colIndex, cell, tableRow) {
                 if (colIndex == 0) {
@@ -935,8 +817,7 @@
                 for (var colIndex = 0; colIndex < numCols; colIndex++) {
                     cell = this.cloneCell(sourceCell, true);
                     this.setCellContent(cell);
-                    cell.getAttribute("vAlign") &&
-                    cell.setAttribute("vAlign", cell.getAttribute("vAlign"));
+                    cell.getAttribute("vAlign") && cell.setAttribute("vAlign", cell.getAttribute("vAlign"));
                     row.appendChild(cell);
                     if (!isInsertTitle) replaceTdToTh(colIndex, cell, row);
                 }
@@ -985,9 +866,7 @@
                         cell.rowSpan = 1;
                         var nextRowIndex = rowIndex + 1,
                             nextRow = this.table.rows[nextRowIndex],
-                            insertCellIndex,
-                            preMerged =
-                                this.getPreviewMergedCellsNum(nextRowIndex, colIndex) - count;
+                            insertCellIndex, preMerged = this.getPreviewMergedCellsNum(nextRowIndex, colIndex) - count;
                         if (preMerged < colIndex) {
                             insertCellIndex = colIndex - preMerged - 1;
                             //nextRow.insertCell(insertCellIndex);
@@ -1033,17 +912,8 @@
         insertCol: function (colIndex, sourceCell, defaultValue) {
             var rowsNum = this.rowsNum,
                 rowIndex = 0,
-                tableRow,
-                cell,
-                backWidth = parseInt(
-                    (this.table.offsetWidth -
-                        (this.colsNum + 1) * 20 -
-                        (this.colsNum + 1)) /
-                    (this.colsNum + 1),
-                    10
-                ),
-                isInsertTitleCol =
-                    typeof sourceCell == "string" && sourceCell.toUpperCase() == "TH";
+                tableRow, cell, backWidth = parseInt((this.table.offsetWidth - (this.colsNum + 1) * 20 - (this.colsNum + 1)) / (this.colsNum + 1), 10),
+                isInsertTitleCol = typeof sourceCell == "string" && sourceCell.toUpperCase() == "TH";
 
             function replaceTdToTh(rowIndex, cell, tableRow) {
                 if (rowIndex == 0) {
@@ -1068,8 +938,7 @@
             if (colIndex == 0 || colIndex == this.colsNum) {
                 for (; rowIndex < rowsNum; rowIndex++) {
                     tableRow = this.table.rows[rowIndex];
-                    preCell =
-                        tableRow.cells[colIndex == 0 ? colIndex : tableRow.cells.length];
+                    preCell = tableRow.cells[colIndex == 0 ? colIndex : tableRow.cells.length];
                     cell = this.cloneCell(sourceCell, true); //tableRow.insertCell(colIndex == 0 ? colIndex : tableRow.cells.length);
                     this.setCellContent(cell);
                     cell.setAttribute("vAlign", cell.getAttribute("vAlign"));
@@ -1078,9 +947,7 @@
                         tableRow.insertBefore(cell, tableRow.cells[0]);
                     } else {
                         domUtils.insertAfter(
-                            tableRow.cells[tableRow.cells.length - 1],
-                            cell
-                        );
+                            tableRow.cells[tableRow.cells.length - 1], cell);
                     }
                     if (!isInsertTitleCol) replaceTdToTh(rowIndex, cell, tableRow);
                 }
@@ -1096,12 +963,9 @@
                         cell = this.cloneCell(sourceCell, true); //tableRow.insertCell(cellInfo.cellIndex);
                         this.setCellContent(cell);
                         cell.setAttribute("vAlign", cell.getAttribute("vAlign"));
-                        preCell &&
-                        cell.setAttribute("width", preCell.getAttribute("width"));
+                        preCell && cell.setAttribute("width", preCell.getAttribute("width"));
                         //防止IE下报错
-                        preCell
-                        ? tableRow.insertBefore(cell, preCell)
-                        : tableRow.appendChild(cell);
+                        preCell ? tableRow.insertBefore(cell, preCell) : tableRow.appendChild(cell);
                     }
                     if (!isInsertTitleCol) replaceTdToTh(rowIndex, cell, tableRow);
                 }
@@ -1109,17 +973,14 @@
             //框选时插入不触发contentchange，需要手动更新索引
             this.update();
             this.updateWidth(
-                backWidth,
-                defaultValue || {tdPadding: 10, tdBorder: 1}
-            );
+                backWidth, defaultValue || {
+                tdPadding: 10,
+                tdBorder: 1
+            });
         },
         updateWidth: function (width, defaultValue) {
             var table = this.table,
-                tmpWidth =
-                    UETable.getWidth(table) -
-                    defaultValue.tdPadding * 2 -
-                    defaultValue.tdBorder +
-                    width;
+                tmpWidth = UETable.getWidth(table) - defaultValue.tdPadding * 2 - defaultValue.tdBorder + width;
             if (tmpWidth < table.ownerDocument.body.offsetWidth) {
                 table.setAttribute("width", tmpWidth);
                 return;
@@ -1145,8 +1006,7 @@
                 cacheMap[key] = 1;
                 var cell = this.getCell(cellInfo.rowIndex, cellInfo.cellIndex);
                 if (!backTdWidth) {
-                    backTdWidth =
-                        cell && parseInt(cell.offsetWidth / cell.colSpan, 10).toFixed(0);
+                    backTdWidth = cell && parseInt(cell.offsetWidth / cell.colSpan, 10).toFixed(0);
                 }
                 // 如果Cell的colSpan大于1, 就修改colSpan, 否则就删掉这个Cell
                 if (cell.colSpan > 1) {
@@ -1178,13 +1038,11 @@
             for (
                 var i = rowIndex, endRow = rowIndex + cellInfo.rowSpan;
                 i < endRow;
-                i++
-            ) {
+                i++) {
                 if (i == rowIndex) continue;
                 var tableRow = this.table.rows[i],
                     tmpCell = tableRow.insertCell(
-                        colIndex - this.getPreviewMergedCellsNum(i, colIndex)
-                    );
+                        colIndex - this.getPreviewMergedCellsNum(i, colIndex));
                 tmpCell.colSpan = cellInfo.colSpan;
                 this.setCellContent(tmpCell);
                 tmpCell.setAttribute("vAlign", cell.getAttribute("vAlign"));
@@ -1222,13 +1080,11 @@
             for (
                 var j = colIndex, endCol = colIndex + cellInfo.colSpan;
                 j < endCol;
-                j++
-            ) {
+                j++) {
                 if (j == colIndex) continue;
                 var tableRow = this.table.rows[rowIndex],
                     tmpCell = tableRow.insertCell(
-                        this.indexTable[rowIndex][j].cellIndex + 1
-                    );
+                        this.indexTable[rowIndex][j].cellIndex + 1);
                 tmpCell.rowSpan = cellInfo.rowSpan;
                 this.setCellContent(tmpCell);
                 tmpCell.setAttribute("vAlign", cell.getAttribute("vAlign"));
@@ -1256,9 +1112,7 @@
             colsNum = colsNum || this.colsNum;
             var cellInfo = this.getCellInfo(cell);
             return (
-                cellInfo.rowIndex + cellInfo.rowSpan == rowsNum &&
-                cellInfo.colIndex + cellInfo.colSpan == colsNum
-            );
+                cellInfo.rowIndex + cellInfo.rowSpan == rowsNum && cellInfo.colIndex + cellInfo.colSpan == colsNum);
         },
         getLastCell: function (cells) {
             cells = cells || this.table.getElementsByTagName("td");
@@ -1286,9 +1140,7 @@
             var indexRow = this.indexTable[rowIndex],
                 start = this.getCell(indexRow[0].rowIndex, indexRow[0].cellIndex),
                 end = this.getCell(
-                    indexRow[this.colsNum - 1].rowIndex,
-                    indexRow[this.colsNum - 1].cellIndex
-                ),
+                    indexRow[this.colsNum - 1].rowIndex, indexRow[this.colsNum - 1].cellIndex),
                 range = this.getCellsRange(start, end);
             this.setSelected(range);
         },
@@ -1303,28 +1155,21 @@
                     cell.style.backgroundColor = value;
                 });
             } else if (typeof value === "object") {
-                value = utils.extend(
-                    {
-                        repeat: true,
-                        colorList: ["#ddd", "#fff"]
-                    },
-                    value
-                );
+                value = utils.extend({
+                    repeat: true,
+                    colorList: ["#ddd", "#fff"]
+                }, value);
                 var rowIndex = this.getCellInfo(cells[0]).rowIndex,
                     count = 0,
                     colors = value.colorList,
                     getColor = function (list, index, repeat) {
-                        return list[index]
-                               ? list[index]
-                               : repeat ? list[index % list.length] : "";
+                        return list[index] ? list[index] : repeat ? list[index % list.length] : "";
                     };
-                for (var i = 0, cell; (cell = cells[i++]);) {
+                for (var i = 0, cell;
+                     (cell = cells[i++]);) {
                     var cellInfo = this.getCellInfo(cell);
                     cell.style.backgroundColor = getColor(
-                        colors,
-                        rowIndex + count == cellInfo.rowIndex ? count : ++count,
-                        value.repeat
-                    );
+                        colors, rowIndex + count == cellInfo.rowIndex ? count : ++count, value.repeat);
                 }
             }
         },

@@ -65,9 +65,9 @@
                 'paragraph',
                 'fontfamily',
                 'fontsize',
-                /*'|',
-                'directionalityltr',
-                'directionalityrtl',*///已去除
+                //'|',
+                //'directionalityltr',
+                //'directionalityrtl',
                 'indent',
                 '|',
                 'justifyleft',
@@ -95,10 +95,10 @@
                 'music',
                 'attachment',
                 'map',
-                //'gmap', 已去除
+                //'gmap',//已去除
                 'insertframe',
                 'insertcode',
-                //'webapp',//已去除
+                'webapp',//已去除
                 'pagebreak',
                 'template',
                 'background',
@@ -107,7 +107,7 @@
                 'date',
                 'time',
                 'spechars',
-                //'snapscreen',//已去除
+                'snapscreen',//已去除
                 'wordimage',
                 '|',
                 'inserttable',
