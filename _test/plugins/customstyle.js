@@ -266,11 +266,12 @@ test('block的元素-样式的反复转换：块-内联；包含的选取方式�
     ua.manualDeleteFillData(editor.body);
     equal(editor.body.getElementsByTagName('span')[0].getAttribute('label'), '强调', '闭合选区设置样式：强调');
     var hStyle = $(editor.body.getElementsByTagName('span')[0]);
-    if (ua.browser.webkit) {
+    ok(hStyle.css('font-style') == 'italic' && (hStyle.css('font-weight') == 'bold'||hStyle.css('font-weight') == '700'), '检查字体');
+    /*if (ua.browser.webkit) {
         ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == 'bold', '检查字体');
     } else {
         ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == '700', '检查字体');
-    }
+    }*/
     if (ua.browser.ie && ua.browser.ie < 9) {
         equal(hStyle.css('color'), '#000', '检查颜色');
     } else {
@@ -287,11 +288,12 @@ test('block的元素-样式的反复转换：块-内联；包含的选取方式�
     ua.manualDeleteFillData(editor.body);
     equal(editor.body.getElementsByTagName('h1')[1].firstChild.getAttribute('label'), '明显强调', '闭合选区设置样式：明显强调');
     var hStyle = $(editor.body.getElementsByTagName('h1')[1].firstChild);
-    if (ua.browser.webkit) {
+    ok(hStyle.css('font-style') == 'italic' && (hStyle.css('font-weight') == 'bold'||hStyle.css('font-weight') == '700'), '检查字体');
+    /*if (ua.browser.webkit) {
         ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == 'bold', '检查字体');
     } else {
         ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == '700', '检查字体');
-    }
+    }*/
     if (ua.browser.ie && ua.browser.ie < 9) {
         equal(hStyle.css('color'), 'rgb(51,153,204)', '检查颜色');
     } else {
@@ -330,11 +332,12 @@ test('block的元素-样式的反复转换：内联-块；包含的选取方式�
     equal(editor.body.getElementsByTagName('h1')[0].firstChild.tagName.toLowerCase(), 'span', 'h1内包含样式：强调');
     equal(editor.body.getElementsByTagName('h1')[0].firstChild.getAttribute('label'), '强调', '闭合选区设置样式：强调');
     var hStyle = $(editor.body.getElementsByTagName('span')[0]);
-    if (ua.browser.webkit) {
+    ok(hStyle.css('font-style') == 'italic' && (hStyle.css('font-weight') == 'bold'||hStyle.css('font-weight') == '700'), '检查字体');
+    /*if (ua.browser.webkit) {
         ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == 'bold', '检查字体');
     } else {
         ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == '700', '检查字体');
-    }
+    }*/
     if (ua.browser.ie && ua.browser.ie < 9) {
         equal(hStyle.css('color'), '#000', '检查颜色');
     } else {
@@ -363,11 +366,12 @@ test('block的元素-样式的反复转换：内联-内联；包含的选取方�
             equal(editor.body.getElementsByTagName('p')[0].firstChild.tagName.toLowerCase(), 'span', '闭合选区设置样式：强调');
             equal(editor.body.getElementsByTagName('p')[0].firstChild.getAttribute('label'), '强调', '闭合选区设置样式：强调');
             var hStyle = $(editor.body.getElementsByTagName('span')[0]);
-            if (ua.browser.webkit) {
+            ok(hStyle.css('font-style') == 'italic' && (hStyle.css('font-weight') == 'bold'||hStyle.css('font-weight') == '700'), '检查字体');
+            /*if (ua.browser.webkit) {
                 ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == 'bold', '检查字体');
             } else {
                 ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == '700', '检查字体');
-            }
+            }*/
             if (ua.browser.ie && ua.browser.ie < 9) {
                 equal(hStyle.css('color'), '#000', '检查颜色');
             } else {
@@ -388,11 +392,12 @@ test('block的元素-样式的反复转换：内联-内联；包含的选取方�
             var hStyle = $(span2);
             equal(span2.tagName.toLowerCase(), 'span', '非闭合选区设置样式：明显强调');
             equal(span2.getAttribute('label'), '明显强调', '非闭合选区设置样式：明显强调');
-            if (ua.browser.webkit) {
+            ok(hStyle.css('font-style') == 'italic' && (hStyle.css('font-weight') == 'bold'||hStyle.css('font-weight') == '700'), '检查字体');
+            /*if (ua.browser.webkit) {
                 ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == 'bold', '检查字体');
             } else {
                 ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == '700', '检查字体');
-            }
+            }*/
             if (ua.browser.ie && ua.browser.ie < 9) {
                 equal(hStyle.css('color'), 'rgb(51,153,204)', '检查颜色');
             } else {
@@ -402,11 +407,12 @@ test('block的元素-样式的反复转换：内联-内联；包含的选取方�
             var hStyle = $(span3);
             equal(span3.tagName.toLowerCase(), 'span', '非闭合选区设置样式：明显强调');
             equal(span3.getAttribute('label'), '明显强调', '非闭合选区设置样式：明显强调');
-            if (ua.browser.webkit) {
+            ok(hStyle.css('font-style') == 'italic' && (hStyle.css('font-weight') == 'bold'||hStyle.css('font-weight') == '700'), '检查字体');
+            /*if (ua.browser.webkit) {
                 ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == 'bold', '检查字体');
             } else {
                 ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == '700', '检查字体');
-            }
+            }*/
             if (ua.browser.ie && ua.browser.ie < 9) {
                 equal(hStyle.css('color'), 'rgb(51,153,204)', '检查颜色');
             } else {
@@ -421,11 +427,12 @@ test('block的元素-样式的反复转换：内联-内联；包含的选取方�
             equal(span2.firstChild.tagName.toLowerCase(), 'span', '非闭合选区设置样式：强调');
             equal(span2.firstChild.getAttribute('label'), '强调', '闭合选区设置样式：强调');
             var hStyle = $(span2.firstChild);
-            if (ua.browser.webkit) {
+            ok(hStyle.css('font-style') == 'italic' && (hStyle.css('font-weight') == 'bold'||hStyle.css('font-weight') == '700'), '检查字体');
+            /*if (ua.browser.webkit) {
                 ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == 'bold', '检查字体');
             } else {
                 ok(hStyle.css('font-style') == 'italic' && hStyle.css('font-weight') == '700', '检查字体');
-            }
+            }*/
             if (ua.browser.ie && ua.browser.ie < 9) {
                 equal(hStyle.css('color'), '#000', '检查颜色');
             } else {

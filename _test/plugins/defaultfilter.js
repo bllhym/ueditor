@@ -20,7 +20,8 @@ test('空td,th,caption', function () {
     var editor = te.obj[0];
     editor.setContent('<table><caption></caption><tbody><tr><th></th><th></th></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody></table>');
     var br = ua.browser.ie && ua.browser.ie < 11 ? '' : '<br>';
-    var html = '<table><caption>' + br + '</caption><tbody><tr><th>' + br + '</th><th>' + br + '</th></tr><tr><td>' + br + '</td><td>' + br + '</td></tr><tr><td>' + br + '</td><td>' + br + '</td></tr></tbody></table>';
+    console.log(editor.body.innerHTML);
+    var html = '<table><caption>' + br + '</caption><tbody><tr class="firstRow"><th>' + br + '</th><th>' + br + '</th></tr><tr><td>' + br + '</td><td>' + br + '</td></tr><tr><td>' + br + '</td><td>' + br + '</td></tr></tbody></table>';
     ua.checkSameHtml(editor.body.innerHTML, html, '空td,th,caption,添加text');
 });
 test('转换a标签', function () {
@@ -33,14 +34,16 @@ test('转换a标签', function () {
 test('转换img标签', function () {
     var editor = te.obj[0];
     editor.setContent('<img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;" />');
-//    var html = '<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;" _src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" /></p>';
-    equal(editor.body.getElementsByTagName('img')[0].getAttribute('_src'), "http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif");
+
+    var html = '<p><img src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif" width="270" height="129" style="border: 0px;" _src="http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif"></p>';
+    //equal(editor.body.getElementsByTagName('img')[0].getAttribute('_src'), "http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif");
+    ua.checkSameHtml(html, editor.body.innerHTML, '转换img标签');
 });
 test('删span中的white-space标签', function () {
     if (ua.browser.webkit) {
         var editor = te.obj[0];
         editor.setContent('<span style=" display: block; white-space: nowrap " >sadfsadf</span>');
-        var html = '<p><span style=" display: block; ">sadfsadf</span></p>';
+        var html = '<p><span style="display: block;">sadfsadf</span></p>';
         ua.checkSameHtml(html, editor.body.innerHTML, '删span中的white-space标签');
     }
 });
@@ -54,7 +57,7 @@ test('删span中的white-space标签', function () {
 test('给空p加br&&转对齐样式', function () {
     var editor = te.obj[0];
     editor.setContent('<p align ="center" ></p>');
-    var br = ua.browser.ie ? '&nbsp;' : '<br>';
+    var br = ua.browser.ie ? '&nbsp;' : '<br/>';
 //    "<p style=\"text-align:center;list-style: none;\"><br></p>"
     var html = '<p style=\"text-align:center;\">' + br + '</p>';
     ua.checkSameHtml(editor.body.innerHTML, html, '给空p加br&&转对齐样式');
