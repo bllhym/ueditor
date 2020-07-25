@@ -28,13 +28,10 @@
      */
     function setValue(form, editor) {
         var textarea;
-        if (editor.options.textarea) {
-            if (utils.isString(editor.options.textarea)) {
-                for (
-                    var i = 0, ti, tis = domUtils.getElementsByTagName(form, "textarea");
-                    (ti = tis[i++]);
-                ) {
-                    if (ti.id == "ueditor_textarea_" + editor.options.textarea) {
+        if (editor.textarea) {
+            if (utils.isString(editor.textarea)) {
+                for (var i = 0, ti, tis = domUtils.getElementsByTagName(form, 'textarea'); ti = tis[i++];) {
+                    if (ti.id == 'ueditor_textarea_' + editor.options.textarea) {
                         textarea = ti;
                         break;
                     }
@@ -44,23 +41,18 @@
             }
         }
         if (!textarea) {
-            form.appendChild(
-                (textarea = domUtils.createElement(document, "textarea", {
-                    name: editor.options.textarea,
-                    id: "ueditor_textarea_" + editor.options.textarea,
-                    style: "display:none"
-                }))
-            );
+            form.appendChild(textarea = domUtils.createElement(document, 'textarea', {
+                'name': editor.options.textarea,
+                'id': 'ueditor_textarea_' + editor.options.textarea,
+                'style': "display:none"
+            }));
             //不要产生多个textarea
             editor.textarea = textarea;
         }
-        !textarea.getAttribute("name") &&
-        textarea.setAttribute("name", editor.options.textarea);
-        textarea.value = editor.hasContents()
-                         ? editor.options.allHtmlEnabled
-                           ? editor.getAllHtml()
-                           : editor.getContent(null, null, true)
-                         : "";
+        !textarea.getAttribute('name') && textarea.setAttribute('name', editor.options.textarea );
+        textarea.value = editor.hasContents() ?
+                         (editor.options.allHtmlEnabled ? editor.getAllHtml() : editor.getContent(null, null, true)) :
+                         ''
     }
 
     function loadPlugins(me) {
