@@ -179,11 +179,10 @@
 
 
 <script>
-    var editor = UE.getEditor('editor');
-     editor.ready( function() {
-         editor.setContent('<p>hello1</p><p>hello2</p>');
-         editor.execCommand('paragraph', 'h1');
-         editor.execCommand('indent');
+    var editor =ue;
+    //var editor = UE.getEditor('editor', {tableDragable: true});
+    editor.ready(function () {
+
     });
 
 </script>
