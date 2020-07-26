@@ -241,7 +241,9 @@ test('trace 3088：检查表格属性', function () {
                         equal(iframe1.contentDocument.getElementById('J_title').checked, false, '无标题行');
                         equal(iframe1.contentDocument.getElementById('J_caption').checked, true, '有名称');
                         setTimeout(function () {
-                            var c2 = document.getElementById('edui447_body');
+                            //var c2 = document.getElementById('edui447_body');
+                            var c2 = document.getElementById('edui428_body');
+                            console.log(c2);
                             ua.click(c2);
                             document.getElementById('edui_fixedlayer').parentNode.removeChild(document.getElementById('edui_fixedlayer'));
                             UE.delEditor('ue');

@@ -44,7 +44,7 @@
         'edittable':'~/dialogs/table/edittable.html',
         'edittd':'~/dialogs/table/edittd.html',
         //'webapp':'~/dialogs/webapp/webapp.html',
-        'snapscreen':'~/dialogs/snapscreen/snapscreen.html',
+        //'snapscreen':'~/dialogs/snapscreen/snapscreen.html',
         'scrawl':'~/dialogs/scrawl/scrawl.html',
         'music':'~/dialogs/music/music.html',
         'template':'~/dialogs/template/template.html',
@@ -166,7 +166,7 @@
         })(ci);
     }
     var dialogBtns = {
-        noOk: ["searchreplace", "help", "spechars", /*"webapp",*/ "preview"],
+        noOk: ["searchreplace", "help", "spechars", "webapp", "preview"],
         ok: ["attachment", "anchor", "link", "insertimage", "map", "gmap", "insertframe", "wordimage", "insertvideo", "insertframe", "edittip", "edittable", "edittd", "scrawl", "template", "music", "background", "charts"]
     };
     for (var p in dialogBtns) {
@@ -258,7 +258,7 @@
             }
         })(p, dialogBtns[p]);
     }
-    editorui.snapscreen = function (editor, iframeUrl, title) {
+    /*editorui.snapscreen = function (editor, iframeUrl, title) {
             title =
                 editor.options.labelMap["snapscreen"] ||
                 editor.getLang("labelMap.snapscreen") ||
@@ -308,7 +308,7 @@
                 ui.setDisabled(editor.queryCommandState("snapscreen") == -1);
             });
             return ui;
-        };
+        };*/
     editorui.insertcode = function (editor, list, title) {
         list = editor.options["insertcode"] || [];
         title = editor.options.labelMap["insertcode"] || editor.getLang("labelMap.insertcode") || "";

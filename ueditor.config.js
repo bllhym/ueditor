@@ -107,7 +107,7 @@
                 'date',
                 'time',
                 'spechars',
-                'snapscreen',//已去除
+                //'snapscreen',//已去除
                 'wordimage',
                 '|',
                 'inserttable',
