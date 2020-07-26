@@ -346,7 +346,8 @@ UE.I18N['zh-cn'] = {
             'noneAlign': {'title': '无浮动'},
             'leftAlign': {'title': '左浮动'},
             'rightAlign': {'title': '右浮动'},
-            'centerAlign': {'title': '居中独占一行'}
+            'centerAlign': {'title': '居中独占一行'},
+            'placeholder': '可将照片粘贴或拖曳到这里'
         },
         'uploadSelectFile': '点击选择图片',
         'uploadAddFile': '继续添加',
@@ -378,14 +379,15 @@ UE.I18N['zh-cn'] = {
         'searchRemind': "请输入搜索关键词",
         'searchLoading': "图片加载中，请稍后……",
         'searchRetry': " :( ，抱歉，没有找到图片！请重试一次！",
-        'errorCatch': '抓取失败',
+        'errorCatch': '抓取失败'
     },
     'attachment': {
         'static': {
             'lang_tab_upload': '上传附件',
             'lang_tab_online': '在线附件',
             'lang_start_upload': "开始上传",
-            'lang_drop_remind': "可以将文件拖到这里，单次最多可选100个文件"
+            'lang_drop_remind': "可以将文件拖到这里，单次最多可选100个文件",
+            'placeholder': '可将图片粘贴或文件拖曳到这里'
         },
         'uploadSelectFile': '点击选择文件',
         'uploadAddFile': '继续添加',
@@ -431,7 +433,8 @@ UE.I18N['zh-cn'] = {
             'lang_upload_height': "高度",
             'lang_upload_alignment': "对齐方式",
             'lang_format_advice': "建议使用mp4格式.",
-            'lang_tab_online': '在线管理'
+            'lang_tab_online': '在线管理',
+            'placeholder': '可将视频拖曳到这里'
         },
         'numError': "请输入正确的数值，如123,400",
         'floatLeft': "左浮动",
@@ -543,6 +546,7 @@ UE.I18N['zh-cn'] = {
             'lang_upload_size':"显示尺寸",
             'lang_upload_width':"宽度",
             'lang_upload_alignment':"对齐方式",
+            'placeholder': '可将音频拖曳到这里'
 
         },
         'numError':"请输入正确的数值，如123,400",

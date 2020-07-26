@@ -13,9 +13,10 @@
 .tabbody #upload.panel.focus { width:100%; height:346px; display:block; clip:auto; }
 #upload .queueList { margin:0; width:100%; height:100%; position:absolute; overflow:hidden; }
 #upload p { margin:0; }
+#upload .placeholder p {font-size: 16px}
 .element-invisible { width:0 !important; height:0 !important; border:0; padding:0; margin:0; overflow:hidden; position:absolute !important; clip:rect(1px,1px,1px,1px); }
 #upload .placeholder { margin:10px; border:2px dashed #e6e6e6; *border:0 dashed #e6e6e6; height:172px; padding-top:150px; text-align:center; background:url(./images/image.png) center 70px no-repeat; color:#cccccc; font-size:18px; position:relative; top:0; *top:10px; }
-#upload .placeholder .webuploader-pick { font-size:18px; background:#00b7ee; border-radius:3px; line-height:44px; padding:0 30px; *width:120px; color:#fff; display:inline-block; margin:0 auto 20px auto; cursor:pointer; -webkit-box-shadow:0 1px 1px rgba(0,0,0,0.1); box-shadow:0 1px 1px rgba(0,0,0,0.1); }
+#upload .placeholder .webuploader-pick { font-size:18px; background:#00b7ee; border-radius:3px; line-height:44px; padding:0 30px; *width:120px; color:#fff; display:inline-block; margin:0 auto; cursor:pointer; -webkit-box-shadow:0 1px 1px rgba(0,0,0,0.1); box-shadow:0 1px 1px rgba(0,0,0,0.1); }
 #upload .placeholder .webuploader-pick-hover { background:#00a2d4; }
 #filePickerContainer { text-align:center; }
 #upload .placeholder .flashTip { color:#666666; font-size:12px; position:absolute; width:100%; text-align:center; bottom:20px; }

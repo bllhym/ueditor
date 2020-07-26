@@ -335,6 +335,18 @@
                 state = '',
                 // 所有文件的进度信息，key为file id
                 percentages = {},
+                // 判断浏览器是否支持图片的base64
+                isSupportBase64 = ( function() {
+                    var data = new Image();
+                    var support = true;
+                    data.onload = data.onerror = function() {
+                        if( this.width != 1 || this.height != 1 ) {
+                            support = false;
+                        }
+                    }
+                    data.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+                    return support;
+                } )(),
                 supportTransition = (function () {
                     var s = document.createElement('p').style,
                         r = 'transition' in s ||
@@ -370,6 +382,12 @@
                     extensions: acceptExtensions,
                     mimeTypes: 'image/*'
                 },
+                dnd: '#upload .queueList',//拖曳区域
+                // 禁掉全局的拖拽功能。这样不会出现图片拖进页面的时候，把图片打开。
+                disableGlobalDnd: true,
+                paste: '#upload',//粘贴上传
+                chunked: false,//分片
+                chunkSize: 5*1024*1024,//5m
                 swf: '../../third-party/webuploader/Uploader.swf',
                 server: actionUrl,
                 fileVal: editor.getOpt('imageFieldName'),
@@ -385,7 +403,12 @@
                     // 是否允许裁剪。
                     crop: false,
                     // 是否保留头部meta信息。
-                    preserveHeaders: true
+                    preserveHeaders: true,
+                    // 如果发现压缩后文件大小比原来还大，则使用原来图片
+                    // 此属性可能会影响图片自动纠正功能
+                    noCompressIfLarger: true,
+                    // 单位字节，如果图片大小小于此值，不会采用压缩。
+                    compressSize: 0
                 } : false
             });
             uploader.addButton({
@@ -631,19 +654,45 @@
                 $info.html(text);
             }
 
+            // 拖拽时不接受 js, txt 文件。
+            uploader.on( 'dndAccept', function( items ) {
+                var denied = false,
+                    len = items.length,
+                    i = 0,
+                    // 修改js类型
+                    unAllowed = 'text/plain;application/javascript ';
+
+                for ( ; i < len; i++ ) {
+                    // 如果在列表里面
+                    if ( ~unAllowed.indexOf( items[ i ].type ) ) {
+                        denied = true;
+                        break;
+                    }
+                }
+
+                return !denied;
+            });
+
             uploader.on('fileQueued', function (file) {
-                fileCount++;
-                fileSize += file.size;
+                if (file.ext && acceptExtensions.indexOf(file.ext.toLowerCase()) != -1 && file.size <= imageMaxSize) {
+                    fileCount++;
+                    fileSize += file.size;
+                }
                 if (fileCount === 1) {
                     $placeHolder.addClass('element-invisible');
                     $statusBar.show();
                 }
                 addFile(file);
+                setState( 'ready' );
+                updateTotalProgress();
             });
             uploader.on('fileDequeued', function (file) {
                 if (file.ext && acceptExtensions.indexOf(file.ext.toLowerCase()) != -1 && file.size <= imageMaxSize) {
-                fileCount--;
-                fileSize -= file.size;
+                    fileCount--;
+                    fileSize -= file.size;
+                }
+                if ( !fileCount ) {
+                    setState( 'pedding' );
                 }
                 removeFile(file);
                 updateTotalProgress();
@@ -673,6 +722,7 @@
             });
             uploader.on('uploadBeforeSend', function (file, data, header) {
                 //这里可以通过data对象添加POST参数
+                data.rotation = file.file.rotation; // 将存在file对象中的旋转角度数据携带发送过去。
                 if (actionUrl.toLowerCase().indexOf('jsp') != -1) {
                     header['X-Requested-With'] = 'XMLHttpRequest';
                 }
@@ -720,14 +770,17 @@
                     uploader.stop();
                 }
             });
+
             $upload.addClass('state-' + state);
             updateTotalProgress();
         },
         getQueueCount: function () {
             var file, i, status, readyFile = 0, files = this.uploader.getFiles();
+            //console.log(files);
             for (i = 0; file = files[i++];) {
                 status = file.getStatus();
-                if (status == 'queued' || status == 'uploading' || status == 'progress') readyFile++;
+                //console.log(status);
+                if (status == 'inited'||status == 'queued' || status == 'uploading' || status == 'progress'|| status == 'interrupt') readyFile++;
             }
             return readyFile;
         },

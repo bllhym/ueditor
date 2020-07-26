@@ -359,6 +359,17 @@
                     id: '#filePickerReady',
                     label: lang.uploadSelectFile
                 },
+                accept: {
+                    title: 'Audio',
+                    extensions: acceptExtensions,
+                    mimeTypes: 'audio/*'
+                },
+                dnd: '#upload .queueList',//拖曳区域
+                // 禁掉全局的拖拽功能。这样不会出现图片拖进页面的时候，把图片打开。
+                disableGlobalDnd: true,
+                paste: '#upload',//粘贴上传
+                chunked: false,//分片
+                chunkSize: 5*1024*1024,//5m
                 swf: '../../third-party/webuploader/Uploader.swf',
                 server: actionUrl,
                 fileVal: editor.getOpt('musicFieldName'),
@@ -637,9 +648,30 @@
                 $info.html(text);
             }
 
+            // 拖拽时不接受 js, txt 文件。
+            uploader.on( 'dndAccept', function( items ) {
+                var denied = false,
+                    len = items.length,
+                    i = 0,
+                    // 修改js类型
+                    unAllowed = 'text/plain;application/javascript ';
+
+                for ( ; i < len; i++ ) {
+                    // 如果在列表里面
+                    if ( ~unAllowed.indexOf( items[ i ].type ) ) {
+                        denied = true;
+                        break;
+                    }
+                }
+
+                return !denied;
+            });
+
             uploader.on('fileQueued', function (file) {
-                fileCount++;
-                fileSize += file.size;
+                if (file.ext && acceptExtensions.indexOf(file.ext.toLowerCase()) != -1 && file.size <= fileMaxSize) {
+                    fileCount++;
+                    fileSize += file.size;
+                }
 
                 if (fileCount === 1) {
                     $placeHolder.addClass('element-invisible');
@@ -647,11 +679,18 @@
                 }
 
                 addFile(file);
+                setState( 'ready' );
+                updateTotalProgress();
             });
 
             uploader.on('fileDequeued', function (file) {
-                fileCount--;
-                fileSize -= file.size;
+                if (file.ext && acceptExtensions.indexOf(file.ext.toLowerCase()) != -1 && file.size <= fileMaxSize) {
+                    fileCount--;
+                    fileSize -= file.size;
+                }
+                if ( !fileCount ) {
+                    setState( 'pedding' );
+                }
 
                 removeFile(file);
                 updateTotalProgress();
@@ -749,7 +788,7 @@
             var file, i, status, readyFile = 0, files = this.uploader.getFiles();
             for (i = 0; file = files[i++]; ) {
                 status = file.getStatus();
-                if (status == 'queued' || status == 'uploading' || status == 'progress') readyFile++;
+                if (status == 'inited'||status == 'queued' || status == 'uploading' || status == 'progress'|| status == 'interrupt') readyFile++;
             }
             return readyFile;
         },
