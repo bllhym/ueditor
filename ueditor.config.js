@@ -98,7 +98,7 @@
                 //'gmap',//已去除
                 'insertframe',
                 'insertcode',
-                'webapp',//已去除
+                //'webapp',//已去除
                 'pagebreak',
                 'template',
                 'background',
