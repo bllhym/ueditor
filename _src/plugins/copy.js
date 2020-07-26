@@ -1,7 +1,7 @@
 UE.plugin.register("copy", function () {
     var me = this;
 
-    function initZeroClipboard() {
+    /*function initZeroClipboard() {
         ZeroClipboard.config({
             debug: false,
             swfPath:
@@ -11,6 +11,7 @@ UE.plugin.register("copy", function () {
         var client = (me.zeroclipboard = new ZeroClipboard());
         // 复制内容
         client.on("copy", function (e) {
+            console.log("copy");
             var client = e.client,
                 rng = me.selection.getRange(),
                 div = document.createElement("div");
@@ -32,14 +33,15 @@ UE.plugin.register("copy", function () {
         });
         // flash加载不成功
         client.on("wrongflash noflash", function () {
+            console.log("wrongflash noflash");
             ZeroClipboard.destroy();
         });
         // 触发事件
         me.fireEvent("zeroclipboardready", client);
-    }
+    }*/
 
     return {
-        bindEvents: {
+        /*bindEvents: {
             ready: function () {
                 if (!browser.ie) {
                     if (window.ZeroClipboard) {
@@ -62,7 +64,7 @@ UE.plugin.register("copy", function () {
                     }
                 }
             }
-        },
+        },*/
         commands: {
             copy: {
                 execCommand: function (cmd) {

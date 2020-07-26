@@ -521,7 +521,7 @@ UE.plugins["contextmenu"] = function() {
   });
 
   // 添加复制的flash按钮
-  me.addListener("aftershowcontextmenu", function(type, menu) {
+  /*me.addListener("aftershowcontextmenu", function(type, menu) {
     if (me.zeroclipboard) {
       var items = menu.items;
       for (var key in items) {
@@ -530,5 +530,5 @@ UE.plugins["contextmenu"] = function() {
         }
       }
     }
-  });
+  });*/
 };
