@@ -1,4 +1,4 @@
-UE.parse.register("vedio", function (utils) {
+/*UE.parse.register("vedio", function (utils) {
     var video = this.root.getElementsByTagName("video"),
         audio = this.root.getElementsByTagName("audio");
     document.createElement("video");
@@ -33,4 +33,4 @@ UE.parse.register("vedio", function (utils) {
             );
         }
     }
-});
+});*/
