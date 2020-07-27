@@ -26,8 +26,8 @@ test('插入锚点后切换源码', function () {
             setTimeout(function () {
                 start();
             }, 500);
-        }, 200);
-    }, 20);
+        }, 500);
+    }, 500);
 });
 test('在源码模式设置超链接的name属性，切换到编辑器模式检查超链接是否变为锚点', function () {
     var editor = te.obj[0];
@@ -44,10 +44,10 @@ test('在源码模式设置超链接的name属性，切换到编辑器模式检�
                     editor.execCommand('source');
                     ua.checkHTMLSameStyle('<img anchorname="source" class="anchorclass">', editor.document, body.firstChild, '检查锚点html');
                     start();
-                }, 100);
-            }, 100);
-        }, 100);
-    }, 100);
+                }, 500);
+            }, 500);
+        }, 500);
+    }, 500);
 });
 test('在源码模式设置超链接没有name属性，切换到编辑器模式检查超链接不变为锚点', function () {
     var editor = te.obj[0];
@@ -65,9 +65,9 @@ test('在源码模式设置超链接没有name属性，切换到编辑器模式�
 //                equal( body.firstChild.firstChild.tagName.toLowerCase(), 'a', 'a标签不会转化' );
                 equal(body.firstChild.lastChild.tagName.toLowerCase(), 'a', 'a标签不会转化');   //兼容opera
                 start();
-            }, 50);
-        }, 10);
-    }, 20);
+            }, 500);
+        }, 500);
+    }, 500);
 });
 test('已存在锚点', function () {
     var editor = te.obj[0];
