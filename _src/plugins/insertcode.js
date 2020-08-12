@@ -8,7 +8,7 @@ UE.plugins["insertcode"] = function () {
     me.ready(function () {
         utils.cssRule(
             "pre",
-            "pre{margin:.5em 0;padding:.4em .6em;border-radius:8px;background:#f8f8f8;}",
+            "pre{margin:.5em 0;padding:.4em .6em;border-radius:8px;background:#f7f7f7;}",
             me.document
         );
     });
@@ -16,14 +16,14 @@ UE.plugins["insertcode"] = function () {
         as3: "ActionScript3",
         bash: "Bash/Shell",
         cpp: "C/C++",
-        css: "Css",
+        css: "CSS",
         cf: "CodeFunction",
         "c#": "C#",
         delphi: "Delphi",
         diff: "Diff",
         erlang: "Erlang",
         groovy: "Groovy",
-        html: "Html",
+        html: "HTML",
         java: "Java",
         jfx: "JavaFx",
         js: "Javascript",
@@ -66,7 +66,21 @@ UE.plugins["insertcode"] = function () {
                 rng = me.selection.getRange(),
                 pre = domUtils.findParentByTagName(rng.startContainer, "pre", true);
             if (pre) {
-                pre.className = "brush:" + lang + ";toolbar:false;";
+                //pre.className = "language-" + lang + " line-numbers match-braces";
+                var code=pre.getElementsByTagName('code');
+                //console.log(code);
+                if(code.length>0){
+                    code[0].className = "language-" + lang + " line-numbers match-braces";
+                }else{
+                    var code = document.createElement("code");
+                    //console.log(code);
+                    code.className= "language-" + lang + " line-numbers match-braces";
+                    code.innerHTML=pre.innerHTML
+                    //console.log(code);
+                    pre.innerHTML="";
+                    pre.appendChild(code);
+                }
+
             } else {
                 var code = "";
                 if (rng.collapsed) {
@@ -151,11 +165,11 @@ UE.plugins["insertcode"] = function () {
                 }
                 me.execCommand(
                     "inserthtml",
-                    '<pre id="coder"class="brush:' +
+                    '<pre><code id="coder" class="language-' +
                     lang +
-                    ';toolbar:false">' +
+                    ' line-numbers match-braces">' +
                     code +
-                    "</pre>",
+                    "</code></pre>",
                     true
                 );
                 pre = me.document.getElementById("coder");
@@ -183,8 +197,9 @@ UE.plugins["insertcode"] = function () {
             var path = this.selection.getStartElementPath();
             var lang = "";
             utils.each(path, function (node) {
-                if (node.nodeName == "PRE") {
-                    var match = node.className.match(/brush:([^;]+)/);
+                if (node.nodeName == "CODE") {
+                    var match = node.className.match(/language-([^ ]+)/);
+                    //var match = node.getElementsByTagName('code')[0].className.match(/language-([^ ]+)/);
                     lang = match && match[1] ? match[1] : "";
                     return false;
                 }
@@ -193,7 +208,8 @@ UE.plugins["insertcode"] = function () {
         }
     };
     me.addInputRule(function (root) {
-        utils.each(root.getNodesByTagName("pre"), function (pre) {
+        utils.each(root.getNodesByTagName("code"), function (pre) {
+            //var pre=pre.getNodesByTagName("code")[0];
             var brs = pre.getNodesByTagName("br");
             if (brs.length) {
                 browser.ie &&
@@ -218,7 +234,8 @@ UE.plugins["insertcode"] = function () {
         });
     });
     me.addOutputRule(function (root) {
-        utils.each(root.getNodesByTagName("pre"), function (pre) {
+        utils.each(root.getNodesByTagName("code"), function (pre) {
+            //var pre=pre.getNodesByTagName("code")[0];
             var code = "";
             utils.each(pre.children, function (n) {
                 if (n.type == "text") {
@@ -267,7 +284,7 @@ UE.plugins["insertcode"] = function () {
     };
     me.addListener("beforeenterkeydown", function () {
         var rng = me.selection.getRange();
-        var pre = domUtils.findParentByTagName(rng.startContainer, "pre", true);
+        var pre = domUtils.findParentByTagName(rng.startContainer, "code", true);
         if (pre) {
             me.fireEvent("saveScene");
             if (!rng.collapsed) {
@@ -391,7 +408,7 @@ UE.plugins["insertcode"] = function () {
     });
     me.addListener("tabkeydown", function (cmd, evt) {
         var rng = me.selection.getRange();
-        var pre = domUtils.findParentByTagName(rng.startContainer, "pre", true);
+        var pre = domUtils.findParentByTagName(rng.startContainer, "code", true);
         if (pre) {
             me.fireEvent("saveScene");
             if (evt.shiftKey) {
@@ -450,7 +467,7 @@ UE.plugins["insertcode"] = function () {
     me.addListener("beforeinserthtml", function (evtName, html) {
         var me = this,
             rng = me.selection.getRange(),
-            pre = domUtils.findParentByTagName(rng.startContainer, "pre", true);
+            pre = domUtils.findParentByTagName(rng.startContainer, "code", true);
         if (pre) {
             if (!rng.collapsed) {
                 rng.deleteContents();
@@ -552,7 +569,7 @@ UE.plugins["insertcode"] = function () {
                 start = rng.startContainer;
             if (
                 rng.collapsed &&
-                (pre = domUtils.findParentByTagName(rng.startContainer, "pre", true)) &&
+                (pre = domUtils.findParentByTagName(rng.startContainer, "code", true)) &&
                 !pre.nextSibling
             ) {
                 var last = pre.lastChild;

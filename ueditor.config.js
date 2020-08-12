@@ -413,7 +413,7 @@
             caption: ['class', 'style'],
             center: [],
             cite: [],
-            code: ['class', 'style'],
+            code: ['class','style'],
             col: ['align', 'valign', 'span', 'width', 'class', 'style'],
             colgroup: ['align', 'valign', 'span', 'width', 'class', 'style'],
             dd: ['class', 'style'],

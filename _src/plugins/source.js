@@ -170,8 +170,11 @@
                                         }
                                     }
                                     break;
-                                case "pre":
+                                case "code":
                                     node.innerText(node.innerText().replace(/&nbsp;/g, " "));
+                                    break;
+                                case "pre":
+                                    node.innerHTML(node.innerHTML().replace(/&nbsp;/g, " "));
                             }
                         }
                     });

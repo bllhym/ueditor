@@ -171,7 +171,7 @@ UE.I18N['zh-cn'] = {
         'callBackErrorMsg': "服务器返回数据有误，请检查配置项之后重试。",
         'uploadErrorMsg': "截图上传失败，请检查服务器端环境! "
     },
-    'insertcode': {
+    /*'insertcode': {
         'as3': 'ActionScript 3',
         'bash': 'Bash/Shell',
         'cpp': 'C/C++',
@@ -196,7 +196,7 @@ UE.I18N['zh-cn'] = {
         'sql': 'SQL',
         'vb': 'Visual Basic',
         'xml': 'XML'
-    },
+    },*/
     'confirmClear': "确定清空当前文档么？",
     'contextMenu': {
         'delete': "删除",
